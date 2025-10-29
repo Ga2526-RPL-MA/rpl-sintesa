@@ -1,110 +1,135 @@
-"use client";
+'use client'
+import React, { useEffect } from 'react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
+import { Input } from './ui/input'
+import { Button } from './ui/button'
+import { Field, FieldGroup, FieldLabel, FieldDescription } from './ui/field'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { Spinner } from './ui/spinner'
+import Image from 'next/image'
+import SintesaLogo from './logo'
+import { createClient } from '@/lib/supabase/client'
+import { useRouter } from 'next/navigation'
 
-import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/client";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+function LoginForm() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+    function isLoginValid():boolean{
+        if (!email){
+            toast.error("Email is required")
+            return false
+        }
+        if (!email.includes("@")){
+            toast.error("Please enter a valid email")
+            return false
+        }
+        if (!password){
+            toast.error("Password is required")
+            return false
+        }
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const supabase = createClient();
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/protected");
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
-    } finally {
-      setIsLoading(false);
+        return true
     }
-  };
 
-  return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleLogin}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <Link
-                    href="/auth/forgot-password"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </Link>
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        
+        if (!isLoginValid()){
+            return
+        }
+        setIsLoading(true)
+        
+        try {
+            const supabase = createClient()
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password
+            })
+            if (error) throw error
+            router.push('/dashboard');
+            
+        } catch (error){
+            toast.error(error instanceof Error ? error.message : "An error occurred")
+        } finally {
+            setIsLoading(false);
+            setPassword('');
+            setEmail('');
+        }
+    }
+
+    useEffect(() => {
+        const supabase = createClient()
+        console.log(supabase.auth.getUser())
+    },[])
+
+    return (
+        <div>
+        <Card className='p-2'>
+            <CardHeader>
+                <div className='w-full h-fit flex justify-center items-center mb-5 gap-2'>
+                    <SintesaLogo />
                 </div>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Logging in..." : "Login"}
-              </Button>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <Link
-                href="/auth/sign-up"
-                className="underline underline-offset-4"
-              >
-                Sign up
-              </Link>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+                <CardTitle className='text-xl'>Sign in to Sintesa</CardTitle>
+                <CardDescription>Enter your email and password below to login</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <form noValidate onSubmit={handleLogin}>
+                    <FieldGroup>
+                        <Field>
+                            <FieldLabel htmlFor="email">Email</FieldLabel>
+                            <Input
+                            id="email"
+                            type="email"
+                            placeholder="m@example.com"
+                            value={email}
+                            onChange={(e) => {setEmail(e.target.value)}}
+                            required
+                            />
+                        </Field>
+                        <Field>
+                            <div className="flex items-center">
+                            <FieldLabel htmlFor="password">Password</FieldLabel>
+                            <a
+                                href="#"
+                                className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                            >
+                                Forgot your password?
+                            </a>
+                            </div>
+                            <Input 
+                            id="password" 
+                            type="password"
+                            placeholder='Password'
+                            value={password}
+                            onChange={(e) => {setPassword(e.target.value)}}
+                            required 
+                            />
+                        </Field>
+                        <Field>
+                            <Button type="submit" disabled={isLoading} >
+                                { isLoading ? (
+                                    <div className='flex gap-2 items-center'>
+                                        <Spinner/>
+                                        Signing in...
+                                    </div>
+                                ): (
+                                    'Sign In'
+                                )}
+                            </Button>
+                            <FieldDescription className="text-center">
+                            Don't have an account? <a href="/register">Sign up</a>
+                            </FieldDescription>
+                        </Field>
+                    </FieldGroup>
+                </form>
+            </CardContent>
+        </Card>
     </div>
-  );
+  )
 }
+
+export default LoginForm

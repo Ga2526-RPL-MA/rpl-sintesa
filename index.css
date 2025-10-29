@@ -52,24 +52,7 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
-@keyframes float {
-  0%, 100% {
-    transform: translateX(0px) translateY(0px);
-  }
-  25% {
-    transform: translateX(10px) translateY(-10px);
-  }
-  50% {
-    transform: translateX(0px) translateY(-20px);
-  }
-  75% {
-    transform: translateX(-10px) translateY(-10px);
-  }
-}
 
-.float-animation {
-  animation: float 50s ease-out infinite;
-}
 
 @layer base {
   :root {
@@ -114,7 +97,7 @@
     --card-foreground: oklch(0.985 0 0);
     --popover: oklch(0.21 0.006 285.885);
     --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(65.336% 0.1854 148.006);
+    --primary: oklch(0.488 0.243 264.376);
     --primary-foreground: oklch(0.97 0.014 254.604);
     --secondary: oklch(0.274 0.006 286.033);
     --secondary-foreground: oklch(0.985 0 0);
