@@ -1,18 +1,17 @@
-import AuthBackground from "@/components/auth-bg"
-import RegisterForm from "@/components/register-form"
-import Image from "next/image"
+import AuthBackground from '@/components/auth-bg';
+import RegisterForm from '@/components/register-form';
 function RegisterPage() {
-  return (
-    <div>
-        <AuthBackground>
-            <div className='flex min-h-svh items-center justify-center'>
-                <div className="w-full max-w-sm sm:p-0 p-5">
-                    <RegisterForm />
+    return (
+        <div>
+            <AuthBackground>
+                <div className="flex min-h-svh items-center justify-center">
+                    <div className="w-full max-w-sm p-5 sm:p-0">
+                        <RegisterForm />
+                    </div>
                 </div>
-            </div>
-        </AuthBackground>
-    </div>
-  )
+            </AuthBackground>
+        </div>
+    );
 }
 
-export default RegisterPage
+export default RegisterPage;

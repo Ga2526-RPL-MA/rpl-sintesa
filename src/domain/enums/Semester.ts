@@ -1,4 +1,4 @@
 export enum Semester {
-  Odd = "Gasal",
-  Even = "Genap"
+    Odd = 'Gasal',
+    Even = 'Genap',
 }

@@ -1,18 +1,17 @@
-import AuthBackground from "@/components/auth-bg"
-import LoginForm from "@/components/login-form"
-import Image from "next/image"
+import AuthBackground from '@/components/auth-bg';
+import LoginForm from '@/components/login-form';
 function LoginPage() {
-  return (
-    <div>
-        <AuthBackground>
-            <div className='flex min-h-svh items-center justify-center'>
-                <div className="w-full max-w-sm sm:p-0 p-5">
-                    <LoginForm />
+    return (
+        <div>
+            <AuthBackground>
+                <div className="flex min-h-svh items-center justify-center">
+                    <div className="w-full max-w-sm p-5 sm:p-0">
+                        <LoginForm />
+                    </div>
                 </div>
-            </div>
-        </AuthBackground>
-    </div>
-  )
+            </AuthBackground>
+        </div>
+    );
 }
 
-export default LoginPage
+export default LoginPage;
