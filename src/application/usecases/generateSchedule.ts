@@ -5,12 +5,16 @@ import Hour from '@/src/domain/enums/Hour';
 import Random from '@/src/shared/utils/Random';
 import generateScheduleDTO from '../dto/generateScheduleDTO';
 
-export default async function GenerateSchedule(dto: generateScheduleDTO): Promise<ScheduleList> {
+export default async function GenerateSchedule(
+    dto: generateScheduleDTO,
+): Promise<ScheduleList> {
     const scheduleList: Schedule[] = [];
     const usedScheduleList: string[] = [];
 
     if (totalCourseExceedSlots(dto)) {
-        throw new Error('Not enough slots to schedule all courses without overlap.');
+        throw new Error(
+            'Not enough slots to schedule all courses without overlap.',
+        );
     }
 
     for (let i = 0; i < dto.coursesList.length; i++) {
@@ -35,15 +39,14 @@ export default async function GenerateSchedule(dto: generateScheduleDTO): Promis
             lecturerIdx = Random.int(dto.lecturersList.length - 1);
 
             schedule = `${weekDayIdx},${startHourIdx},${endHourIdx},${roomIdx}`;
-            
         } while (usedScheduleList.includes(schedule));
 
         usedScheduleList.push(schedule);
 
         scheduleList.push({
-            courseId: i+1,
-            roomId: roomIdx+1,
-            lecturerId: lecturerIdx+1,
+            courseId: i + 1,
+            roomId: roomIdx + 1,
+            lecturerId: lecturerIdx + 1,
             weekDay: dto.weekDaysList[weekDayIdx],
             startHour: dto.hoursList[startHourIdx],
             endHour: dto.hoursList[endHourIdx],
@@ -59,7 +62,12 @@ export default async function GenerateSchedule(dto: generateScheduleDTO): Promis
 }
 
 function totalCourseExceedSlots(dto: generateScheduleDTO): boolean {
-    return dto.coursesList.length > dto.weekDaysList.length * (dto.hoursList.length / 4) * dto.roomsList.length;
+    return (
+        dto.coursesList.length >
+        dto.weekDaysList.length *
+            (dto.hoursList.length / 4) *
+            dto.roomsList.length
+    );
 }
 
 // TODO: default jam kuliah 7-18 dengan increment 1 jam sesuai sistem perjadwalan ITS

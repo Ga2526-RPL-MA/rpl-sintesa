@@ -1,6 +1,6 @@
-import Hour from "@/src/domain/enums/Hour";
-import Semester from "@/src/domain/enums/Semester";
-import WeekDay from "@/src/domain/enums/WeekDay";
+import Hour from '@/src/domain/enums/Hour';
+import Semester from '@/src/domain/enums/Semester';
+import WeekDay from '@/src/domain/enums/WeekDay';
 
 export default interface generateScheduleDTO {
     coursesList: string[];

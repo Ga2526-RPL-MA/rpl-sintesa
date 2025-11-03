@@ -1,5 +1,5 @@
-import Hour from "../enums/Hour";
-import WeekDay from "../enums/WeekDay";
+import Hour from '../enums/Hour';
+import WeekDay from '../enums/WeekDay';
 
 type Schedule = {
     courseId: number;
@@ -8,6 +8,6 @@ type Schedule = {
     weekDay: WeekDay;
     startHour: Hour;
     endHour: Hour;
-}
+};
 
 export default Schedule;
