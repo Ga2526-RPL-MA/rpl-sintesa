@@ -4,7 +4,7 @@ export default interface RoomRepository {
     GetRoom(): Promise<Room[]>;
     GetRoomByID(id: number): Promise<Room>;
     GetRoomByCode(code: string): Promise<Room>;
-    AddRoom(course: Room): Promise<Room>;
-    UpdateRoom(id: number, course: Room): Promise<Room>;
-    DeleteCourse(id: number): Promise<Room>;
+    AddRoom(room: Room): Promise<Room>;
+    UpdateRoom(id: number, room: Room): Promise<Room>;
+    DeleteRoom(id: number): Promise<Room>;
 }
