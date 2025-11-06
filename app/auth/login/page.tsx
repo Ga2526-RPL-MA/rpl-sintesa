@@ -1,11 +1,13 @@
-import { LoginForm } from '@/components/premade/login-form';
+import LoginForm from '@/components/login-form';
 
-export default function Page() {
+function LoginPage() {
     return (
-        <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-            <div className="w-full max-w-sm">
-                <LoginForm />
+        <div className="relative flex min-h-screen items-center justify-center">
+            <div className="relative z-10 w-full max-w-sm p-5">
+                <LoginForm cardClass="bg-card/85 [&_input]:border-foreground/10 [&_label]:text-green-900 dark:[&_label]:text-accent-foreground dark:text-accent-foreground" />
             </div>
         </div>
     );
 }
+
+export default LoginPage;
