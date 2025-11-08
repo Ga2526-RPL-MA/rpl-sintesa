@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import RoomRepositoryImpl from '@/src/infrastructure/repositories/RoomRepositoryImpl';
-import { Room } from '@/src/domain/entities/Room';
+import Room from '@/src/domain/entities/Room';
 
 const roomRepo = new RoomRepositoryImpl();
 
@@ -20,7 +20,7 @@ export async function GET(request: Request) {
             return NextResponse.json(room);
         }
 
-        const rooms = await roomRepo.GetRoom();
+        const rooms = await roomRepo.GetRooms();
         return NextResponse.json(rooms);
     } catch (error) {
         return NextResponse.json(

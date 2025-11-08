@@ -1,4 +1,4 @@
-import { Lecturer } from '../entities/Lecturer';
+import Lecturer from '../entities/Lecturer';
 
 export default interface LecturerRepository {
     GetLecturers(): Promise<Lecturer[]>;

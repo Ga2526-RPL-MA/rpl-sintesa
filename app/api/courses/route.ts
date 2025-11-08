@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import CourseRepositoryImpl from '@/src/infrastructure/repositories/CourseRepositoryImpl';
-import { Course } from '@/src/domain/entities/Course';
+import Course from '@/src/domain/entities/Course';
 
 const courseRepo = new CourseRepositoryImpl();
 

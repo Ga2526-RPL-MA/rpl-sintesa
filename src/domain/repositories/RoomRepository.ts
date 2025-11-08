@@ -1,7 +1,7 @@
-import { Room } from '../entities/Room';
+import Room from '../entities/Room';
 
 export default interface RoomRepository {
-    GetRoom(): Promise<Room[]>;
+    GetRooms(): Promise<Room[]>;
     GetRoomByID(id: number): Promise<Room>;
     GetRoomByCode(code: string): Promise<Room>;
     AddRoom(room: Room): Promise<Room>;

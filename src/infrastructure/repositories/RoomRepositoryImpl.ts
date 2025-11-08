@@ -1,11 +1,11 @@
 import { rooms as room } from '@/src/database/drizzle/schema';
-import { Room } from '@/src/domain/entities/Room';
+import Room from '@/src/domain/entities/Room';
 import RoomRepository from '@/src/domain/repositories/RoomRepository';
 import { db } from '@/src/database';
 import { eq } from 'drizzle-orm';
 
 export default class RoomRepositoryImpl implements RoomRepository {
-    async GetRoom(): Promise<Room[]> {
+    async GetRooms(): Promise<Room[]> {
         const rooms = await db.select().from(room);
         return rooms.map((r) => ({
             id: Number(r.id),

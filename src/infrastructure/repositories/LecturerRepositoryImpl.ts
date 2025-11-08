@@ -1,5 +1,5 @@
 import { lecturer } from '@/src/database/drizzle/schema';
-import { Lecturer } from '@/src/domain/entities/Lecturer';
+import Lecturer from '@/src/domain/entities/Lecturer';
 import LecturerRepository from '@/src/domain/repositories/LecturerRepository';
 import { db } from '@/src/database';
 import { eq } from 'drizzle-orm';

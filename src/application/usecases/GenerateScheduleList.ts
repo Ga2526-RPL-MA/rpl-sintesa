@@ -3,10 +3,10 @@ import Schedule from '@/src/domain/entities/Schedule';
 import WeekDay from '@/src/domain/enums/WeekDay';
 import Hour from '@/src/domain/enums/Hour';
 import Random from '@/src/shared/utils/Random';
-import generateScheduleDTO from '../dto/generateScheduleDTO';
+import GenerateScheduleListDTO from '../dto/GenerateScheduleListDTO';
 
-export default async function GenerateSchedule(
-    dto: generateScheduleDTO,
+export default async function GenerateScheduleList(
+    dto: GenerateScheduleListDTO,
 ): Promise<ScheduleList> {
     const scheduleList: Schedule[] = [];
     const usedScheduleList: string[] = [];
@@ -44,24 +44,24 @@ export default async function GenerateSchedule(
         usedScheduleList.push(schedule);
 
         scheduleList.push({
-            courseId: i + 1,
-            roomId: roomIdx + 1,
-            lecturerId: lecturerIdx + 1,
+            course: dto.coursesList[i],
+            lecturer: dto.lecturersList[lecturerIdx],
+            room: dto.roomsList[roomIdx],
             weekDay: dto.weekDaysList[weekDayIdx],
             startHour: dto.hoursList[startHourIdx],
             endHour: dto.hoursList[endHourIdx],
-        });
+        } as Schedule);
     }
 
     return {
-        schedules: scheduleList,
         semester: dto.semester,
         year: dto.year,
         userId: dto.userId,
-    };
+        schedules: scheduleList,
+    } as ScheduleList;
 }
 
-function totalCourseExceedSlots(dto: generateScheduleDTO): boolean {
+function totalCourseExceedSlots(dto: GenerateScheduleListDTO): boolean {
     return (
         dto.coursesList.length >
         dto.weekDaysList.length *
@@ -72,9 +72,7 @@ function totalCourseExceedSlots(dto: generateScheduleDTO): boolean {
 
 // TODO: default jam kuliah 7-18 dengan increment 1 jam sesuai sistem perjadwalan ITS
 // TODO: bobot jam 07:00-08:50, 10:00-11:50, 13:30-15:20, 15:30-17:20 lebih memungkinkan
-// TODO: bobot kelas IF-101 hingga IF-114 (RBTC) lebih memungkinkan
 // TODO: randomize plottingan dosen, sesuai bidang keahlian dosen tersebut sendiri terhadap matkul (kalo bisa)
 // TODO: pastikan tidak tabrak kelas maupun jadwal antar mata kuliah ataupun dosen
 // TODO: jadwal dasprog sesuai dengan UPMB jam 07-09, 09-11, 11-13, 13-15, 15-17
-// TODO: intergrate with supabase to get real data
 // TODO: replace index with a more stable unique identifier

@@ -1,7 +1,8 @@
 import ScheduleList from '../entities/ScheduleList';
 
 export default interface ScheduleListRepository {
-    saveSchedules(scheduleListEntity: ScheduleList): Promise<void>;
+    AddScheduleList(newScheduleList: ScheduleList): Promise<ScheduleList>;
+    GetScheduleListByID(id: number): Promise<ScheduleList>;
+    GetNewestScheduleListByUserID(userId: string): Promise<ScheduleList>;
+    GetScheduleListsByUserID(userId: string): Promise<ScheduleList[]>;
 }
-
-// TODO: add more methods

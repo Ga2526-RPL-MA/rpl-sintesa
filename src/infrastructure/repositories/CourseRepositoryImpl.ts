@@ -1,6 +1,6 @@
 import { course } from '@/src/database/drizzle/schema';
 import CourseRepository from '@/src/domain/repositories/CourseRepository';
-import { Course } from '@/src/domain/entities/Course';
+import Course from '@/src/domain/entities/Course';
 import { db } from '@/src/database';
 import { eq } from 'drizzle-orm';
 

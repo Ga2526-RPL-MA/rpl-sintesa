@@ -1,4 +1,4 @@
-export type Lecturer = {
+type Lecturer = {
     id: number;
     createdAt: Date;
     nip: string;
@@ -6,3 +6,5 @@ export type Lecturer = {
     faculy: string;
     expertise: string;
 };
+
+export default Lecturer;

@@ -1,4 +1,4 @@
-export type Course = {
+type Course = {
     id: number;
     createdAt: Date;
     code: string;
@@ -6,3 +6,5 @@ export type Course = {
     sks: number;
     description: string;
 };
+
+export default Course;
