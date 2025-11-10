@@ -1,11 +1,21 @@
+import GenerateScheduleListDTO from '@/src/application/dto/GenerateScheduleListDTO';
+import AddScheduleList from '@/src/application/usecases/AddScheduleList';
+import GenerateScheduleList from '@/src/application/usecases/GenerateScheduleList';
 import GenerateThenAddScheduleList from '@/src/application/usecases/GenerateThenAddScheduleList';
+import GetCourses from '@/src/application/usecases/GetCourses';
+import GetCurrentUserID from '@/src/application/usecases/GetCurrentUserID';
+import GetHours from '@/src/application/usecases/GetHours';
+import GetLecturers from '@/src/application/usecases/GetLecturers';
 import GetNewestScheduleListByUserID from '@/src/application/usecases/GetNewestScheduleListByUserID';
+import GetRooms from '@/src/application/usecases/GetRooms';
 import GetScheduleListByID from '@/src/application/usecases/GetScheduleListByID';
 import GetScheduleListsByUserID from '@/src/application/usecases/GetScheduleListsByUserID';
+import GetWeekDays from '@/src/application/usecases/GetWeekDays';
 import CourseRepositoryImpl from '@/src/infrastructure/repositories/CourseRepositoryImpl';
 import LecturerRepositoryImpl from '@/src/infrastructure/repositories/LecturerRepositoryImpl';
 import RoomRepositoryImpl from '@/src/infrastructure/repositories/RoomRepositoryImpl';
 import ScheduleListRepositoryImpl from '@/src/infrastructure/repositories/ScheduleListRepositoryImpl';
+import { hoursEnum, weekDaysEnum } from '@/src/shared/helper/enumHelper';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
@@ -22,15 +32,14 @@ export async function GET(request: Request) {
             );
         } else if (newest) {
             if (newest !== 'true') throw new Error('Invalid query');
-            // TODO: use the userId of the currently logged in user as parameter
+
             scheduleList = await GetNewestScheduleListByUserID(
-                'ef2ca123-1a08-4a06-b4bd-c44322703e5c',
+                await GetCurrentUserID(),
                 new ScheduleListRepositoryImpl(),
             );
         } else {
-            // TODO: use the userId of the currently logged in user as parameter
             scheduleList = await GetScheduleListsByUserID(
-                'ef2ca123-1a08-4a06-b4bd-c44322703e5c',
+                await GetCurrentUserID(),
                 new ScheduleListRepositoryImpl(),
             );
         }
@@ -49,15 +58,24 @@ export async function GET(request: Request) {
     }
 }
 
-export async function POST() {
+export async function POST(request: Request) {
     try {
-        const newScheduleList = await GenerateThenAddScheduleList(
-            new ScheduleListRepositoryImpl(),
-            new CourseRepositoryImpl(),
-            new LecturerRepositoryImpl(),
-            new RoomRepositoryImpl(),
-        );
-        return NextResponse.json(newScheduleList);
+        const body = await request.json();
+
+        const addedScheduleList = await AddScheduleList(
+            await GenerateScheduleList({
+                coursesList: await GetCourses(new CourseRepositoryImpl()),
+                lecturersList: await GetLecturers(new LecturerRepositoryImpl()),
+                roomsList: await GetRooms(new RoomRepositoryImpl()),
+                weekDaysList: await GetWeekDays(),
+                hoursList: await GetHours(),
+                semester: body.semester,
+                year: new Date(Date.now()).getFullYear().toString(),
+                userId: await GetCurrentUserID(),
+            }), 
+            new ScheduleListRepositoryImpl());
+
+        return NextResponse.json(addedScheduleList);
     } catch (error) {
         return NextResponse.json(
             { message: 'Failed to generate schedule', error },
