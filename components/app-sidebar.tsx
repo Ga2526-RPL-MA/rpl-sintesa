@@ -53,7 +53,7 @@ function AppSidebar({ className }: { className?: string }) {
     const pathname = usePathname();
     const router = useRouter();
     return (
-        <Sidebar
+        <Sidebar    
             variant={'floating'}
             className={cn(className)}
             sidebarInner={cn('dark:bg-sidebar/95', 'bg-sidebar/90')}
@@ -77,7 +77,7 @@ function AppSidebar({ className }: { className?: string }) {
                                             }
                                             className={cn(
                                                 'flex items-center gap-3 rounded-md transition-colors',
-                                                'hover:bg-primary/5 active:bg-primary/10! hover:text-foreground/90',
+                                                'hover:bg-primary/5 dark:active:bg-primary/10! active:bg-primary/10! hover:text-foreground/90',
                                                 isSelected
                                                     ? cn(
                                                           'dark:bg-primary! shadow-sm dark:text-white!',
