@@ -6,9 +6,9 @@ export default async function GetNewestScheduleListByUserID(
     scheduleListRepository: ScheduleListRepository,
 ): Promise<ScheduleList> {
     try {
-        return await scheduleListRepository.GetNewestScheduleListByUserID(
-            userId,
-        );
+        return (
+            await scheduleListRepository.GetScheduleListsByUserID(userId)
+        )[0];
     } catch (err) {
         throw new Error(
             err instanceof Error

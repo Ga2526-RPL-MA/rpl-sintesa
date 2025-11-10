@@ -95,61 +95,6 @@ export default class ScheduleListRepositoryImpl
         };
     }
 
-    async GetNewestScheduleListByUserID(userId: string): Promise<ScheduleList> {
-        const result = await db.query.scheduleList.findFirst({
-            where: eq(scheduleList.userId, userId),
-            with: {
-                schedules: {
-                    with: {
-                        course: true,
-                        lecturer: true,
-                        room: true,
-                    },
-                },
-            },
-            orderBy: desc(scheduleList.createdAt),
-        });
-
-        if (!result) throw new Error('Schedule list not found');
-
-        return {
-            id: Number(result.id),
-            createdAt: new Date(result.createdAt),
-            semester: Semester[result.semester],
-            year: result.year,
-            userId: result.userId,
-            schedules: result.schedules.map((schedule) => ({
-                id: Number(schedule.id),
-                createdAt: new Date(schedule.createdAt),
-                weekDay: WeekDay[schedule.weekDay],
-                startHour: Hour[schedule.startHour],
-                endHour: Hour[schedule.endHour],
-                course: {
-                    id: Number(schedule.course.id),
-                    createdAt: new Date(schedule.course.createdAt),
-                    code: schedule.course.code || '',
-                    name: schedule.course.name || '',
-                    sks: schedule.course.sks || 0,
-                    description: schedule.course.description || '',
-                },
-                lecturer: {
-                    id: Number(schedule.lecturer.id),
-                    createdAt: new Date(schedule.lecturer.createdAt),
-                    nip: schedule.lecturer.nip || '',
-                    name: schedule.lecturer.name || '',
-                    faculy: schedule.lecturer.faculty || '',
-                    expertise: schedule.lecturer.expertise || '',
-                },
-                room: {
-                    id: Number(schedule.room.id),
-                    createdAt: new Date(schedule.room.createdAt),
-                    name: schedule.room.name || '',
-                    capacity: schedule.room.capacity || 0,
-                },
-            })),
-        };
-    }
-
     async GetScheduleListsByUserID(userId: string): Promise<ScheduleList[]> {
         const result = await db.query.scheduleList.findMany({
             where: eq(scheduleList.userId, userId),

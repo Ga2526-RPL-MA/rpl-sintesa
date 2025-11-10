@@ -4,7 +4,6 @@ import GetCourses from '@/src/application/usecases/GetCourses';
 import GetCurrentUserID from '@/src/application/usecases/GetCurrentUserID';
 import GetHours from '@/src/application/usecases/GetHours';
 import GetLecturers from '@/src/application/usecases/GetLecturers';
-import GetNewestScheduleListByUserID from '@/src/application/usecases/GetNewestScheduleListByUserID';
 import GetRooms from '@/src/application/usecases/GetRooms';
 import GetScheduleListByID from '@/src/application/usecases/GetScheduleListByID';
 import GetScheduleListsByUserID from '@/src/application/usecases/GetScheduleListsByUserID';
@@ -19,27 +18,20 @@ export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
-        const newest = searchParams.get('newest');
 
-        let scheduleList = {};
         if (id) {
-            scheduleList = await GetScheduleListByID(
+            const scheduleList = await GetScheduleListByID(
                 Number(id),
                 new ScheduleListRepositoryImpl(),
             );
-        } else if (newest) {
-            if (newest !== 'true') throw new Error('Invalid query');
 
-            scheduleList = await GetNewestScheduleListByUserID(
-                await GetCurrentUserID(),
-                new ScheduleListRepositoryImpl(),
-            );
-        } else {
-            scheduleList = await GetScheduleListsByUserID(
-                await GetCurrentUserID(),
-                new ScheduleListRepositoryImpl(),
-            );
+            return NextResponse.json(scheduleList);
         }
+
+        const scheduleList = await GetScheduleListsByUserID(
+            await GetCurrentUserID(),
+            new ScheduleListRepositoryImpl(),
+        );
 
         return NextResponse.json(scheduleList);
     } catch (err) {
