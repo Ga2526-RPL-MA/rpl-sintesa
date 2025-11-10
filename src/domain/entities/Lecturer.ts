@@ -3,7 +3,7 @@ type Lecturer = {
     createdAt: Date;
     nip: string;
     name: string;
-    faculy: string;
+    faculty: string;
     expertise: string;
 };
 

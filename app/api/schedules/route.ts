@@ -1,7 +1,8 @@
 import GenerateScheduleListDTO from '@/src/application/dto/GenerateScheduleListDTO';
+import ExportType from '@/src/application/enums/ExportType';
 import AddScheduleList from '@/src/application/usecases/AddScheduleList';
+import ExportScheduleList from '@/src/application/usecases/ExportScheduleList';
 import GenerateScheduleList from '@/src/application/usecases/GenerateScheduleList';
-import GenerateThenAddScheduleList from '@/src/application/usecases/GenerateThenAddScheduleList';
 import GetCourses from '@/src/application/usecases/GetCourses';
 import GetCurrentUserID from '@/src/application/usecases/GetCurrentUserID';
 import GetHours from '@/src/application/usecases/GetHours';
@@ -45,12 +46,12 @@ export async function GET(request: Request) {
         }
 
         return NextResponse.json(scheduleList);
-    } catch (err) {
+    } catch (error) {
         return NextResponse.json(
             {
                 error:
-                    err instanceof Error
-                        ? err.message
+                    error instanceof Error
+                        ? error.message
                         : 'Unknown error occured',
             },
             { status: 500 },
@@ -60,6 +61,22 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
     try {
+        const { searchParams } = new URL(request.url);
+        const id = searchParams.get('id');
+        const type = searchParams.get('type');
+
+        if(id && type){
+            const result = await ExportScheduleList(
+                await GetScheduleListByID(
+                    Number(id), 
+                    new ScheduleListRepositoryImpl()
+                ), type as ExportType);
+
+            return NextResponse.json(result);
+        } else if (id && !type || !id && type){
+            throw new Error('Invalid params');
+        }
+
         const body = await request.json();
 
         const addedScheduleList = await AddScheduleList(
@@ -78,7 +95,12 @@ export async function POST(request: Request) {
         return NextResponse.json(addedScheduleList);
     } catch (error) {
         return NextResponse.json(
-            { message: 'Failed to generate schedule', error },
+            {
+                error:
+                    error instanceof Error
+                        ? error.message
+                        : 'Unknown error occured',
+            },
             { status: 500 },
         );
     }
