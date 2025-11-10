@@ -1,19 +1,8 @@
-import type { Metadata } from 'next';
 import { ThemeProvider } from 'next-themes';
-import './globals.css';
+import AuthBackground from '@/components/auth-bg';
 import { Toaster } from 'sonner';
-
-const defaultUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : 'http://localhost:3000';
-
-export const metadata: Metadata = {
-    metadataBase: new URL(defaultUrl),
-    title: 'Sintesa',
-    description: 'The fast scheduler',
-};
-
-export default function RootLayout({
+import { ThemeSwitcher } from '@/components/premade/theme-switcher';
+export default function AuthLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
@@ -27,6 +16,10 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
+                    <AuthBackground />
+                    <div className="absolute top-4 right-4 z-20">
+                        <ThemeSwitcher />
+                    </div>
                     {children}
                 </ThemeProvider>
                 <Toaster position="top-center" richColors />
