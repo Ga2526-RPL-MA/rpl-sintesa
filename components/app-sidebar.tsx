@@ -53,7 +53,7 @@ function AppSidebar({ className }: { className?: string }) {
     const pathname = usePathname();
     const router = useRouter();
     return (
-        <Sidebar    
+        <Sidebar
             variant={'floating'}
             className={cn(className)}
             sidebarInner={cn('dark:bg-sidebar/95', 'bg-sidebar/90')}
