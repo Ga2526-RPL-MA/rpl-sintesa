@@ -61,22 +61,6 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
     try {
-        const { searchParams } = new URL(request.url);
-        const id = searchParams.get('id');
-        const type = searchParams.get('type');
-
-        if(id && type){
-            const result = await ExportScheduleList(
-                await GetScheduleListByID(
-                    Number(id), 
-                    new ScheduleListRepositoryImpl()
-                ), type as ExportType);
-
-            return NextResponse.json(result);
-        } else if (id && !type || !id && type){
-            throw new Error('Invalid params');
-        }
-
         const body = await request.json();
 
         const addedScheduleList = await AddScheduleList(
