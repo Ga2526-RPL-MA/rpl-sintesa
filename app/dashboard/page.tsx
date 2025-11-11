@@ -6,11 +6,7 @@ async function Dashboard() {
     } = await supabase.auth.getUser();
     console.log(user);
 
-    return (
-        <div className="flex h-screen items-center justify-center">
-            Welcome {user?.email}
-        </div>
-    );
+    return <div className="h-max w-max bg-blue-500">dwdddw</div>;
 }
 
 export default Dashboard;

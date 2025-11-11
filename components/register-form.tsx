@@ -107,7 +107,7 @@ function RegisterForm({
 
     return (
         <div className={cn(className)}>
-            <Card className={cn(cardClass)}>
+            <Card variant={'theme'}>
                 <CardHeader>
                     <div className="mb-5 flex h-fit w-full items-center justify-center gap-2">
                         <Logo />
