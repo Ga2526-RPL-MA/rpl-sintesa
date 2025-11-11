@@ -9,9 +9,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <SidebarProvider>
                     <AppSidebar className="bg-transparent" />
                     <main className="h-screen w-screen p-2 pl-0">
-                        <div className="bg-sidebar h-full w-full rounded-xl p-5 shadow-xl">
+                        <div className="dark:bg-sidebar/95 bg-sidebar/90 h-full w-full rounded-xl p-5 shadow-xl">
                             <SiteHeader />
-                            {children}
+                            <div className='mt-5'>
+                                {children}
+                            </div>
                         </div>
                     </main>
                 </SidebarProvider>

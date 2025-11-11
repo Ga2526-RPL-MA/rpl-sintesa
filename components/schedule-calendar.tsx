@@ -3,25 +3,26 @@
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { useEffect, useState } from 'react';
-import mockScheduleData from '@/lib/mockScheduleData';
-import { Schedule } from '@/lib/mockScheduleData';
-import ScheduleDialog from './dialogs/open-event-dialog';
+import ScheduleDialog from './dialogs/open-schedule-generate-dialog';
 import { EventClickArg } from '@fullcalendar/core/index.js';
-import { Button } from './ui/button';
+import Schedule from '@/src/domain/entities/Schedule';
+import ScheduleList from '@/src/domain/entities/ScheduleList';
+import { cn } from '@/lib/utils';
 
-export default function ScheduleCalendar() {
+export default function ScheduleCalendar({ scheduleData, className }: { scheduleData?: ScheduleList | undefined, className?: string }) {
     const [events, setEvents] = useState<any[]>([]);
     const [selectedEvent, setSelectedEvent] = useState<any>();
     const [eventOpen, setEventOpen] = useState(false);
 
     useEffect(() => {
-        const data: Schedule[] = mockScheduleData.schedules;
+        const timeout = setTimeout(() => {
+            const data: Schedule[] = scheduleData?.schedules || [];
 
-        // Map weekdays to numbers (0 = Sunday, 1 = Monday, ...)
-        const getDayNumber = (day: string) =>
+            // Map weekdays to numbers (0 = Sunday, 1 = Monday, ...)
+            const getDayNumber = (day: string) =>
             ['SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT'].indexOf(day);
 
-        const weekEvents = data.map((d) => ({
+            const weekEvents = data.map((d) => ({
             title: d.course.name,
             daysOfWeek: [getDayNumber(d.weekDay)],
             startTime: d.startHour,
@@ -31,11 +32,14 @@ export default function ScheduleCalendar() {
                 courseCode: d.course.code,
                 data: d,
             },
-        }));
+            }));
 
-        setEvents(weekEvents);
-        console.log(weekEvents);
-    }, []);
+            setEvents(weekEvents);
+            console.log(weekEvents);
+        }, 300); // delay in ms
+
+        return () => clearTimeout(timeout); // cleanup if scheduleData changes quickly
+        }, [scheduleData]);
 
     const renderEventContent = (info: any) => {
         const { event } = info;
@@ -61,8 +65,9 @@ export default function ScheduleCalendar() {
         setEventOpen(true);
     };
     return (
-        <div className="h-[70vh] w-full overflow-hidden bg-transparent">
+        <div className={cn(className, 'overflow-y-auto bg-transparent')}>
             <FullCalendar
+                viewClassNames={'w-full overflow-x-hidden'}
                 plugins={[timeGridPlugin]}
                 initialView="timeGridWeek"
                 allDaySlot={false}
@@ -70,7 +75,7 @@ export default function ScheduleCalendar() {
                 selectable={false}
                 headerToolbar={false}
                 slotMinTime="07:00:00"
-                slotMaxTime="18:00:00"
+                slotMaxTime="17:30:00"
                 hiddenDays={[0, 6]}
                 expandRows={true}
                 eventContent={renderEventContent}

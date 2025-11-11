@@ -6,7 +6,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { Schedule } from '@/lib/mockScheduleData';
+import Schedule from '@/src/domain/entities/Schedule';
 import { Separator } from '../ui/separator';
 import { Clock12, Clock3, MapPin, User } from 'lucide-react';
 

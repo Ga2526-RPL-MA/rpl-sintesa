@@ -22,6 +22,7 @@ import {
 } from '@tabler/icons-react';
 import Logo from './logo';
 import { usePathname, useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 
 const menuItems = [
     {
@@ -52,6 +53,23 @@ const menuItems = [
 function AppSidebar({ className }: { className?: string }) {
     const pathname = usePathname();
     const router = useRouter();
+
+    async function handleLogout() {
+        try {
+            const supabase = createClient();
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+                console.error('Error logging out:', error.message);
+                return;
+            }
+        } catch (error) {
+            console.error(
+                'An unexpected error occurred during logout:',
+                error,
+            );
+        }
+    }
+
     return (
         <Sidebar
             variant={'floating'}

@@ -66,9 +66,14 @@ export async function POST(request: Request) {
         );
 
         return NextResponse.json(addedScheduleList);
-    } catch (error) {
-        return NextResponse.json(
-            { message: 'Failed to generate schedule', error },
+    } catch (err) {
+         return NextResponse.json(
+            {
+                error:
+                    err instanceof Error
+                        ? err.message
+                        : 'Unknown error occured',
+            },
             { status: 500 },
         );
     }
