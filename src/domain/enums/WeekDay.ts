@@ -1,7 +1,9 @@
-export enum WeekDay {
-    Monday = 'Senin',
-    Tuesday = 'Selasa',
-    Wednesday = 'Rabu',
-    Thursday = 'Kamis',
-    Friday = 'Jumat',
+enum WeekDay {
+    SENIN = 'SENIN',
+    SELASA = 'SELASA',
+    RABU = 'RABU',
+    KAMIS = 'KAMIS',
+    JUMAT = 'JUMAT',
 }
+
+export default WeekDay;
