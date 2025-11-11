@@ -23,10 +23,10 @@ export default function ViewScheduleHistoryDialog({
     schedule,
 }: ViewScheduleHistoryDialogProps) {
     if (!schedule) return null;
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         if (open) {
-            setIsLoading(true)
+            setIsLoading(true);
         }
         // fake async loading delay
         const timeout = setTimeout(() => {
@@ -34,24 +34,21 @@ export default function ViewScheduleHistoryDialog({
         }, 1000); // 1.5s delay — adjust as needed
 
         return () => clearTimeout(timeout); // cleanup on unmount
-    },[open])
+    }, [open]);
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className='min-w-[90vw] h-[80vh] grid-rows-[auto_1fr]'>
-                <DialogTitle>
-                    Schedule - {schedule.id}
-                </DialogTitle>
+            <DialogContent className="h-[80vh] min-w-[90vw] grid-rows-[auto_1fr]">
+                <DialogTitle>Schedule - {schedule.id}</DialogTitle>
                 <div>
                     {isLoading ? (
                         <ScheduleSkeleton />
                     ) : (
-                        <ScheduleCalendar 
-                        scheduleData={schedule} 
-                        className='w-full h-full'
+                        <ScheduleCalendar
+                            scheduleData={schedule}
+                            className="h-full w-full"
                         />
                     )}
-
                 </div>
             </DialogContent>
         </Dialog>

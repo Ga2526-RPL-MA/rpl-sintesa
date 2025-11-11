@@ -8,7 +8,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+} from '@/components/ui/alert-dialog';
 
 interface ConfirmDialogProps {
     open: boolean;
@@ -26,8 +26,8 @@ export default function ConfirmDialog({
     onConfirm,
     title,
     description,
-    confirmText = "Continue",
-    cancelText = "Cancel",
+    confirmText = 'Continue',
+    cancelText = 'Cancel',
 }: ConfirmDialogProps) {
     const handleConfirm = () => {
         onConfirm();
@@ -41,7 +41,15 @@ export default function ConfirmDialog({
                     <AlertDialogTitle>{title}</AlertDialogTitle>
                     <AlertDialogDescription>
                         Are you sure you want to generate a new schedule? <br />
-                        This will replace your current schedule with the new one, the previous schedules will be saved in the <a href="/dashboard/history" className="text-primary underline">History Page</a>.
+                        This will replace your current schedule with the new
+                        one, the previous schedules will be saved in the{' '}
+                        <a
+                            href="/dashboard/history"
+                            className="text-primary underline"
+                        >
+                            History Page
+                        </a>
+                        .
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

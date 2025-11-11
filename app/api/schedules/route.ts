@@ -67,7 +67,7 @@ export async function POST(request: Request) {
 
         return NextResponse.json(addedScheduleList);
     } catch (err) {
-         return NextResponse.json(
+        return NextResponse.json(
             {
                 error:
                     err instanceof Error

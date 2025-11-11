@@ -212,7 +212,6 @@
     }
     body {
         @apply bg-background text-foreground;
-        
     }
 }
 
@@ -229,18 +228,18 @@
 }
 
 @keyframes fadeInEvent {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .fade-in-event {
-  animation: fadeInEvent 0.1s ease-out forwards;
+    animation: fadeInEvent 0.1s ease-out forwards;
 }
 
 /* Grid lines */
@@ -266,4 +265,3 @@
     @apply border;
     @apply border-sidebar-border!;
 }
-

@@ -63,10 +63,7 @@ function AppSidebar({ className }: { className?: string }) {
                 return;
             }
         } catch (error) {
-            console.error(
-                'An unexpected error occurred during logout:',
-                error,
-            );
+            console.error('An unexpected error occurred during logout:', error);
         }
     }
 

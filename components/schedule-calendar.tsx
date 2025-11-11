@@ -9,7 +9,13 @@ import Schedule from '@/src/domain/entities/Schedule';
 import ScheduleList from '@/src/domain/entities/ScheduleList';
 import { cn } from '@/lib/utils';
 
-export default function ScheduleCalendar({ scheduleData, className }: { scheduleData?: ScheduleList | undefined, className?: string }) {
+export default function ScheduleCalendar({
+    scheduleData,
+    className,
+}: {
+    scheduleData?: ScheduleList | undefined;
+    className?: string;
+}) {
     const [events, setEvents] = useState<any[]>([]);
     const [selectedEvent, setSelectedEvent] = useState<any>();
     const [eventOpen, setEventOpen] = useState(false);
@@ -20,18 +26,18 @@ export default function ScheduleCalendar({ scheduleData, className }: { schedule
 
             // Map weekdays to numbers (0 = Sunday, 1 = Monday, ...)
             const getDayNumber = (day: string) =>
-            ['SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT'].indexOf(day);
+                ['SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT'].indexOf(day);
 
             const weekEvents = data.map((d) => ({
-            title: d.course.name,
-            daysOfWeek: [getDayNumber(d.weekDay)],
-            startTime: d.startHour,
-            endTime: d.endHour,
-            extendedProps: {
-                room: d.room,
-                courseCode: d.course.code,
-                data: d,
-            },
+                title: d.course.name,
+                daysOfWeek: [getDayNumber(d.weekDay)],
+                startTime: d.startHour,
+                endTime: d.endHour,
+                extendedProps: {
+                    room: d.room,
+                    courseCode: d.course.code,
+                    data: d,
+                },
             }));
 
             setEvents(weekEvents);
@@ -39,7 +45,7 @@ export default function ScheduleCalendar({ scheduleData, className }: { schedule
         }, 300); // delay in ms
 
         return () => clearTimeout(timeout); // cleanup if scheduleData changes quickly
-        }, [scheduleData]);
+    }, [scheduleData]);
 
     const renderEventContent = (info: any) => {
         const { event } = info;

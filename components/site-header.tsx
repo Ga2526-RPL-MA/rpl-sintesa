@@ -5,7 +5,7 @@ import { Separator } from './ui/separator';
 function SiteHeader() {
     return (
         <div>
-            <div className="mb-2 flex items-center h-[3vh]">
+            <div className="mb-2 flex h-[3vh] items-center">
                 {/* <SidebarTrigger /> */}
                 <ThemeSwitcher className="ml-auto" />
             </div>
