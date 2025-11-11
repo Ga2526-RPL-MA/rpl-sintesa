@@ -214,3 +214,37 @@
         @apply bg-background text-foreground;
     }
 }
+
+.fc-timegrid-event-harness-inset .fc-timegrid-event {
+    @apply dark:shadow-[0_0px_0px_1px_rgba(0,0,0,1)];
+
+}
+.fc-v-event {
+    @apply border;
+    @apply border-white;
+    @apply dark:border-sidebar-border
+}
+
+/* Grid lines */
+.fc-theme-standard td, 
+.fc-theme-standard th {
+    @apply border border-border;
+}
+
+/* Day headers */
+.fc-col-header-cell {
+    @apply truncate;
+    @apply bg-sidebar text-sidebar-foreground font-semibold;
+}
+
+/* Today's cell */
+.fc-day-today {
+    @apply bg-transparent!;
+    @apply -z-10
+}
+
+/* Outer borders */
+.fc-scrollgrid {
+    @apply border;
+    @apply border-sidebar-border!;
+}
