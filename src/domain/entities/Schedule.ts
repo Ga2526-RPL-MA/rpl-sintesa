@@ -1,39 +1,18 @@
-import { Semester } from '../enums/Semester';
-import { WeekDay } from '../enums/WeekDay';
+import Hour from '../enums/Hour';
+import WeekDay from '../enums/WeekDay';
+import Course from './Course';
+import Lecturer from './Lecturer';
+import Room from './Room';
 
-export default class Schedule {
+type Schedule = {
     id: number;
-    courseId: number;
-    roomId: number;
+    createdAt: Date;
     weekDay: WeekDay;
-    startHour: string;
-    endHour: string;
-    semester: Semester;
-    lecturerId: number;
-    year: string;
-    userId: string;
+    startHour: Hour;
+    endHour: Hour;
+    course: Course;
+    lecturer: Lecturer;
+    room: Room;
+};
 
-    constructor(
-        id: number,
-        courseId: number,
-        roomId: number,
-        weekDay: WeekDay,
-        startHour: string,
-        endHour: string,
-        semester: Semester,
-        lecturerId: number,
-        year: string,
-        userId: string,
-    ) {
-        this.id = id;
-        this.courseId = courseId;
-        this.roomId = roomId;
-        this.weekDay = weekDay;
-        this.startHour = startHour;
-        this.endHour = endHour;
-        this.semester = semester;
-        this.lecturerId = lecturerId;
-        this.year = year;
-        this.userId = userId;
-    }
-}
+export default Schedule;
