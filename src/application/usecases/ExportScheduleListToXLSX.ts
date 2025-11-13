@@ -2,14 +2,16 @@ import * as ExcelJS from 'exceljs';
 import ExportScheduleListToXLSXDTO from '../dto/ExportScheduleListToXLSXDTO';
 import ArgbColors from '../enums/ArgbColors';
 
-export default async function ExportScheduleListToXLSX(dto: ExportScheduleListToXLSXDTO): Promise<{buffer: ExcelJS.Buffer, fileName: string}>{
+export default async function ExportScheduleListToXLSX(
+    dto: ExportScheduleListToXLSXDTO,
+): Promise<{ buffer: ExcelJS.Buffer; fileName: string }> {
     try {
-        let formattedHourList = [];
-        for(let i = 0; i < dto.hourList.length-1; i+=2){
-            formattedHourList.push(`${dto.hourList[i]}-${dto.hourList[i+1]}`);
+        const formattedHourList = [];
+        for (let i = 0; i < dto.hourList.length - 1; i += 2) {
+            formattedHourList.push(`${dto.hourList[i]}-${dto.hourList[i + 1]}`);
         }
-        let hourColumnValues = ['Jam'];
-        for(let i = 0; i < dto.weekDayList.length; i++){
+        const hourColumnValues = ['Jam'];
+        for (let i = 0; i < dto.weekDayList.length; i++) {
             hourColumnValues.push(...formattedHourList);
             if (i < dto.weekDayList.length - 1) {
                 hourColumnValues.push('');
@@ -18,17 +20,21 @@ export default async function ExportScheduleListToXLSX(dto: ExportScheduleListTo
 
         const workbook = new ExcelJS.Workbook();
 
-        workbook.title = `Schedule List ${dto.scheduleList.semester} ${dto.scheduleList.year}`
+        workbook.title = `Schedule List ${dto.scheduleList.semester} ${dto.scheduleList.year}`;
         workbook.creator = 'Shintesa-Team';
         workbook.lastModifiedBy = 'Shintesa-Team';
         workbook.created = new Date();
 
-        const worksheet = workbook.addWorksheet(`${dto.scheduleList.semester} ${dto.scheduleList.year}`);
-        (await worksheet).views = [{
-            state: 'frozen',
-            xSplit: 2,
-            ySplit: 1,
-        }];
+        const worksheet = workbook.addWorksheet(
+            `${dto.scheduleList.semester} ${dto.scheduleList.year}`,
+        );
+        (await worksheet).views = [
+            {
+                state: 'frozen',
+                xSplit: 2,
+                ySplit: 1,
+            },
+        ];
 
         // First Row Header
         const firstRowHeader = worksheet.getRow(1);
@@ -36,10 +42,10 @@ export default async function ExportScheduleListToXLSX(dto: ExportScheduleListTo
         firstRowHeader.font = {
             bold: true,
             color: {
-                argb: ArgbColors.White
+                argb: ArgbColors.White,
             },
             size: 12,
-        }
+        };
         fillSolid(firstRowHeader, ArgbColors.Black);
         alignWrapCenter(firstRowHeader);
 
@@ -51,82 +57,103 @@ export default async function ExportScheduleListToXLSX(dto: ExportScheduleListTo
                 return {
                     header: room.name,
                     key: `room=${room.id}`,
-                }})
-        ]
+                };
+            }),
+        ];
 
         // Week Days
-        for(let i = 0; i < dto.weekDayList.length; i++){
-            let startRow = 2+i+formattedHourList.length*i;
-            let endRow= 2+i+formattedHourList.length*(i+1)-1;
+        for (let i = 0; i < dto.weekDayList.length; i++) {
+            const startRow = 2 + i + formattedHourList.length * i;
+            const endRow = 2 + i + formattedHourList.length * (i + 1) - 1;
             worksheet.mergeCells(`A${startRow}:A${endRow}`);
 
-            let cell = worksheet.getCell(`A${startRow}`);
+            const cell = worksheet.getCell(`A${startRow}`);
             cell.value = dto.weekDayList[i];
             cell.font = {
                 bold: true,
-            }
+            };
             alignWrapCenter(cell);
 
-            let dividerRow = worksheet.getRow(endRow+1);
+            const dividerRow = worksheet.getRow(endRow + 1);
             fillSolid(dividerRow, ArgbColors.Black);
         }
 
         // Hours
         const hourRows = worksheet.getColumn('jam');
-        hourRows.values = hourColumnValues
+        hourRows.values = hourColumnValues;
         hourRows.width = 15;
         alignWrapCenter(hourRows);
 
         // Rooms
         dto.roomList.forEach((room) => {
-            let col = worksheet.getColumn(`room=${room.id}`);
+            const col = worksheet.getColumn(`room=${room.id}`);
             col.width = 30;
             alignWrapCenter(col);
-        })
+        });
 
         // Schedules
         dto.scheduleList.schedules.forEach((schedule) => {
             const weekDayIndex = dto.weekDayList.findIndex(
-                (day) => day === schedule.weekDay
+                (day) => day === schedule.weekDay,
             );
-            if (weekDayIndex === -1) throw new Error(`Week day for ${schedule.id} not found.`);
+            if (weekDayIndex === -1)
+                throw new Error(`Week day for ${schedule.id} not found.`);
 
             const hourIndex = dto.hourList.findIndex((hour) =>
-                hour.includes(schedule.startHour)
+                hour.includes(schedule.startHour),
             );
-            if (hourIndex === -1) throw new Error(`Start hour for ${schedule.id} not found.`);
+            if (hourIndex === -1)
+                throw new Error(`Start hour for ${schedule.id} not found.`);
 
             const roomIndex = dto.roomList.findIndex(
-                (room) => room.name === schedule.room.name
+                (room) => room.name === schedule.room.name,
             );
-            if (roomIndex === -1) throw new Error(`Room name for ScheduleID: ${schedule.id} not found.`);
+            if (roomIndex === -1)
+                throw new Error(
+                    `Room name for ScheduleID: ${schedule.id} not found.`,
+                );
 
-            const row = 2 + weekDayIndex + hourIndex + formattedHourList.length * weekDayIndex;
+            const row =
+                2 +
+                weekDayIndex +
+                hourIndex +
+                formattedHourList.length * weekDayIndex;
             const col = 3 + roomIndex;
 
-            fillScheduleCell(worksheet, row, col, schedule);
+            fillScheduleCell(
+                worksheet,
+                row,
+                col,
+                schedule.course.name,
+                schedule.course.sks,
+                schedule.lecturer.name,
+            );
         });
 
         return {
             buffer: await workbook.xlsx.writeBuffer(),
             fileName: `${Date.now()}.xlsx`,
         };
-    } catch(error) {
-        throw new Error(error instanceof Error? error.message : `Error: ExportScheduleListToXLSX()`);
+    } catch (error) {
+        throw new Error(
+            error instanceof Error
+                ? error.message
+                : `Error: ExportScheduleListToXLSX()`,
+        );
     }
 }
 
 function fillScheduleCell(
-  worksheet: ExcelJS.Worksheet,
-  row: number,
-  col: number,
-  schedule: any
+    worksheet: ExcelJS.Worksheet,
+    row: number,
+    col: number,
+    courseName: string,
+    courseSks: number,
+    lecturerName: string,
 ): void {
-    const { course, lecturer } = schedule;
-
     // (Course name)
     let cell = worksheet.getCell(row, col);
-    cell.value = course.name;
+    cell.value = courseName;
     fillSolid(cell, ArgbColors.BabyBlue);
     setBorder(cell, {
         top: { style: 'medium' },
@@ -137,7 +164,7 @@ function fillScheduleCell(
 
     // (SKS / Lecturer)
     cell = worksheet.getCell(row + 1, col);
-    cell.value = `${course.sks} SKS / ${lecturer.name}`;
+    cell.value = `${courseSks} SKS / ${lecturerName}`;
     fillSolid(cell, ArgbColors.BabyBlue);
     setBorder(cell, {
         left: { style: 'medium' },
@@ -147,24 +174,32 @@ function fillScheduleCell(
     // TODO: sesuaikan warna cell matkul dengan semesternya
 }
 
-function fillSolid(target: ExcelJS.Cell | ExcelJS.Row | ExcelJS.Column, colorArgb: string): void {
+function fillSolid(
+    target: ExcelJS.Cell | ExcelJS.Row | ExcelJS.Column,
+    colorArgb: string,
+): void {
     target.fill = {
         type: 'pattern',
         pattern: 'solid',
         fgColor: {
-            argb: colorArgb
+            argb: colorArgb,
         },
-    }
+    };
 }
 
-function setBorder(target: ExcelJS.Cell | ExcelJS.Row | ExcelJS.Column, sides: Partial<ExcelJS.Borders> = {}): void {
-  target.border = sides;
+function setBorder(
+    target: ExcelJS.Cell | ExcelJS.Row | ExcelJS.Column,
+    sides: Partial<ExcelJS.Borders> = {},
+): void {
+    target.border = sides;
 }
 
-function alignWrapCenter(target: ExcelJS.Cell | ExcelJS.Row | ExcelJS.Column): void {
+function alignWrapCenter(
+    target: ExcelJS.Cell | ExcelJS.Row | ExcelJS.Column,
+): void {
     target.alignment = {
         horizontal: 'center',
         vertical: 'middle',
-        wrapText: true
-    }
+        wrapText: true,
+    };
 }

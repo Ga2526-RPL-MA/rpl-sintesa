@@ -1,7 +1,4 @@
-import GenerateScheduleListDTO from '@/src/application/dto/GenerateScheduleListDTO';
-import ExportType from '@/src/application/enums/ExportType';
 import AddScheduleList from '@/src/application/usecases/AddScheduleList';
-import ExportScheduleList from '@/src/application/usecases/ExportScheduleList';
 import GenerateScheduleList from '@/src/application/usecases/GenerateScheduleList';
 import GetCourses from '@/src/application/usecases/GetCourses';
 import GetCurrentUserID from '@/src/application/usecases/GetCurrentUserID';
@@ -16,7 +13,6 @@ import CourseRepositoryImpl from '@/src/infrastructure/repositories/CourseReposi
 import LecturerRepositoryImpl from '@/src/infrastructure/repositories/LecturerRepositoryImpl';
 import RoomRepositoryImpl from '@/src/infrastructure/repositories/RoomRepositoryImpl';
 import ScheduleListRepositoryImpl from '@/src/infrastructure/repositories/ScheduleListRepositoryImpl';
-import { hoursEnum, weekDaysEnum } from '@/src/shared/helper/enumHelper';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
@@ -73,8 +69,9 @@ export async function POST(request: Request) {
                 semester: body.semester,
                 year: new Date(Date.now()).getFullYear().toString(),
                 userId: await GetCurrentUserID(),
-            }), 
-            new ScheduleListRepositoryImpl());
+            }),
+            new ScheduleListRepositoryImpl(),
+        );
 
         return NextResponse.json(addedScheduleList);
     } catch (error) {

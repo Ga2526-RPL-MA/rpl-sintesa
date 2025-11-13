@@ -1,8 +1,8 @@
-import Schedule from "@/src/domain/entities/Schedule";
-import PublicSchedule from "../types/PublicSchedule";
-import toPublicCourse from "./toPublicCourse";
-import toPublicLecturer from "./toPublicLecturer";
-import toPublicRoom from "./toPublicRoom";
+import Schedule from '@/src/domain/entities/Schedule';
+import PublicSchedule from '../types/PublicSchedule';
+import toPublicCourse from './toPublicCourse';
+import toPublicLecturer from './toPublicLecturer';
+import toPublicRoom from './toPublicRoom';
 
 export default function toPublicSchedule(schedule: Schedule): PublicSchedule {
     return {
@@ -12,5 +12,5 @@ export default function toPublicSchedule(schedule: Schedule): PublicSchedule {
         course: toPublicCourse(schedule.course),
         lecturer: toPublicLecturer(schedule.lecturer),
         room: toPublicRoom(schedule.room),
-    }
+    };
 }
