@@ -35,7 +35,6 @@
     "drizzle-orm": "^0.44.7",
     "exceljs": "^4.4.0",
     "flat": "^6.0.1",
-    "fs": "^0.0.1-security",
     "json-2-csv": "^5.5.10",
     "lucide-react": "^0.511.0",
     "next": "latest",
