@@ -9,7 +9,7 @@ function RegisterPage() {
                 <ThemeSwitcher />
             </div>
             <div className="relative z-10 w-full max-w-sm p-5">
-                <RegisterForm cardClass="bg-card/85 [&_input]:border-foreground/10 [&_label]:text-green-900 dark:[&_label]:text-accent-foreground dark:text-accent-foreground" />
+                <RegisterForm />
             </div>
         </div>
     );

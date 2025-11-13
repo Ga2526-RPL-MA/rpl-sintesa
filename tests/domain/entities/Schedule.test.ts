@@ -1,6 +1,6 @@
-import Schedule from "@/src/domain/entities/Schedule";
-import Hour from "@/src/domain/enums/Hour";
-import WeekDay from "@/src/domain/enums/WeekDay";
+import Schedule from '@/src/domain/entities/Schedule';
+import Hour from '@/src/domain/enums/Hour';
+import WeekDay from '@/src/domain/enums/WeekDay';
 
 describe('Testing Schedule Entity', () => {
     it('should create a Schedule instance', () => {

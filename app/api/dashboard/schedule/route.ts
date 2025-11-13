@@ -1,0 +1,25 @@
+import GetCurrentUserID from '@/src/application/usecases/GetCurrentUserID';
+import GetNewestScheduleListByUserID from '@/src/application/usecases/GetNewestScheduleListByUserID';
+import ScheduleListRepositoryImpl from '@/src/infrastructure/repositories/ScheduleListRepositoryImpl';
+import { NextResponse } from 'next/server';
+
+export async function GET() {
+    try {
+        const scheduleList = await GetNewestScheduleListByUserID(
+            await GetCurrentUserID(),
+            new ScheduleListRepositoryImpl(),
+        );
+
+        return NextResponse.json(scheduleList);
+    } catch (err) {
+        return NextResponse.json(
+            {
+                error:
+                    err instanceof Error
+                        ? err.message
+                        : 'Unknown error occured',
+            },
+            { status: 500 },
+        );
+    }
+}
