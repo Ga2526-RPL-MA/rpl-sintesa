@@ -82,7 +82,7 @@ export default class ScheduleListRepositoryImpl
                     createdAt: new Date(schedule.lecturer.createdAt),
                     nip: schedule.lecturer.nip || '',
                     name: schedule.lecturer.name || '',
-                    faculy: schedule.lecturer.faculty || '',
+                    faculty: schedule.lecturer.faculty || '',
                     expertise: schedule.lecturer.expertise || '',
                 },
                 room: {
@@ -137,7 +137,7 @@ export default class ScheduleListRepositoryImpl
                     createdAt: new Date(schedule.lecturer.createdAt),
                     nip: schedule.lecturer.nip || '',
                     name: schedule.lecturer.name || '',
-                    faculy: schedule.lecturer.faculty || '',
+                    faculty: schedule.lecturer.faculty || '',
                     expertise: schedule.lecturer.expertise || '',
                 },
                 room: {

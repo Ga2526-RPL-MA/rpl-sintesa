@@ -12,7 +12,7 @@ export default class LecturerRepositoryImpl implements LecturerRepository {
             createdAt: new Date(l.createdAt),
             nip: l.nip || '',
             name: l.name || '',
-            faculy: l.faculty || '',
+            faculty: l.faculty || '',
             expertise: l.expertise || '',
         }));
     }
@@ -30,7 +30,7 @@ export default class LecturerRepositoryImpl implements LecturerRepository {
             createdAt: new Date(result.createdAt),
             nip: result.nip || '',
             name: result.name || '',
-            faculy: result.faculty || '',
+            faculty: result.faculty || '',
             expertise: result.expertise || '',
         };
     }
@@ -41,7 +41,7 @@ export default class LecturerRepositoryImpl implements LecturerRepository {
             .values({
                 nip: newLecturer.nip,
                 name: newLecturer.name,
-                faculty: newLecturer.faculy,
+                faculty: newLecturer.faculty,
                 expertise: newLecturer.expertise,
             })
             .returning();
@@ -51,7 +51,7 @@ export default class LecturerRepositoryImpl implements LecturerRepository {
             createdAt: new Date(result.createdAt),
             nip: result.nip || '',
             name: result.name || '',
-            faculy: result.faculty || '',
+            faculty: result.faculty || '',
             expertise: result.expertise || '',
         };
     }
@@ -65,7 +65,7 @@ export default class LecturerRepositoryImpl implements LecturerRepository {
             .set({
                 nip: updatedLecturer.nip,
                 name: updatedLecturer.name,
-                faculty: updatedLecturer.faculy,
+                faculty: updatedLecturer.faculty,
                 expertise: updatedLecturer.expertise,
             })
             .where(eq(lecturer.id, id))
@@ -78,7 +78,7 @@ export default class LecturerRepositoryImpl implements LecturerRepository {
             createdAt: new Date(result.createdAt),
             nip: result.nip || '',
             name: result.name || '',
-            faculy: result.faculty || '',
+            faculty: result.faculty || '',
             expertise: result.expertise || '',
         };
     }
@@ -96,7 +96,7 @@ export default class LecturerRepositoryImpl implements LecturerRepository {
             createdAt: new Date(result.createdAt),
             nip: result.nip || '',
             name: result.name || '',
-            faculy: result.faculty || '',
+            faculty: result.faculty || '',
             expertise: result.expertise || '',
         };
     }
