@@ -19,7 +19,7 @@ export const scheduleListRelations = relations(
     }),
 );
 
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersInAuthRelations = relations(users, ({ many }) => ({
     scheduleLists: many(scheduleList),
 }));
 

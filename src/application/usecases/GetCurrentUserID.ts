@@ -7,9 +7,11 @@ export default async function GetCurrentUserID(): Promise<string> {
         if (error) throw error;
 
         return data.user.id;
-    } catch (err) {
+    } catch (error) {
         throw new Error(
-            err instanceof Error ? err.message : `Error: GetCurrentUserID()`,
+            error instanceof Error
+                ? error.message
+                : `Error: GetCurrentUserID()`,
         );
     }
 }

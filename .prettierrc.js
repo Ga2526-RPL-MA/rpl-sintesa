@@ -6,6 +6,6 @@ module.exports = {
   printWidth: 80,
   bracketSpacing: true,
   arrowParens: "always",
-  endOfLine: "lf",
+  endOfLine: "crlf",
   plugins: ["prettier-plugin-tailwindcss"]
 };

@@ -5,7 +5,7 @@ import Hour from '@/src/domain/enums/Hour';
 import Semester from '@/src/domain/enums/Semester';
 import WeekDay from '@/src/domain/enums/WeekDay';
 
-export default interface GenerateScheduleListDTO {
+type GenerateScheduleListDTO = {
     coursesList: Course[];
     lecturersList: Lecturer[];
     roomsList: Room[];
@@ -14,4 +14,6 @@ export default interface GenerateScheduleListDTO {
     semester: Semester;
     year: string;
     userId: string;
-}
+};
+
+export default GenerateScheduleListDTO;

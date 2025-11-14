@@ -3,7 +3,7 @@ import Schedule from '@/src/domain/entities/Schedule';
 import WeekDay from '@/src/domain/enums/WeekDay';
 import Hour from '@/src/domain/enums/Hour';
 import Random from '@/src/shared/utils/Random';
-import GenerateScheduleListDTO from '../dto/GenerateScheduleListDTO';
+import GenerateScheduleListDTO from '../types/GenerateScheduleListDTO';
 
 export default async function GenerateScheduleList(
     dto: GenerateScheduleListDTO,

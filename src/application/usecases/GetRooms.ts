@@ -6,10 +6,10 @@ export default async function GetRooms(
 ): Promise<Room[]> {
     try {
         return await roomRepository.GetRooms();
-    } catch (err) {
+    } catch (error) {
         throw new Error(
-            err instanceof Error
-                ? err.message
+            error instanceof Error
+                ? error.message
                 : `Error: GetRooms(${roomRepository})`,
         );
     }
