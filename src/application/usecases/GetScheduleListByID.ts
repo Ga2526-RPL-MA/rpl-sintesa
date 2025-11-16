@@ -7,10 +7,10 @@ export default async function GetScheduleListByID(
 ): Promise<ScheduleList> {
     try {
         return await scheduleListRepository.GetScheduleListByID(id);
-    } catch (err) {
+    } catch (error) {
         throw new Error(
-            err instanceof Error
-                ? err.message
+            error instanceof Error
+                ? error.message
                 : `Error: GetScheduleListByID(${id}, ${scheduleListRepository}`,
         );
     }

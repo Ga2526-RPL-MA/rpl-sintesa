@@ -11,12 +11,12 @@ export async function GET() {
         );
 
         return NextResponse.json(scheduleList);
-    } catch (err) {
+    } catch (error) {
         return NextResponse.json(
             {
                 error:
-                    err instanceof Error
-                        ? err.message
+                    error instanceof Error
+                        ? error.message
                         : 'Unknown error occured',
             },
             { status: 500 },
