@@ -50,7 +50,7 @@ export const weekday = pgEnum('WEEKDAY', [
     'KAMIS',
     'JUMAT',
 ]);
-const authSchema = pgSchema('auth');
+export const authSchema = pgSchema('auth');
 
 export const users = authSchema.table('users', {
     // You can use { mode: "bigint" } if numbers are exceeding js number limitations
@@ -114,31 +114,32 @@ export const course = pgTable(
         })
             .defaultNow()
             .notNull(),
-        code: text(),
-        name: text(),
-        sks: smallint(),
-        description: text(),
+        code: text().notNull(),
+        name: text().notNull(),
+        sks: smallint().notNull(),
+        description: text().default('').notNull(),
+        semester: integer().notNull(),
     },
     () => [
-        pgPolicy('Policy with table joins', {
+        pgPolicy('Enable delete for users based on user_id', {
             as: 'permissive',
-            for: 'update',
+            for: 'delete',
             to: ['supabase_admin'],
             using: sql`true`,
-        }),
-        pgPolicy('Enable read access for all users', {
-            as: 'permissive',
-            for: 'select',
-            to: ['public'],
         }),
         pgPolicy('Enable insert for authenticated users only', {
             as: 'permissive',
             for: 'insert',
             to: ['supabase_admin'],
         }),
-        pgPolicy('Enable delete for users based on user_id', {
+        pgPolicy('Enable read access for all users', {
             as: 'permissive',
-            for: 'delete',
+            for: 'select',
+            to: ['public'],
+        }),
+        pgPolicy('Policy with table joins', {
+            as: 'permissive',
+            for: 'update',
             to: ['supabase_admin'],
         }),
     ],
@@ -164,14 +165,14 @@ export const rooms = pgTable(
         })
             .defaultNow()
             .notNull(),
-        name: text(),
-        capacity: integer(),
+        name: text().notNull(),
+        capacity: integer().default(50).notNull(),
     },
     () => [
-        pgPolicy('Enable read access for all users', {
+        pgPolicy('Enable delete for users based on user_id', {
             as: 'permissive',
-            for: 'select',
-            to: ['public'],
+            for: 'delete',
+            to: ['supabase_admin'],
             using: sql`true`,
         }),
         pgPolicy('Enable insert for authenticated users only', {
@@ -179,10 +180,10 @@ export const rooms = pgTable(
             for: 'insert',
             to: ['supabase_admin'],
         }),
-        pgPolicy('Enable delete for users based on user_id', {
+        pgPolicy('Enable read access for all users', {
             as: 'permissive',
-            for: 'delete',
-            to: ['supabase_admin'],
+            for: 'select',
+            to: ['public'],
         }),
         pgPolicy('Enable update for users based on user_id', {
             as: 'permissive',
@@ -278,16 +279,17 @@ export const lecturer = pgTable(
         })
             .defaultNow()
             .notNull(),
-        nip: text(),
-        name: text(),
-        faculty: text(),
-        expertise: text(),
+        nip: text().notNull(),
+        name: text().notNull(),
+        faculty: text().notNull(),
+        expertise: text().default('').notNull(),
+        code: text().notNull(),
     },
     () => [
-        pgPolicy('Enable read access for all users', {
+        pgPolicy('Enable delete for users based on user_id', {
             as: 'permissive',
-            for: 'select',
-            to: ['public'],
+            for: 'delete',
+            to: ['supabase_admin'],
             using: sql`true`,
         }),
         pgPolicy('Enable insert for authenticated users only', {
@@ -295,10 +297,10 @@ export const lecturer = pgTable(
             for: 'insert',
             to: ['supabase_admin'],
         }),
-        pgPolicy('Enable delete for users based on user_id', {
+        pgPolicy('Enable read access for all users', {
             as: 'permissive',
-            for: 'delete',
-            to: ['supabase_admin'],
+            for: 'select',
+            to: ['public'],
         }),
         pgPolicy('Policy with table joins', {
             as: 'permissive',

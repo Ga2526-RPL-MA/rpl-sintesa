@@ -1,13 +1,13 @@
 import Semester from '../enums/Semester';
 import Schedule from './Schedule';
 
-type ScheduleList = {
-    id: number;
-    createdAt: Date;
-    semester: Semester;
-    year: string;
-    userId: string;
-    schedules: Schedule[];
-};
-
-export default ScheduleList;
+export default class ScheduleList {
+    constructor(
+        public id: number,
+        public createdAt: Date,
+        public semester: Semester,
+        public year: string,
+        public userId: string,
+        public schedules: Schedule[],
+    ) {}
+}

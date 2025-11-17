@@ -1,8 +1,8 @@
-type Room = {
-    id: number;
-    createdAt: Date;
-    name: string;
-    capacity: number;
-};
-
-export default Room;
+export default class Room {
+    constructor(
+        public id: number,
+        public createdAt: Date,
+        public name: string,
+        public capacity: number,
+    ) {}
+}

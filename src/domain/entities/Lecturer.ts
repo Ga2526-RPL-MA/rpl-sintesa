@@ -1,10 +1,11 @@
-type Lecturer = {
-    id: number;
-    createdAt: Date;
-    nip: string;
-    name: string;
-    faculty: string;
-    expertise: string;
-};
-
-export default Lecturer;
+export default class Lecturer {
+    constructor(
+        public id: number,
+        public createdAt: Date,
+        public nip: string,
+        public name: string,
+        public faculty: string,
+        public expertise: string,
+        public code: string,
+    ) {}
+}

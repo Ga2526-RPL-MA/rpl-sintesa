@@ -9,10 +9,10 @@ export default async function GetNewestScheduleListByUserID(
         return (
             await scheduleListRepository.GetScheduleListsByUserID(userId)
         )[0];
-    } catch (err) {
+    } catch (error) {
         throw new Error(
-            err instanceof Error
-                ? err.message
+            error instanceof Error
+                ? error.message
                 : `Error: GetNewestScheduleListByUserID(${userId}, ${scheduleListRepository})`,
         );
     }

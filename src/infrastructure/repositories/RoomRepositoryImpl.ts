@@ -10,8 +10,8 @@ export default class RoomRepositoryImpl implements RoomRepository {
         return rooms.map((r) => ({
             id: Number(r.id),
             createdAt: new Date(r.createdAt),
-            name: r.name || '',
-            capacity: Number(r.capacity) || 0,
+            name: r.name,
+            capacity: Number(r.capacity),
         }));
     }
 
@@ -23,8 +23,8 @@ export default class RoomRepositoryImpl implements RoomRepository {
         return {
             id: Number(result.id),
             createdAt: new Date(result.createdAt),
-            name: result.name || '',
-            capacity: Number(result.capacity) || 0,
+            name: result.name,
+            capacity: Number(result.capacity),
         };
     }
 
@@ -39,8 +39,8 @@ export default class RoomRepositoryImpl implements RoomRepository {
         return {
             id: Number(result.id),
             createdAt: new Date(result.createdAt),
-            name: result.name || '',
-            capacity: Number(result.capacity) || 0,
+            name: result.name,
+            capacity: Number(result.capacity),
         };
     }
 
@@ -56,8 +56,8 @@ export default class RoomRepositoryImpl implements RoomRepository {
         return {
             id: Number(result.id),
             createdAt: new Date(result.createdAt),
-            name: result.name || '',
-            capacity: Number(result.capacity) || 0,
+            name: result.name,
+            capacity: Number(result.capacity),
         };
     }
 
@@ -76,8 +76,8 @@ export default class RoomRepositoryImpl implements RoomRepository {
         return {
             id: Number(result.id),
             createdAt: new Date(result.createdAt),
-            name: result.name || '',
-            capacity: Number(result.capacity) || 0,
+            name: result.name,
+            capacity: Number(result.capacity),
         };
     }
 
@@ -92,8 +92,8 @@ export default class RoomRepositoryImpl implements RoomRepository {
         return {
             id: Number(result.id),
             createdAt: new Date(result.createdAt),
-            name: result.name || '',
-            capacity: Number(result.capacity) || 0,
+            name: result.name,
+            capacity: Number(result.capacity),
         };
     }
 }

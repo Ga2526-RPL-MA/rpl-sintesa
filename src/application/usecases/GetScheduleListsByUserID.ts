@@ -7,10 +7,10 @@ export default async function GetScheduleListsByUserID(
 ): Promise<ScheduleList[]> {
     try {
         return await scheduleListRepository.GetScheduleListsByUserID(userId);
-    } catch (err) {
+    } catch (error) {
         throw new Error(
-            err instanceof Error
-                ? err.message
+            error instanceof Error
+                ? error.message
                 : `Error: GetScheduleListsByUserID(${userId}, ${scheduleListRepository})`,
         );
     }
