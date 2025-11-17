@@ -1,4 +1,4 @@
-import ArgbColors from "./ArgbColor";
+import ArgbColors from './ArgbColor';
 
 const enum SemesterArgbColor {
     Zero = ArgbColors.White,

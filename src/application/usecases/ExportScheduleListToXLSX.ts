@@ -7,7 +7,6 @@ export default async function ExportScheduleListToXLSX(
     dto: ExportScheduleListToXLSXDTO,
 ): Promise<{ buffer: ExcelJS.Buffer; fileName: string }> {
     try {
-
         const formattedHourList = [];
         for (let i = 0; i < dto.hourList.length - 1; i += 2) {
             formattedHourList.push(`${dto.hourList[i]}-${dto.hourList[i + 1]}`);
