@@ -1,11 +1,13 @@
 import * as ExcelJS from 'exceljs';
 import ExportScheduleListToXLSXDTO from '../dto/ExportScheduleListToXLSXDTO';
-import ArgbColors from '../enums/ArgbColors';
+import ArgbColors from '../enums/ArgbColor';
+import { semesterArgbColorsEnum } from '@/src/shared/helper/enumHelper';
 
 export default async function ExportScheduleListToXLSX(
     dto: ExportScheduleListToXLSXDTO,
 ): Promise<{ buffer: ExcelJS.Buffer; fileName: string }> {
     try {
+
         const formattedHourList = [];
         for (let i = 0; i < dto.hourList.length - 1; i += 2) {
             formattedHourList.push(`${dto.hourList[i]}-${dto.hourList[i + 1]}`);
@@ -126,7 +128,8 @@ export default async function ExportScheduleListToXLSX(
                 col,
                 schedule.course.name,
                 schedule.course.sks,
-                schedule.lecturer.name,
+                schedule.course.semester,
+                schedule.lecturer.code,
             );
         });
 
@@ -149,12 +152,13 @@ function fillScheduleCell(
     col: number,
     courseName: string,
     courseSks: number,
-    lecturerName: string,
+    courseSemester: number,
+    lecturerCode: string,
 ): void {
     // (Course name)
     let cell = worksheet.getCell(row, col);
     cell.value = courseName;
-    fillSolid(cell, ArgbColors.BabyBlue);
+    fillSolid(cell, semesterArgbColorsEnum[courseSemester]);
     setBorder(cell, {
         top: { style: 'medium' },
         left: { style: 'medium' },
@@ -164,14 +168,13 @@ function fillScheduleCell(
 
     // (SKS / Lecturer)
     cell = worksheet.getCell(row + 1, col);
-    cell.value = `${courseSks} SKS / ${lecturerName}`;
-    fillSolid(cell, ArgbColors.BabyBlue);
+    cell.value = `${courseSks} SKS / Sem ${courseSemester} /  ${lecturerCode}`;
+    fillSolid(cell, semesterArgbColorsEnum[courseSemester]);
     setBorder(cell, {
         left: { style: 'medium' },
         bottom: { style: 'medium' },
         right: { style: 'medium' },
     });
-    // TODO: sesuaikan warna cell matkul dengan semesternya
 }
 
 function fillSolid(
