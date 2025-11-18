@@ -48,8 +48,8 @@ function Page() {
     }
 
     function getYears() {
-        var yearList = [];
-        let now = new Date(Date.now()).getFullYear();
+        const yearList = [];
+        const now = new Date(Date.now()).getFullYear();
         for (let i = 0; i <= 3; i++) {
             yearList.push((now + i).toString());
         }
@@ -112,7 +112,10 @@ function Page() {
                             <DropdownMenuLabel>Select Year</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             {getYears().map((year) => (
-                                <DropdownMenuItem onClick={() => setYear(year)}>
+                                <DropdownMenuItem
+                                    key={year}
+                                    onClick={() => setYear(year)}
+                                >
                                     {year}
                                 </DropdownMenuItem>
                             ))}
