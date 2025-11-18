@@ -17,6 +17,7 @@ import {
     MapPin,
     User,
 } from 'lucide-react';
+import { weekDaysEngRecord } from '@/src/shared/helper/enumHelper';
 
 interface ScheduleDialogProps {
     open: boolean;
@@ -30,20 +31,7 @@ export default function ScheduleDialog({
     event,
 }: ScheduleDialogProps) {
     if (!event) return null;
-    const getWeekday = (day: string) => {
-        switch (day) {
-            case 'SENIN':
-                return 'Monday';
-            case 'SELASA':
-                return 'Tuesday';
-            case 'RABU':
-                return 'Wednesday';
-            case 'KAMIS':
-                return 'Thursday';
-            case 'JUMAT':
-                return 'Friday';
-        }
-    };
+    
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
@@ -96,7 +84,7 @@ export default function ScheduleDialog({
                             <CalendarFold className="text-muted-foreground mt-1" />
                             <div>
                                 <h1 className="font-bold">Day:</h1>
-                                <p>{getWeekday(event.weekDay)}</p>
+                                <p>{weekDaysEngRecord[event.weekDay]}</p>
                             </div>
                         </div>
                     )}
