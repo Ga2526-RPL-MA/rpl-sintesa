@@ -13,7 +13,7 @@ function ScheduleHistoryCard({ schedule }: { schedule: ScheduleList }) {
         <div>
             <Card
                 onClick={handleScheduleClick}
-                className="border-primary/30 bg-primary/10 hover:bg-primary/35 flex cursor-pointer items-center justify-between border p-4 px-6"
+                className="active:bg-primary/40 border-primary/30 bg-primary/10 hover:bg-primary/30 grid cursor-pointer grid-cols-1 items-center justify-between border p-4 px-6 lg:flex"
             >
                 <CardTitle>Schedule - {schedule.id}</CardTitle>
                 <h1>Semester - {schedule.semester}</h1>
@@ -36,8 +36,6 @@ function ScheduleHistoryCard({ schedule }: { schedule: ScheduleList }) {
                         },
                     )}
                 </CardDescription>
-                <h1>View</h1>
-                <h1>Export</h1>
             </Card>
             <ScheduleHistoryDialog
                 open={open}

@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className="bg-linear-to-t from-teal-900 to-green-500">
                 <SidebarProvider>
                     <AppSidebar className="bg-transparent" />
-                    <main className="h-screen w-screen p-2 pl-0">
+                    <main className="h-screen w-screen p-2 md:pl-0">
                         <div className="dark:bg-sidebar/95 bg-sidebar/90 h-full w-full rounded-xl p-5 shadow-xl">
                             <SiteHeader />
                             <div className="mt-5">{children}</div>

@@ -8,22 +8,20 @@ export default function AuthLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" suppressHydrationWarning>
-            <body className={`antialiased`}>
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="system"
-                    enableSystem
-                    disableTransitionOnChange
-                >
-                    <AuthBackground />
-                    <div className="absolute top-4 right-4 z-20">
-                        <ThemeSwitcher />
-                    </div>
-                    {children}
-                </ThemeProvider>
-                <Toaster position="top-center" richColors />
-            </body>
-        </html>
+        <div>
+            <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+            >
+                <AuthBackground />
+                <div className="absolute top-4 right-4 z-20">
+                    <ThemeSwitcher />
+                </div>
+                {children}
+            </ThemeProvider>
+            <Toaster position="top-center" richColors />
+        </div>
     );
 }

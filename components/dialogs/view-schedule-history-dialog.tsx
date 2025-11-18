@@ -3,7 +3,7 @@
 import {
     Dialog,
     DialogContent,
-    DialogHeader,
+    DialogDescription,
     DialogTitle,
 } from '@/components/ui/dialog';
 import ScheduleList from '@/src/domain/entities/ScheduleList';
@@ -40,14 +40,21 @@ export default function ViewScheduleHistoryDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="h-[80vh] min-w-[90vw] grid-rows-[auto_1fr]">
                 <DialogTitle>Schedule - {schedule.id}</DialogTitle>
-                <div>
+                <DialogDescription className="sr-only">
+                    Schedule details dialog
+                </DialogDescription>
+                <div className="overflow-hidden">
                     {isLoading ? (
                         <ScheduleSkeleton />
                     ) : (
-                        <ScheduleCalendar
-                            scheduleData={schedule}
-                            className="h-full w-full"
-                        />
+                        <div className="h-full w-full overflow-auto">
+                            <div className="min-w-[900px]">
+                                <ScheduleCalendar
+                                    scheduleData={schedule}
+                                    className="h-full w-full"
+                                />
+                            </div>
+                        </div>
                     )}
                 </div>
             </DialogContent>

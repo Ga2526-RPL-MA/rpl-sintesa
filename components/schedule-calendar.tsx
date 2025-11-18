@@ -3,7 +3,7 @@
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { useEffect, useState } from 'react';
-import ScheduleDialog from './dialogs/open-schedule-generate-dialog';
+import ScheduleDialog from './dialogs/course-detail-dialog';
 import { EventClickArg } from '@fullcalendar/core/index.js';
 import Schedule from '@/src/domain/entities/Schedule';
 import ScheduleList from '@/src/domain/entities/ScheduleList';
@@ -24,9 +24,10 @@ export default function ScheduleCalendar({
         const timeout = setTimeout(() => {
             const data: Schedule[] = scheduleData?.schedules || [];
 
-            // Map weekdays to numbers (0 = Sunday, 1 = Monday, ...)
+            // Map weekday to indexes
             const getDayNumber = (day: string) =>
-                ['SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT'].indexOf(day);
+                // Indexing from 0 hence the + 1
+                ['SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT'].indexOf(day) + 1;
 
             const weekEvents = data.map((d) => ({
                 title: d.course.name,
@@ -73,7 +74,6 @@ export default function ScheduleCalendar({
     return (
         <div className={cn(className, 'overflow-y-auto bg-transparent')}>
             <FullCalendar
-                viewClassNames={'w-full overflow-x-hidden'}
                 plugins={[timeGridPlugin]}
                 initialView="timeGridWeek"
                 allDaySlot={false}
@@ -81,19 +81,26 @@ export default function ScheduleCalendar({
                 selectable={false}
                 headerToolbar={false}
                 slotMinTime="07:00:00"
-                slotMaxTime="17:30:00"
+                slotMaxTime="20:00:00"
                 hiddenDays={[0, 6]}
                 expandRows={true}
+                viewHeight="100%"
+                height="auto"
                 eventContent={renderEventContent}
                 events={events}
                 eventClick={handleEventClick}
                 eventColor="var(--primary)"
                 eventBorderColor="var(--primary)!"
                 displayEventTime={true}
-                height="100%"
+                stickyHeaderDates={false}
+                slotLabelFormat={{
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false,
+                }}
+                handleWindowResize={true}
                 dayHeaderFormat={{ weekday: 'long' }}
                 titleFormat={() => ''}
-                nowIndicator={false}
                 eventOverlap={(a, b) => {
                     // tell FC these events "overlap" only if start or end differ
                     return (
