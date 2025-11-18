@@ -8,6 +8,7 @@ import { EventClickArg } from '@fullcalendar/core/index.js';
 import Schedule from '@/src/domain/entities/Schedule';
 import ScheduleList from '@/src/domain/entities/ScheduleList';
 import { cn } from '@/lib/utils';
+import WeekDay from '@/src/domain/enums/WeekDay';
 
 export default function ScheduleCalendar({
     scheduleData,
@@ -25,9 +26,15 @@ export default function ScheduleCalendar({
             const data: Schedule[] = scheduleData?.schedules || [];
 
             // Map weekday to indexes
-            const getDayNumber = (day: string) =>
+            const getDayNumber = (day: WeekDay) =>
                 // Indexing from 0 hence the + 1
-                ['SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT'].indexOf(day) + 1;
+                [
+                    WeekDay.SENIN, 
+                    WeekDay.SELASA, 
+                    WeekDay.RABU, 
+                    WeekDay.KAMIS, 
+                    WeekDay.JUMAT
+                ].indexOf(day) + 1;
 
             const weekEvents = data.map((d) => ({
                 title: d.course.name,
