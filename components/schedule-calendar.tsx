@@ -25,20 +25,18 @@ export default function ScheduleCalendar({
         const timeout = setTimeout(() => {
             const data: Schedule[] = scheduleData?.schedules || [];
 
-            // Map weekday to indexes
-            const getDayNumber = (day: WeekDay) =>
-                // Indexing from 0 hence the + 1
-                [
-                    WeekDay.SENIN, 
-                    WeekDay.SELASA, 
-                    WeekDay.RABU, 
-                    WeekDay.KAMIS, 
-                    WeekDay.JUMAT
-                ].indexOf(day) + 1;
+
+            const WEEKDAY_TO_NUMBER: Record<WeekDay, number> = {
+                [WeekDay.SENIN]: 1,
+                [WeekDay.SELASA]: 2,
+                [WeekDay.RABU]: 3,
+                [WeekDay.KAMIS]: 4,
+                [WeekDay.JUMAT]: 5
+            }
 
             const weekEvents = data.map((d) => ({
                 title: d.course.name,
-                daysOfWeek: [getDayNumber(d.weekDay)],
+                daysOfWeek: [WEEKDAY_TO_NUMBER[d.weekDay]],
                 startTime: d.startHour,
                 endTime: d.endHour,
                 extendedProps: {
@@ -88,7 +86,7 @@ export default function ScheduleCalendar({
                 selectable={false}
                 headerToolbar={false}
                 slotMinTime="07:00:00"
-                slotMaxTime="20:00:00"
+                slotMaxTime="20:30:00"
                 hiddenDays={[0, 6]}
                 expandRows={true}
                 viewHeight="100%"
