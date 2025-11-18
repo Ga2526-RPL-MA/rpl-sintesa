@@ -23,6 +23,7 @@ import {
 import Logo from './logo';
 import { usePathname, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { toast } from 'sonner';
 
 const menuItems = [
     {
@@ -43,11 +44,6 @@ const menuItems = [
         icon: IconClock,
         iconFilled: IconClockFilled,
     },
-    {
-        title: 'Logout',
-        url: null,
-        icon: IconLogout,
-    },
 ];
 
 function AppSidebar({ className }: { className?: string }) {
@@ -62,6 +58,8 @@ function AppSidebar({ className }: { className?: string }) {
                 console.error('Error logging out:', error.message);
                 return;
             }
+            toast.success('Succesfully logged out!');
+            router.push('/auth/login');
         } catch (error) {
             console.error('An unexpected error occurred during logout:', error);
         }
@@ -111,6 +109,17 @@ function AppSidebar({ className }: { className?: string }) {
                                     </SidebarMenuItem>
                                 );
                             })}
+                            <SidebarSeparator className="my-2 flex self-center" />
+                            <SidebarMenuButton
+                                onClick={handleLogout}
+                                className={cn(
+                                    'flex items-center gap-3 rounded-md transition-colors',
+                                    'text-foreground hover:bg-primary/5 dark:active:bg-primary/10! active:bg-primary/10! hover:text-foreground/90',
+                                )}
+                            >
+                                <IconLogout />
+                                Logout
+                            </SidebarMenuButton>
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>

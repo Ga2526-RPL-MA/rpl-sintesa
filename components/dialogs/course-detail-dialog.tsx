@@ -5,10 +5,19 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
 } from '@/components/ui/dialog';
 import Schedule from '@/src/domain/entities/Schedule';
 import { Separator } from '../ui/separator';
-import { Clock12, Clock3, MapPin, User } from 'lucide-react';
+import {
+    CalendarFold,
+    ClipboardList,
+    Clock12,
+    Clock3,
+    MapPin,
+    User,
+} from 'lucide-react';
+import { weekDaysEngRecord } from '@/src/shared/helper/enumHelper';
 
 interface ScheduleDialogProps {
     open: boolean;
@@ -22,7 +31,7 @@ export default function ScheduleDialog({
     event,
 }: ScheduleDialogProps) {
     if (!event) return null;
-
+    
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
@@ -31,6 +40,9 @@ export default function ScheduleDialog({
                         <DialogTitle className="text-primary">
                             {event.course.name}
                         </DialogTitle>
+                        <DialogDescription className="sr-only">
+                            Schedule details dialog
+                        </DialogDescription>
                         {event.course.code && (
                             <h1 className="text-primary">
                                 {event.course.code}
@@ -55,6 +67,24 @@ export default function ScheduleDialog({
                             <div>
                                 <h1 className="font-bold">Lecturer:</h1>
                                 <p>{event.lecturer.name}</p>
+                            </div>
+                        </div>
+                    )}
+                    {event.course.sks && (
+                        <div className="flex items-start gap-2">
+                            <ClipboardList className="text-muted-foreground mt-1" />
+                            <div>
+                                <h1 className="font-bold">SKS:</h1>
+                                <p>{event.course.sks}</p>
+                            </div>
+                        </div>
+                    )}
+                    {event.weekDay && (
+                        <div className="flex items-start gap-2">
+                            <CalendarFold className="text-muted-foreground mt-1" />
+                            <div>
+                                <h1 className="font-bold">Day:</h1>
+                                <p>{weekDaysEngRecord[event.weekDay]}</p>
                             </div>
                         </div>
                     )}

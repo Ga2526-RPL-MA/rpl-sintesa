@@ -251,7 +251,7 @@
 /* Day headers */
 .fc-col-header-cell {
     @apply truncate;
-    @apply bg-sidebar text-sidebar-foreground font-semibold;
+    @apply bg-sidebar/35!;
 }
 
 /* Today's cell */
@@ -260,8 +260,22 @@
     @apply -z-10;
 }
 
+.fc-col-header-cell.fc-day-today {
+    @apply bg-primary!;
+    @apply text-white;
+}
 /* Outer borders */
 .fc-scrollgrid {
     @apply border;
     @apply border-sidebar-border!;
+}
+
+.fc-timegrid-slot-label {
+    @apply border-none!;
+    @apply text-sm!;
+}
+
+.fc-timegrid-axis {
+    @apply px-5!;
+    @apply bg-sidebar/35!;
 }
