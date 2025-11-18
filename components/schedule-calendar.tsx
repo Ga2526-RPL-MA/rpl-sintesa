@@ -9,7 +9,7 @@ import Schedule from '@/src/domain/entities/Schedule';
 import ScheduleList from '@/src/domain/entities/ScheduleList';
 import { cn } from '@/lib/utils';
 import WeekDay from '@/src/domain/enums/WeekDay';
-import { WeekDayToNumber } from '@/src/shared/helper/enumHelper';
+import { WeekDaysIndexRecord } from '@/src/shared/helper/enumHelper';
 
 export default function ScheduleCalendar({
     scheduleData,
@@ -28,7 +28,7 @@ export default function ScheduleCalendar({
 
             const weekEvents = data.map((d) => ({
                 title: d.course.name,
-                daysOfWeek: [WeekDayToNumber[d.weekDay]],
+                daysOfWeek: [WeekDaysIndexRecord[d.weekDay]],
                 startTime: d.startHour,
                 endTime: d.endHour,
                 extendedProps: {

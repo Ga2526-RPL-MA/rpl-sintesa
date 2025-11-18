@@ -10,7 +10,7 @@ export const weekDaysEngRecord: Record<WeekDay, string> = {
     [WeekDay.KAMIS]: 'Thursday',
     [WeekDay.JUMAT]: 'Friday',
 };
-export const WeekDayToNumber: Record<WeekDay, number> = {
+export const WeekDaysIndexRecord: Record<WeekDay, number> = {
     [WeekDay.SENIN]: 1,
     [WeekDay.SELASA]: 2,
     [WeekDay.RABU]: 3,
