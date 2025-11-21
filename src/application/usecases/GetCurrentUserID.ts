@@ -1,12 +1,11 @@
 import { createClient } from '@/lib/supabase/server';
+import UserRepository from '@/src/domain/repositories/UserRepository';
 
-export default async function GetCurrentUserID(): Promise<string> {
+export default async function GetCurrentUserID(
+    userRepository: UserRepository,
+): Promise<string> {
     try {
-        const supabase = await createClient();
-        const { data, error } = await supabase.auth.getUser();
-        if (error) throw error;
-
-        return data.user.id;
+        return await userRepository.GetUserId(await createClient());
     } catch (error) {
         throw new Error(
             error instanceof Error

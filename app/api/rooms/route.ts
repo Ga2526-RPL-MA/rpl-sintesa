@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import RoomRepositoryImpl from '@/src/infrastructure/repositories/RoomRepositoryImpl';
 import Room from '@/src/domain/entities/Room';
+import IsAuthorize from '@/src/application/usecases/IsAuthorize';
+import UserRepositoryImpl from '@/src/infrastructure/repositories/UserRepositoryImpl';
+import UserRole from '@/src/domain/enums/UserRole';
 
 const roomRepo = new RoomRepositoryImpl();
 
@@ -37,6 +40,10 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
     try {
+        if (!(await IsAuthorize(new UserRepositoryImpl(), [UserRole.ADMIN]))) {
+            return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+        }
+
         const body = await request.json();
         const room = await roomRepo.AddRoom(body as Room);
         return NextResponse.json(room, { status: 201 });
@@ -55,6 +62,10 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
     try {
+        if (!(await IsAuthorize(new UserRepositoryImpl(), [UserRole.ADMIN]))) {
+            return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+        }
+
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
 
@@ -83,6 +94,10 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
     try {
+        if (!(await IsAuthorize(new UserRepositoryImpl(), [UserRole.ADMIN]))) {
+            return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+        }
+
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
 
