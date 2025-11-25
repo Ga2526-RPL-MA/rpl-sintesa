@@ -252,6 +252,7 @@
 .fc-col-header-cell {
     @apply truncate;
     @apply bg-sidebar/35!;
+    @apply sticky top-0 z-10!;
 }
 
 /* Today's cell */

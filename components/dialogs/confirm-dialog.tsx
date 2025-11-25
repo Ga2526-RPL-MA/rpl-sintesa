@@ -9,13 +9,14 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { ReactNode } from 'react';
 
 interface ConfirmDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     onConfirm: () => void;
     title: string;
-    description?: string;
+    description?: ReactNode;
     confirmText?: string;
     cancelText?: string;
 }
@@ -40,7 +41,7 @@ export default function ConfirmDialog({
                 <AlertDialogHeader>
                     <AlertDialogTitle>{title}</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Are you sure you want to generate a new schedule? <br />
+                        {/* Are you sure you want to generate a new schedule? <br />
                         This will replace your current schedule with the new
                         one, the previous schedules will be saved in the{' '}
                         <a
@@ -49,7 +50,8 @@ export default function ConfirmDialog({
                         >
                             History Page
                         </a>
-                        .
+                        . */}
+                        {description}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

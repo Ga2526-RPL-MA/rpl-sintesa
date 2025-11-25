@@ -12,7 +12,7 @@ function ScheduleHistoryCard({ schedule }: { schedule: ScheduleList }) {
     return (
         <div>
             <Card
-                onClick={handleScheduleClick}
+                onClick={() => handleScheduleClick()}
                 className="active:bg-primary/40 border-primary/30 bg-primary/10 hover:bg-primary/30 grid cursor-pointer grid-cols-1 items-center justify-between border p-4 px-6 lg:flex"
             >
                 <CardTitle>Schedule - {schedule.id}</CardTitle>

@@ -7,7 +7,7 @@ function ScheduleSkeleton() {
     return (
         <div className="h-full space-y-2">
             {/* Header */}
-            <div className="grid grid-cols-1 gap-2 overflow-hidden lg:grid-cols-[0.15fr_repeat(5,1fr)]">
+            <div className="grid grid-cols-1 gap-2 overflow-hidden md:grid-cols-[0.15fr_repeat(5,1fr)]">
                 <div></div>
                 {isMobile ? (
                     <>

@@ -14,7 +14,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import Semester from '@/src/domain/enums/Semester';
 import { toast } from 'sonner';
-import ConfirmDialog from '@/components/dialogs/confirm-generation-dialog';
+import ConfirmDialog from '@/components/dialogs/confirm-dialog';
 import { Spinner } from '@/components/ui/spinner';
 
 function Page() {
@@ -153,6 +153,19 @@ function Page() {
                     open={showDialog}
                     onOpenChange={setShowDialog}
                     onConfirm={generateSchedule}
+                    description={
+                        <>
+                            Are you sure you want to replace the generated schedule?
+                            <br />
+                            This action will replace the current schedule with a new one, you can view the
+                            replaced schedule in the "
+                            <a 
+                            href='/dashboard/history'
+                            className=''>
+                                Schedules History
+                            </a>" tab.
+                        </>
+                        }
                     title="Confirm Schedule Generation"
                 />
             </div>
