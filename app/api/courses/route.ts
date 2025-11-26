@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import CourseRepositoryImpl from '@/src/infrastructure/repositories/CourseRepositoryImpl';
 import Course from '@/src/domain/entities/Course';
+import IsAuthorize from '@/src/application/usecases/IsAuthorize';
+import UserRole from '@/src/domain/enums/UserRole';
+import UserRepositoryImpl from '@/src/infrastructure/repositories/UserRepositoryImpl';
 
 const courseRepo = new CourseRepositoryImpl();
 
@@ -31,6 +34,10 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
     try {
+        if (!(await IsAuthorize(new UserRepositoryImpl(), [UserRole.ADMIN]))) {
+            return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+        }
+
         const body = await request.json();
         const course = await courseRepo.AddCourse(body as Course);
         return NextResponse.json(course, { status: 201 });
@@ -49,6 +56,10 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
     try {
+        if (!(await IsAuthorize(new UserRepositoryImpl(), [UserRole.ADMIN]))) {
+            return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+        }
+
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
 
@@ -80,6 +91,10 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
     try {
+        if (!(await IsAuthorize(new UserRepositoryImpl(), [UserRole.ADMIN]))) {
+            return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+        }
+
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
 

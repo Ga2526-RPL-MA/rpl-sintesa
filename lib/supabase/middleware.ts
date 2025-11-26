@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import { hasEnvVars } from '../utils';
+import UserRole from '@/src/domain/enums/UserRole';
 
 export async function updateSession(request: NextRequest) {
     let supabaseResponse = NextResponse.next({
@@ -45,17 +46,50 @@ export async function updateSession(request: NextRequest) {
     // IMPORTANT: If you remove getClaims() and you use server-side rendering
     // with the Supabase client, your users may be randomly logged out.
     const { data } = await supabase.auth.getClaims();
-    const user = data?.claims;
+    const claims = data?.claims;
+    const path = request.nextUrl.pathname;
 
     if (
         request.nextUrl.pathname !== '/' &&
-        !user &&
-        !request.nextUrl.pathname.startsWith('/auth')
+        !claims &&
+        !path.startsWith('/auth') &&
+        !path.startsWith('/api/auth')
     ) {
         // no user, potentially respond by redirecting the user to the login page
         const url = request.nextUrl.clone();
         url.pathname = '/auth/login';
+        if(path.startsWith('/api')){
+            url.pathname = '/api/auth/login';
+        }
         return NextResponse.redirect(url);
+    }
+
+    if (!path.includes('/admin')) {
+        return supabaseResponse;
+    }
+
+    const { data: userData } = await supabase.auth.getUser();
+    const user = userData.user;
+    if (!user){
+        const url = request.nextUrl.clone();
+        url.pathname = '/auth/login';
+        return NextResponse.redirect(url);
+    }
+
+    const { data: roles } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id);
+
+    if (!roles){
+        console.log("No roles assigned");
+        return NextResponse.redirect(new URL('/forbidden', request.url));
+    }
+
+    const userRoles = roles.map((r) => r.role);
+    
+    if (path.includes('/admin') && !userRoles.includes(UserRole.ADMIN)){
+        return NextResponse.redirect(new URL('/forbidden', request.url));
     }
 
     // IMPORTANT: You *must* return the supabaseResponse object as it is.
