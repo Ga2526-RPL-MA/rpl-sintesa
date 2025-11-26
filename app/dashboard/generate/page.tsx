@@ -1,5 +1,5 @@
 'use client';
-import ScheduleCalendar from '@/components/schedule-calendar';
+import ScheduleCalendar from '@/components/schedule/schedule-calendar';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,

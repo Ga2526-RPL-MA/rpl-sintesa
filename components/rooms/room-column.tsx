@@ -1,9 +1,7 @@
 'use client'
 
 import { ColumnDef } from '@tanstack/react-table'
-import Lecturer from '@/src/domain/entities/Lecturer'
-import { MoreHorizontal } from "lucide-react"
- 
+import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -14,48 +12,48 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Badge } from '../ui/badge'
+import Room from '@/src/domain/entities/Room'
 
 
-export const LecturerColumns = (
+export const RoomColumns = (
     onDelete: (id: number) => void,
-    onEdit: (lecturer: Lecturer) => void,
-): ColumnDef<Lecturer>[] => [
+    onEdit: (room: Room) => void,
+): ColumnDef<Room>[] => [
     {
         accessorKey: "name",
-        header: "Name",
-    },
-    {
-        accessorKey: "code",
-        header: "Code",
-    },
-    {
-        accessorKey: "nip",
-        header: "NIP"
-    },
-    {
-      accessorKey: "faculty",
-      header: "Faculty"
-    },
-    {
-        accessorKey: "expertise",
-        header: "Expertise",
-        cell: ({ row }) => {
+        header: ({ column }) => {
             return (
-                row.getValue('expertise') ? (
-                <Badge>
-                    {row.getValue('expertise')}
-                </Badge>
-                ):(
-                    'N/A'
+                    <Button
+                    variant="ghost"
+                    className='px-1 active:scale-100 hover:scale-105 transition-transform'
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    >
+                        Name
+                    <ArrowUpDown className="h-4" />
+                    </Button>
                 )
-            )
-        }
+            },
+    },
+    {
+        accessorKey: "capacity",
+        header: ({ column }) => {
+            return (
+                    <Button
+                    variant="ghost"
+                    className='px-1 active:scale-100 hover:scale-105 transition-transform'
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    >
+                        Capacity
+                    <ArrowUpDown className="h-4" />
+                    </Button>
+                )
+            },
     },
     {
         id: "actions",
         cell: ({ row }) => {
-            // Get original lecturer object
-            const lecturer = row.original;
+            // Get original room object
+            const room = row.original;
             return (
                 <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -68,12 +66,12 @@ export const LecturerColumns = (
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                    onClick={() => onEdit(lecturer)}
+                    onClick={() => onEdit(room)}
                     >
                         Edit
                     </DropdownMenuItem>
                     <DropdownMenuItem 
-                    onClick={() => onDelete(lecturer.id)}
+                    onClick={() => onDelete(room.id)}
                     variant={'destructive'}
                     >
                         Delete

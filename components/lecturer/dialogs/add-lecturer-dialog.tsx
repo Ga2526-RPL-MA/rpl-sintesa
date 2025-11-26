@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+
 import {
     Dialog,
     DialogContent,
@@ -16,19 +16,17 @@ import Lecturer from '@/src/domain/entities/Lecturer';
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
 
-interface EditLecturerDialogProps {
-    open: boolean
-    onOpenChange: (open: boolean) => void
-    item?: Lecturer | null // Use 'item' instead of 'lecturer'
-    onEdit: () => void
+interface AddLecturerDialogProps {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    onAdd: () => void;
 }
 
-export default function EditLecturerDialog({
-    item,
+export default function AddLecturerDialog({
     open,
     onOpenChange,
-    onEdit,
-}: EditLecturerDialogProps) {
+    onAdd,
+}: AddLecturerDialogProps) {
     const [name, setName] = useState('')
     const [nip, setNip] = useState('')
     const [code, setCode] = useState('')
@@ -61,14 +59,14 @@ export default function EditLecturerDialog({
         return true
     }
 
-    async function handleEditLecturer() {
+    async function handleAddLecturer() {
         try {
             if (!isInputsValid()){
                 return
             }
 
-            const response = await axios.put<Lecturer>(
-                `/api/lecturers?id=${item?.id}`,
+            const response = await axios.post<Lecturer>(
+                '/api/lecturers',
                 { 
                     nip: nip,
                     name: name,
@@ -78,9 +76,9 @@ export default function EditLecturerDialog({
                  },
                 {withCredentials: true}
             );
-            onEdit()
+            onAdd()
             onOpenChange(false)
-            toast.success('Successfully edited lecturer!')
+            toast.success('Successfully added lecturer!')
             setNip('')
             setName('')
             setFaculty('')
@@ -88,35 +86,28 @@ export default function EditLecturerDialog({
             setExpertise('')
         } catch (err) {
             console.error(err);
-            toast.error('Failed to edit lecturer');
+            toast.error('Failed to add lecturer');
         }
     }
 
-    useEffect(() => {
-        if (item) {
-            setName(item.name)
-            setNip(item.nip)
-            setCode(item.code)
-            setFaculty(item.faculty)
-            setExpertise(item.expertise || '')
-        } else {
-            // Reset form when dialog closes
-            setName('')
-            setNip('')
-            setCode('')
-            setFaculty('')
-            setExpertise('')
-        }
-    }, [open])
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={open} onOpenChange={(value) => {
+            onOpenChange(value);
+            if (!value) {
+                setNip('')
+                setName('')
+                setFaculty('')
+                setCode('')
+                setExpertise('')
+            }
+        }}>
             <DialogContent className="w-sm">
                 <DialogHeader>
                     <DialogTitle className="text-primary">
-                        Edit Lecturer
+                        Add lecturer
                     </DialogTitle>
                     <DialogDescription>
-                        You can edit the lecturer by changing the form below.
+                        You can add a new lecturer by filling in the form below.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4">
@@ -127,6 +118,7 @@ export default function EditLecturerDialog({
                         name="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
+                        placeholder='Andi Yanto'
                         />
                     </div>
                     <div className="grid gap-3">
@@ -174,9 +166,9 @@ export default function EditLecturerDialog({
                 </div>
                 <Button 
                 className='mt-2'
-                onClick={handleEditLecturer}
+                onClick={handleAddLecturer}
                 >
-                    Confirm
+                    Add
                 </Button>
             </DialogContent>
         </Dialog>

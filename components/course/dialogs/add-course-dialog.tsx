@@ -12,93 +12,103 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '../../ui/separator';
 import { use, useState } from 'react';
 import { toast } from 'sonner';
-import Lecturer from '@/src/domain/entities/Lecturer';
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
+import Course from '@/src/domain/entities/Course';
+import { Textarea } from '@/components/ui/textarea';
 
-interface AddLecturerDialogProps {
+interface AddCourseDialog {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     onAdd: () => void;
 }
 
-export default function AddLecturerDialog({
+export default function AddCourseDialog({
     open,
     onOpenChange,
     onAdd,
-}: AddLecturerDialogProps) {
+}: AddCourseDialog) {
     const [name, setName] = useState('')
-    const [nip, setNip] = useState('')
+    const [sks, setSks] = useState('')
     const [code, setCode] = useState('')
-    const [expertise, setExpertise] = useState('')
-    // if faculty can be changed
-    const [faculty, setFaculty] = useState('')
+    const [semester, setSemester] = useState('')
+    // if description can be changed
+    const [description, setDescription] = useState('')
 
     function isInputsValid(){
         if (!name){
             toast.error('Name cannot be empty!');
             return false
         }
-        if (!nip){
-            toast.error('NIP cannot be empty!');
+        if (!sks){
+            toast.error('SKS cannot be empty!');
             return
         }
-        if (!nip.match(/^[0-9]+$/)){
-            toast.error('NIP can only be digits/numbers!');
+        if (!sks.match(/^[0-9]+$/)){
+            toast.error('SKS can only be digits/numbers!');
             return false
         }
         if (!code){
             toast.error('Code cannot be empty!')
             return false
         }
-        if (!faculty){
-            toast.error('Faculty cannot be empty!')
+        if (!semester){
+            toast.error('Semester cannot be empty!')
             return false
         }
 
         return true
     }
 
-    async function handleAddLecturer() {
+    async function handleAddCourse() {
         try {
             if (!isInputsValid()){
                 return
             }
 
-            const response = await axios.post<Lecturer>(
-                '/api/lecturers',
-                { 
-                    nip: nip,
+            const response = await axios.post<Course>(
+                '/api/courses',
+                {
+                    sks: parseInt(sks),
                     name: name,
-                    faculty: faculty,
+                    semester: parseInt(semester),
                     code: code,
-                    expertise: expertise,
-                 },
+                    description: description,
+                },
                 {withCredentials: true}
             );
             onAdd()
             onOpenChange(false)
-            toast.success('Successfully added lecturer!')
-            setNip('')
+            toast.success('Successfully added course!')
+            setSks('')
             setName('')
-            setFaculty('')
+            setDescription('')
             setCode('')
-            setExpertise('')
+            setSemester('')
         } catch (err) {
             console.error(err);
-            toast.error('Failed to add lecturer');
+            toast.error('Failed to add course');
         }
     }
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={open} onOpenChange={(value) => {
+            onOpenChange(value);
+            if (!value) {
+                setSks('')
+                setName('')
+                setDescription('')
+                setCode('')
+                setSemester('')
+            }
+        }}>
             <DialogContent className="w-sm">
                 <DialogHeader>
                     <DialogTitle className="text-primary">
-                        Add lecturer
+                        Add Course
                     </DialogTitle>
                     <DialogDescription>
-                        You can add a new lecturer by filling in the form below.
+                        You can add a new course by filling in the form below.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4">
@@ -109,18 +119,7 @@ export default function AddLecturerDialog({
                         name="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder='Andi Yanto'
-                        />
-                    </div>
-                    <div className="grid gap-3">
-                        <Label htmlFor="nip">NIP</Label>
-                        <Input 
-                        id="nip" 
-                        name="nip"
-                        value={nip}
-                        maxLength={10}
-                        onChange={(e) => setNip(e.target.value.replace(/\D/g, ''))}
-                        placeholder=' 50000XXXXX'
+                        placeholder='Object Oriented Programming'
                         />
                     </div>
                     <div className="grid gap-3">
@@ -128,38 +127,49 @@ export default function AddLecturerDialog({
                         <Input 
                         id="code" 
                         name="code"
-                        maxLength={2}
+                        maxLength={8}
                         value={code}
                         onChange={(e) => setCode(e.target.value.toUpperCase())}
-                        placeholder='AY'
+                        placeholder='ER234510'
                         />
                     </div>
                     <div className="grid gap-3">
-                        <Label htmlFor="faculty">Faculty</Label>
+                        <Label htmlFor="sks">SKS</Label>
                         <Input 
-                        id="faculty" 
-                        name="faculty"
-                        value={faculty}
-                        onChange={(e) => setFaculty(e.target.value.trim())}
-                        placeholder='FTEIC'
+                        id="sks" 
+                        name="sks"
+                        value={sks}
+                        maxLength={1}
+                        onChange={(e) => setSks(e.target.value.replace(/\D/g, ''))}
+                        placeholder='3'
                         />
                     </div>
                     <div className="grid gap-3">
-                        <Label htmlFor="expertise">Expertise</Label>
+                        <Label htmlFor="semester">Semester</Label>
                         <Input 
-                        id="expertise" 
-                        name="expertise"
-                        value={expertise}
-                        onChange={(e) => setExpertise(e.target.value)}
-                        placeholder='Automata'
+                        id="semester" 
+                        name="semester"
+                        value={semester}
+                        maxLength={1}
+                        onChange={(e) => setSemester(e.target.value.replace(/\D/g, ''))}
+                        placeholder='2'
+                        />
+                    </div>
+                    <div className="grid gap-3">
+                        <Label htmlFor="description">Description</Label>
+                       <Textarea
+                        id='description'
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder='Teaches the object-oriented programming paradigm using languages such as Java'
                         />
                     </div>
                 </div>
                 <Button 
                 className='mt-2'
-                onClick={handleAddLecturer}
+                onClick={handleAddCourse}
                 >
-                    Create
+                    Add
                 </Button>
             </DialogContent>
         </Dialog>

@@ -12,6 +12,8 @@ import { IconPlus } from '@tabler/icons-react'
 import ConfirmDialog from './dialogs/confirm-dialog'
 import { toast } from 'sonner'
 import axios from 'axios'
+import { table } from 'console'
+import { boolean } from 'drizzle-orm/gel-core'
 
 interface GenericCrudListProps<T> {
     // API Configuration
@@ -24,7 +26,8 @@ interface GenericCrudListProps<T> {
     // Columns
     createColumns: (
         onDelete: (id: number) => void,
-        onEdit: (item: T) => void
+        onEdit: (item: T) => void,
+        onDetails?: (item: T) => void,
     ) => ColumnDef<T>[]
     
     // Card View (optional)
@@ -33,6 +36,7 @@ interface GenericCrudListProps<T> {
         item?: T
         onDelete: (id: number) => void
         onEdit: (item: T) => void
+        onDetails?: (item: T) => void
     }>
     
     // Dialogs
@@ -40,6 +44,12 @@ interface GenericCrudListProps<T> {
         open: boolean
         onOpenChange: (open: boolean) => void
         onAdd: () => void
+    }>
+
+    DetailDialog?: React.ComponentType<{
+        open: boolean
+        onOpenChange: (open: boolean) => void
+        item?: T | null
     }>
     
     EditDialog: React.ComponentType<{
@@ -68,6 +78,7 @@ export default function GenericCrudList<T extends { id: number }>({
     CardComponent,
     AddDialog,
     EditDialog,
+    DetailDialog,
     filterFunction,
     searchPlaceholder = 'Search',
     defaultView = 'card',
@@ -79,6 +90,7 @@ export default function GenericCrudList<T extends { id: number }>({
     const [selectedItem, setSelectedItem] = useState<T | null>(null)
     const [addOpen, setAddOpen] = useState(false)
     const [editOpen, setEditOpen] = useState(false)
+    const [detailOpen, setDetailOpen] = useState(false)
     const [deleteOpen, setDeleteOpen] = useState(false)
     const [deleteId, setDeleteId] = useState<number | null>(null)
     const [isLoading, setIsLoading] = useState(false)
@@ -125,6 +137,11 @@ export default function GenericCrudList<T extends { id: number }>({
         setEditOpen(true)
     }
 
+    function handleDetail(item: T) {
+        setSelectedItem(item)
+        setDetailOpen(true);
+    }
+
     function handleDeleteClick(id: number) {
         setDeleteId(id)
         setDeleteOpen(true)
@@ -156,7 +173,12 @@ export default function GenericCrudList<T extends { id: number }>({
         fetchItems()
     }, [])
 
-    const columns = createColumns(handleDeleteClick, handleEdit)
+    
+    const viewToggler = () => {
+        setView(prev => (prev === 'table' ? 'card' : 'table'))
+    }
+
+    const columns = createColumns(handleDeleteClick, handleEdit, handleDetail)
     const filteredItems = filterItems(itemsList, filter)
 
     return (
@@ -165,7 +187,7 @@ export default function GenericCrudList<T extends { id: number }>({
                 {/* Header with controls */}
                 <div className="grid grid-cols-[0.5fr_1fr_0.5fr] gap-2 items-center mb-4">
                     {/* View Toggle */}
-                    {showViewToggle && CardComponent && (
+                    {!isMobile && CardComponent ? (
                         <div className="flex space-x-2">
                             <Button
                                 variant={'outline'}
@@ -182,13 +204,29 @@ export default function GenericCrudList<T extends { id: number }>({
                                 <LayoutGrid />
                             </Button>
                         </div>
+                    ): (
+                        <div className='space-x-2'>
+                            <Button
+                                variant={'outline'}
+                                onClick={() => viewToggler()}
+                                className={'active:bg-muted'}
+                            >
+                                {view == 'table' ? (
+                                    <Table2 />
+                                ) : (
+                                    <LayoutGrid />
+                                )}
+                            </Button>
+                        </div>
                     )}
 
                     {/* Search */}
-                    <div className="mx-auto flex items-center gap-2">
-                        <SearchIcon className="text-muted-foreground" />
+                    <div className="justify-self-center flex items-center gap-2">
+                        <div className='max-[800px]:hidden flex'>
+                            <SearchIcon className="text-muted-foreground" />
+                        </div>
                         <Input
-                            className="rounded-2xl w-[150px] md:w-[200px] lg:w-[300px]"
+                            className="rounded-2xl w-full md:w-[200px] lg:w-[300px]"
                             placeholder={searchPlaceholder}
                             value={filter}
                             onChange={(e) => setFilter(e.target.value)}
@@ -196,7 +234,7 @@ export default function GenericCrudList<T extends { id: number }>({
                     </div>
 
                     {/* Add Button */}
-                    <div className="w-fit ml-auto">
+                    <div className="w-fit justify-self-end">
                         <Button onClick={handleAdd}>
                             {isMobile ? (
                                 <IconPlus />
@@ -225,6 +263,7 @@ export default function GenericCrudList<T extends { id: number }>({
                                     lecturer={item} // Backward compatibility
                                     onDelete={handleDeleteClick}
                                     onEdit={handleEdit}
+                                    onDetails={handleDetail}
                                 />
                             ))
                         ) : (
@@ -264,6 +303,14 @@ export default function GenericCrudList<T extends { id: number }>({
                 lecturer={selectedItem} // Backward compatibility
                 onEdit={fetchItems}
             />
+
+            { DetailDialog && (
+              <DetailDialog 
+              open={detailOpen}
+              onOpenChange={setDetailOpen}
+              item={selectedItem}
+              />  
+            )}
 
             <ConfirmDialog
                 open={deleteOpen}

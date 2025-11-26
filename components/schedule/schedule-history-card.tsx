@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Card, CardDescription, CardTitle } from './ui/card';
+import { Card, CardDescription, CardTitle } from '../ui/card';
 import ScheduleList from '@/src/domain/entities/ScheduleList';
-import ScheduleHistoryDialog from './dialogs/open-schedule-history-dialog';
+import ScheduleHistoryDialog from '../dialogs/open-schedule-history-dialog';
 
 function ScheduleHistoryCard({ schedule }: { schedule: ScheduleList }) {
     const [open, setOpen] = useState(false);

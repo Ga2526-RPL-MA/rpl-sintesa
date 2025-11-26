@@ -2,9 +2,9 @@ import LecturersList from '@/components/generic-crud-tab'
 import { DataTable } from '../../../../components/table/data-table'
 import GenericCrudList from '@/components/generic-crud-tab'
 import Lecturer from '@/src/domain/entities/Lecturer'
-import { LecturerColumns } from '@/components/table/columns'
-import AddLecturerDialog from '@/components/dialogs/lecturer/add-lecturer-dialog'
-import EditLecturerDialog from '@/components/dialogs/lecturer/edit-lecturer-dialog'
+import { LecturerColumns } from '@/components/lecturer/lecturer-column'
+import AddLecturerDialog from '@/components/lecturer/dialogs/add-lecturer-dialog'
+import EditLecturerDialog from '@/components/lecturer/dialogs/edit-lecturer-dialog'
 import LecturerCard from '@/components/lecturer/lecturer-card'
 
 function LecturersPage() {

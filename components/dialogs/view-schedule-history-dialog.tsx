@@ -7,9 +7,9 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import ScheduleList from '@/src/domain/entities/ScheduleList';
-import ScheduleCalendar from '../schedule-calendar';
+import ScheduleCalendar from '../schedule/schedule-calendar';
 import { useEffect, useState } from 'react';
-import ScheduleSkeleton from '../schedule-skeleton';
+import ScheduleSkeleton from '../schedule/schedule-skeleton';
 
 interface ViewScheduleHistoryDialogProps {
     open: boolean;

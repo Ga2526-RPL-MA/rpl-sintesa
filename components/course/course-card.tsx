@@ -3,34 +3,32 @@ import React, { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import Lecturer from '@/src/domain/entities/Lecturer'
 import { cn } from '@/lib/utils'
-import LecturerDetailDialog from './dialogs/lecturer-detail-dialog';
 import { MoreHorizontal } from 'lucide-react';
 import { Button } from '../ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel ,DropdownMenuSeparator } from '../ui/dropdown-menu';
 import { Badge } from '../ui/badge';
+import Course from '@/src/domain/entities/Course'
+import DetailCourseDialog from './dialogs/detail-course-dialog'
+import TruncatedText from '../truncated-tooltip-text'
 
-interface LecturerCardProps {
-    item?: Lecturer // Make it optional
-    lecturer?: Lecturer // For backward compatibility
+interface CourseCardProps {
+    item?: Course // Make it optional
     className?: string
     onDelete: (id: number) => void
-    onEdit: (lecturer: Lecturer) => void
+    onEdit: (course: Course) => void
+    onDetails?: (course: Course) => void
 }
 
-function LecturerCard({
+function CoursesCard({
     item, 
     className,
     onDelete,
-    onEdit
-}: LecturerCardProps) {
-    const [detailOpen, setDetailOpen] = useState(false);
-
-    function handleLecturerDetail() {
-        setDetailOpen(true);
-    }
-
-    const lecturerData = item
-    if (!lecturerData) return
+    onEdit,
+    onDetails
+}: CourseCardProps) {
+    
+    const courseData = item
+    if (!courseData) return
 
     return (
     <>
@@ -44,14 +42,31 @@ function LecturerCard({
                     {item.name}
                 </CardTitle>
                 <CardDescription>
-                    {item.code} / {item.nip} <br/>
-                    {item.faculty}
+                    {item.code}<br/>
+                    <div className='my-2'>
+                        <TruncatedText text={item.description ? item.description : 'N/A'} />
+                    </div>
                 </CardDescription>
-                {item.expertise && 
-                <Badge className='w-fit'>
-                    {item.expertise}
-                </Badge>
-                }
+                <div className='flex gap-2 mt-auto'>
+                    {item.semester && 
+                    <Badge className='w-fit'>
+                        {
+                        item.semester == 1 ? 
+                        `${item.semester}st Semester`: 
+                        item.semester == 2 ?
+                        `${item.semester}nd Semester`:
+                        item.semester == 3 ?
+                        `${item.semester}rd Semester`:
+                        `${item.semester}th Semester`
+                        }
+                    </Badge>
+                    }
+                    {item.sks && 
+                    <Badge variant={'secondary'}>
+                        {item.sks} SKS
+                    </Badge>
+                    }
+                </div>
             </CardHeader>
             <div className='flex justify-center items-center'>
                 <DropdownMenu>
@@ -63,6 +78,12 @@ function LecturerCard({
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    {/* Enable if detail dialog is needed */}
+                    {/* <DropdownMenuItem
+                    onClick={() => {onDetails && onDetails(item)}}
+                    >
+                        Details
+                    </DropdownMenuItem> */}
                     <DropdownMenuItem
                     onClick={() => onEdit(item)}
                     >
@@ -78,13 +99,8 @@ function LecturerCard({
                 </DropdownMenu>
             </div>
         </Card>
-        <LecturerDetailDialog 
-        open={detailOpen}
-        onOpenChange={setDetailOpen}
-        lecturer={item}
-        />
     </>
   )
 }
 
-export default LecturerCard
+export default CoursesCard
