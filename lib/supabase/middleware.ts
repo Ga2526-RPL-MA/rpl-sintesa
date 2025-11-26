@@ -64,7 +64,7 @@ export async function updateSession(request: NextRequest) {
         return NextResponse.redirect(url);
     }
 
-    if (!path.startsWith('/admin')) {
+    if (!path.includes('/admin')) {
         return supabaseResponse;
     }
 
@@ -83,12 +83,12 @@ export async function updateSession(request: NextRequest) {
 
     if (!roles){
         console.log("No roles assigned");
-        return NextResponse.redirect(new URL('/not-authorized', request.url));
+        return NextResponse.redirect(new URL('/forbidden', request.url));
     }
 
     const userRoles = roles.map((r) => r.role);
     
-    if (path.startsWith('/admin') && !userRoles.includes(UserRole.ADMIN)){
+    if (path.includes('/admin') && !userRoles.includes(UserRole.ADMIN)){
         return NextResponse.redirect(new URL('/forbidden', request.url));
     }
 
