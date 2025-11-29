@@ -4,7 +4,6 @@ import Lecturer from '@/src/domain/entities/Lecturer';
 import IsAuthorize from '@/src/application/usecases/IsAuthorize';
 import UserRole from '@/src/domain/enums/UserRole';
 
-
 const lecturerRepo = new LecturerRepositoryImpl();
 
 export async function GET(request: Request) {

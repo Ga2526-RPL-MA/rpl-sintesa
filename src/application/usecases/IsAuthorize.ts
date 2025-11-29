@@ -1,5 +1,4 @@
 import UserRole from '@/src/domain/enums/UserRole';
-import { createClient } from '@/lib/supabase/server';
 import GetUserRoles from './GetUserRoles';
 
 export default async function IsAuthorize(
