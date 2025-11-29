@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import axios from 'axios';
 import Course from '@/src/domain/entities/Course';
 import { Textarea } from '@/components/ui/textarea';
+import { Spinner } from '@/components/ui/spinner';
 
 interface AddCourseDialog {
     open: boolean;
@@ -34,6 +35,7 @@ export default function AddCourseDialog({
     const [semester, setSemester] = useState('')
     // if description can be changed
     const [description, setDescription] = useState('')
+    const [isAdding, setIsAdding] = useState(false);
 
     function isInputsValid(){
         if (!name){
@@ -65,7 +67,7 @@ export default function AddCourseDialog({
             if (!isInputsValid()){
                 return
             }
-
+            setIsAdding(true);
             const response = await axios.post<Course>(
                 '/api/courses',
                 {
@@ -79,6 +81,7 @@ export default function AddCourseDialog({
             );
             onAdd()
             onOpenChange(false)
+            setIsAdding(false)
             toast.success('Successfully added course!')
             setSks('')
             setName('')
@@ -168,8 +171,16 @@ export default function AddCourseDialog({
                 <Button 
                 className='mt-2'
                 onClick={handleAddCourse}
+                disabled={isAdding}
                 >
-                    Add
+                   {isAdding ? (
+                        <>
+                        <Spinner />
+                        Adding...
+                        </>
+                    ): (
+                        'Add'
+                    )}
                 </Button>
             </DialogContent>
         </Dialog>

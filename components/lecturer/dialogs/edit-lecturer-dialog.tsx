@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import Lecturer from '@/src/domain/entities/Lecturer';
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
+import { Spinner } from '@/components/ui/spinner';
 
 interface EditLecturerDialogProps {
     open: boolean
@@ -36,6 +37,7 @@ export default function EditLecturerDialog({
     const [expertise, setExpertise] = useState('')
     // if faculty can be changed
     const [faculty, setFaculty] = useState('')
+    const [isEditing, setIsEditing] = useState(false);
 
     function isInputsValid(){
         if (!name){
@@ -82,7 +84,7 @@ export default function EditLecturerDialog({
             if (!isInputsValid()){
                 return
             }
-
+            setIsEditing(true);
             const response = await axios.put<Lecturer>(
                 `/api/lecturers?id=${item?.id}`,
                 { 
@@ -96,6 +98,7 @@ export default function EditLecturerDialog({
             );
             onEdit()
             onOpenChange(false)
+            setIsEditing(false)
             toast.success('Successfully edited lecturer!')
             setNip('')
             setName('')
@@ -147,6 +150,7 @@ export default function EditLecturerDialog({
                         name="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
+                        placeholder='Andi Yanto'
                         />
                     </div>
                     <div className="grid gap-3">
@@ -195,9 +199,16 @@ export default function EditLecturerDialog({
                 <Button 
                 className='mt-2'
                 onClick={handleEditLecturer}
-                disabled={!hasChanges()}
+                disabled={!hasChanges() || isEditing}
                 >
-                    Confirm
+                    {isEditing ? (
+                        <>
+                        <Spinner />
+                        Confirming...
+                        </>
+                    ): (
+                        'Confirm'
+                    )}
                 </Button>
             </DialogContent>
         </Dialog>

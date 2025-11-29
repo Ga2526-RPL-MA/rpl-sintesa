@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import axios from 'axios';
 import { Textarea } from '@/components/ui/textarea';
 import Course from '@/src/domain/entities/Course';
+import { Spinner } from '@/components/ui/spinner';
 
 interface EditCourseDialog {
     open: boolean
@@ -41,6 +42,7 @@ export default function EditCourseDialog({
     const [description, setDescription] = useState('')
     // if semester can be changed
     const [semester, setSemester] = useState('')
+    const [isEditing, setIsEditing] = useState(false)
 
     function isInputsValid(){
         if (!name){
@@ -87,7 +89,7 @@ export default function EditCourseDialog({
             if (!isInputsValid()){
                 return
             }
-
+            setIsEditing(true);
             const response = await axios.put<Course>(
                 `/api/courses?id=${item?.id}`,
                 { 
@@ -101,6 +103,7 @@ export default function EditCourseDialog({
             );
             onEdit()
             onOpenChange(false)
+            setIsEditing(false)
             toast.success('Successfully edited course!')
             setSks('')
             setName('')
@@ -202,9 +205,16 @@ export default function EditCourseDialog({
                 <Button 
                 className='mt-2'
                 onClick={handleEditCourse}
-                disabled={!hasChanges()}
+                disabled={!hasChanges() || isEditing}
                 >
-                    Confirm
+                    {isEditing ? (
+                        <>
+                        <Spinner />
+                        Confirming...
+                        </>
+                    ): (
+                        'Confirm'
+                    )}
                 </Button>
             </DialogContent>
         </Dialog>

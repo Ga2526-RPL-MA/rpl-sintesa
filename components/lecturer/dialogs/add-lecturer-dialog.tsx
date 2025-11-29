@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import Lecturer from '@/src/domain/entities/Lecturer';
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
+import { Spinner } from '@/components/ui/spinner';
 
 interface AddLecturerDialogProps {
     open: boolean;
@@ -31,6 +32,7 @@ export default function AddLecturerDialog({
     const [nip, setNip] = useState('')
     const [code, setCode] = useState('')
     const [expertise, setExpertise] = useState('')
+    const [isAdding, setIsAdding] = useState(false); 
     // if faculty can be changed
     const [faculty, setFaculty] = useState('')
 
@@ -65,6 +67,7 @@ export default function AddLecturerDialog({
                 return
             }
 
+            setIsAdding(true);
             const response = await axios.post<Lecturer>(
                 '/api/lecturers',
                 { 
@@ -77,13 +80,14 @@ export default function AddLecturerDialog({
                 {withCredentials: true}
             );
             onAdd()
-            onOpenChange(false)
-            toast.success('Successfully added lecturer!')
-            setNip('')
-            setName('')
-            setFaculty('')
-            setCode('')
-            setExpertise('')
+            onOpenChange(false);
+            setIsAdding(false);
+            toast.success('Successfully added lecturer!');
+            setNip('');
+            setName('');
+            setFaculty('');
+            setCode('');
+            setExpertise('');
         } catch (err) {
             console.error(err);
             toast.error('Failed to add lecturer');
@@ -94,11 +98,11 @@ export default function AddLecturerDialog({
         <Dialog open={open} onOpenChange={(value) => {
             onOpenChange(value);
             if (!value) {
-                setNip('')
-                setName('')
-                setFaculty('')
-                setCode('')
-                setExpertise('')
+                setNip('');
+                setName('');
+                setFaculty('');
+                setCode('');
+                setExpertise('');
             }
         }}>
             <DialogContent className="w-sm">
@@ -167,8 +171,16 @@ export default function AddLecturerDialog({
                 <Button 
                 className='mt-2'
                 onClick={handleAddLecturer}
+                disabled={isAdding}
                 >
-                    Add
+                    {isAdding ? (
+                        <>
+                        <Spinner />
+                        Adding...
+                        </>
+                    ): (
+                        'Add'
+                    )}
                 </Button>
             </DialogContent>
         </Dialog>

@@ -2,6 +2,8 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
+import Room from '@/src/domain/entities/Room'
+ 
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -12,12 +14,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Badge } from '../ui/badge'
-import Room from '@/src/domain/entities/Room'
 
 
 export const RoomColumns = (
     onDelete: (id: number) => void,
-    onEdit: (room: Room) => void,
+    onEdit: (Room: Room) => void,
 ): ColumnDef<Room>[] => [
     {
         accessorKey: "name",
@@ -52,7 +53,7 @@ export const RoomColumns = (
     {
         id: "actions",
         cell: ({ row }) => {
-            // Get original room object
+            // Get original Room object
             const room = row.original;
             return (
                 <DropdownMenu>
