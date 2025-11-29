@@ -12,7 +12,7 @@ import CourseRepositoryImpl from '@/src/infrastructure/repositories/CourseReposi
 import LecturerRepositoryImpl from '@/src/infrastructure/repositories/LecturerRepositoryImpl';
 import RoomRepositoryImpl from '@/src/infrastructure/repositories/RoomRepositoryImpl';
 import ScheduleListRepositoryImpl from '@/src/infrastructure/repositories/ScheduleListRepositoryImpl';
-import UserRepositoryImpl from '@/src/infrastructure/repositories/UserRepositoryImpl';
+
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
@@ -30,7 +30,7 @@ export async function GET(request: Request) {
         }
 
         const scheduleList = await GetScheduleListsByUserID(
-            await GetCurrentUserID(new UserRepositoryImpl()),
+            await GetCurrentUserID(),
             new ScheduleListRepositoryImpl(),
         );
 
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
                 hoursList: await GetHours(),
                 semester: body.semester,
                 year: new Date(Date.now()).getFullYear().toString(),
-                userId: await GetCurrentUserID(new UserRepositoryImpl()),
+                userId: await GetCurrentUserID(),
             }),
             new ScheduleListRepositoryImpl(),
         );
