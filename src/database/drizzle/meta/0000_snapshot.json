@@ -1,580 +1,524 @@
 {
-  "id": "00000000-0000-0000-0000-000000000000",
-  "prevId": "",
-  "version": "7",
-  "dialect": "postgresql",
-  "tables": {
-    "public.schedule_list": {
-      "name": "schedule_list",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "bigint",
-          "primaryKey": true,
-          "notNull": true,
-          "identity": {
-            "type": "byDefault",
-            "name": "schedule_list_id_seq",
-            "increment": "1",
-            "minValue": "1",
-            "maxValue": "9223372036854775807",
-            "startWith": "1",
-            "cache": "1",
-            "cycle": false,
+    "id": "00000000-0000-0000-0000-000000000000",
+    "prevId": "",
+    "version": "7",
+    "dialect": "postgresql",
+    "tables": {
+        "public.schedule_list": {
+            "name": "schedule_list",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "bigint",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "identity": {
+                        "type": "byDefault",
+                        "name": "schedule_list_id_seq",
+                        "increment": "1",
+                        "minValue": "1",
+                        "maxValue": "9223372036854775807",
+                        "startWith": "1",
+                        "cache": "1",
+                        "cycle": false,
+                        "schema": "public"
+                    }
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "now()"
+                },
+                "semester": {
+                    "name": "semester",
+                    "type": "SEMESTER",
+                    "typeSchema": "public",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "year": {
+                    "name": "year",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "user_id": {
+                    "name": "user_id",
+                    "type": "uuid",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "schedule_list_user_id_fkey": {
+                    "name": "schedule_list_user_id_fkey",
+                    "tableFrom": "schedule_list",
+                    "tableTo": "users",
+                    "schemaTo": "auth",
+                    "columnsFrom": ["user_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "cascade",
+                    "onUpdate": "cascade"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {},
+            "policies": {},
+            "isRLSEnabled": true
+        },
+        "public.course": {
+            "name": "course",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "bigint",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "identity": {
+                        "type": "byDefault",
+                        "name": "course_id_seq",
+                        "increment": "1",
+                        "minValue": "1",
+                        "maxValue": "9223372036854775807",
+                        "startWith": "1",
+                        "cache": "1",
+                        "cycle": false,
+                        "schema": "public"
+                    }
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "now()"
+                },
+                "code": {
+                    "name": "code",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "sks": {
+                    "name": "sks",
+                    "type": "smallint",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "description": {
+                    "name": "description",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "''"
+                },
+                "semester": {
+                    "name": "semester",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {},
+            "policies": {
+                "Enable delete for users based on user_id": {
+                    "name": "Enable delete for users based on user_id",
+                    "as": "PERMISSIVE",
+                    "for": "DELETE",
+                    "to": ["supabase_admin"],
+                    "using": "true"
+                },
+                "Enable insert for authenticated users only": {
+                    "name": "Enable insert for authenticated users only",
+                    "as": "PERMISSIVE",
+                    "for": "INSERT",
+                    "to": ["supabase_admin"]
+                },
+                "Enable read access for all users": {
+                    "name": "Enable read access for all users",
+                    "as": "PERMISSIVE",
+                    "for": "SELECT",
+                    "to": ["public"]
+                },
+                "Policy with table joins": {
+                    "name": "Policy with table joins",
+                    "as": "PERMISSIVE",
+                    "for": "UPDATE",
+                    "to": ["supabase_admin"]
+                }
+            },
+            "isRLSEnabled": true
+        },
+        "public.rooms": {
+            "name": "rooms",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "bigint",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "identity": {
+                        "type": "byDefault",
+                        "name": "rooms_id_seq",
+                        "increment": "1",
+                        "minValue": "1",
+                        "maxValue": "9223372036854775807",
+                        "startWith": "1",
+                        "cache": "1",
+                        "cycle": false,
+                        "schema": "public"
+                    }
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "now()"
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "capacity": {
+                    "name": "capacity",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": 50
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {},
+            "policies": {
+                "Enable delete for users based on user_id": {
+                    "name": "Enable delete for users based on user_id",
+                    "as": "PERMISSIVE",
+                    "for": "DELETE",
+                    "to": ["supabase_admin"],
+                    "using": "true"
+                },
+                "Enable insert for authenticated users only": {
+                    "name": "Enable insert for authenticated users only",
+                    "as": "PERMISSIVE",
+                    "for": "INSERT",
+                    "to": ["supabase_admin"]
+                },
+                "Enable read access for all users": {
+                    "name": "Enable read access for all users",
+                    "as": "PERMISSIVE",
+                    "for": "SELECT",
+                    "to": ["public"]
+                },
+                "Enable update for users based on user_id": {
+                    "name": "Enable update for users based on user_id",
+                    "as": "PERMISSIVE",
+                    "for": "UPDATE",
+                    "to": ["supabase_admin"]
+                }
+            },
+            "isRLSEnabled": true
+        },
+        "public.schedule": {
+            "name": "schedule",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "bigint",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "identity": {
+                        "type": "byDefault",
+                        "name": "schedule_id_seq",
+                        "increment": "1",
+                        "minValue": "1",
+                        "maxValue": "9223372036854775807",
+                        "startWith": "1",
+                        "cache": "1",
+                        "cycle": false,
+                        "schema": "public"
+                    }
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "now()"
+                },
+                "course_id": {
+                    "name": "course_id",
+                    "type": "bigint",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "room_id": {
+                    "name": "room_id",
+                    "type": "bigint",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "lecturer_id": {
+                    "name": "lecturer_id",
+                    "type": "bigint",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "week_day": {
+                    "name": "week_day",
+                    "type": "WEEKDAY",
+                    "typeSchema": "public",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "start_hour": {
+                    "name": "start_hour",
+                    "type": "HOUR",
+                    "typeSchema": "public",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "end_hour": {
+                    "name": "end_hour",
+                    "type": "HOUR",
+                    "typeSchema": "public",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "schedule_list_id": {
+                    "name": "schedule_list_id",
+                    "type": "bigint",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {
+                "schedule_course_id_fkey": {
+                    "name": "schedule_course_id_fkey",
+                    "tableFrom": "schedule",
+                    "tableTo": "course",
+                    "schemaTo": "public",
+                    "columnsFrom": ["course_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "set null",
+                    "onUpdate": "cascade"
+                },
+                "schedule_lecturer_id_fkey": {
+                    "name": "schedule_lecturer_id_fkey",
+                    "tableFrom": "schedule",
+                    "tableTo": "lecturer",
+                    "schemaTo": "public",
+                    "columnsFrom": ["lecturer_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "set null",
+                    "onUpdate": "cascade"
+                },
+                "schedule_room_id_fkey": {
+                    "name": "schedule_room_id_fkey",
+                    "tableFrom": "schedule",
+                    "tableTo": "rooms",
+                    "schemaTo": "public",
+                    "columnsFrom": ["room_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "set null",
+                    "onUpdate": "cascade"
+                },
+                "schedule_schedule_list_id_fkey": {
+                    "name": "schedule_schedule_list_id_fkey",
+                    "tableFrom": "schedule",
+                    "tableTo": "schedule_list",
+                    "schemaTo": "public",
+                    "columnsFrom": ["schedule_list_id"],
+                    "columnsTo": ["id"],
+                    "onDelete": "set null",
+                    "onUpdate": "cascade"
+                }
+            },
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {},
+            "policies": {},
+            "isRLSEnabled": true
+        },
+        "public.lecturer": {
+            "name": "lecturer",
+            "schema": "",
+            "columns": {
+                "id": {
+                    "name": "id",
+                    "type": "bigint",
+                    "primaryKey": true,
+                    "notNull": true,
+                    "identity": {
+                        "type": "byDefault",
+                        "name": "lecturer_ids_seq",
+                        "increment": "1",
+                        "minValue": "1",
+                        "maxValue": "9223372036854775807",
+                        "startWith": "1",
+                        "cache": "1",
+                        "cycle": false,
+                        "schema": "public"
+                    }
+                },
+                "created_at": {
+                    "name": "created_at",
+                    "type": "timestamp with time zone",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "now()"
+                },
+                "nip": {
+                    "name": "nip",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "name": {
+                    "name": "name",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "faculty": {
+                    "name": "faculty",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                },
+                "expertise": {
+                    "name": "expertise",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true,
+                    "default": "''"
+                },
+                "code": {
+                    "name": "code",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
+                }
+            },
+            "indexes": {},
+            "foreignKeys": {},
+            "compositePrimaryKeys": {},
+            "uniqueConstraints": {},
+            "checkConstraints": {},
+            "policies": {
+                "Enable delete for users based on user_id": {
+                    "name": "Enable delete for users based on user_id",
+                    "as": "PERMISSIVE",
+                    "for": "DELETE",
+                    "to": ["supabase_admin"],
+                    "using": "true"
+                },
+                "Enable insert for authenticated users only": {
+                    "name": "Enable insert for authenticated users only",
+                    "as": "PERMISSIVE",
+                    "for": "INSERT",
+                    "to": ["supabase_admin"]
+                },
+                "Enable read access for all users": {
+                    "name": "Enable read access for all users",
+                    "as": "PERMISSIVE",
+                    "for": "SELECT",
+                    "to": ["public"]
+                },
+                "Policy with table joins": {
+                    "name": "Policy with table joins",
+                    "as": "PERMISSIVE",
+                    "for": "UPDATE",
+                    "to": ["supabase_admin"]
+                }
+            },
+            "isRLSEnabled": true
+        }
+    },
+    "enums": {
+        "public.HOUR": {
+            "name": "HOUR",
+            "values": [
+                "07:00",
+                "07:50",
+                "08:00",
+                "08:50",
+                "09:00",
+                "09:50",
+                "10:00",
+                "10:50",
+                "11:00",
+                "11:50",
+                "12:00",
+                "12:50",
+                "13:30",
+                "14:20",
+                "14:30",
+                "15:20",
+                "15:30",
+                "16:20",
+                "16:30",
+                "17:20",
+                "17:30",
+                "18:20",
+                "18:30",
+                "19:20",
+                "19:30",
+                "20:20"
+            ],
             "schema": "public"
-          }
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "semester": {
-          "name": "semester",
-          "type": "SEMESTER",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "year": {
-          "name": "year",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "schedule_list_user_id_fkey": {
-          "name": "schedule_list_user_id_fkey",
-          "tableFrom": "schedule_list",
-          "tableTo": "users",
-          "schemaTo": "auth",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {},
-      "policies": {},
-      "isRLSEnabled": true
-    },
-    "public.course": {
-      "name": "course",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "bigint",
-          "primaryKey": true,
-          "notNull": true,
-          "identity": {
-            "type": "byDefault",
-            "name": "course_id_seq",
-            "increment": "1",
-            "minValue": "1",
-            "maxValue": "9223372036854775807",
-            "startWith": "1",
-            "cache": "1",
-            "cycle": false,
+        "public.SEMESTER": {
+            "name": "SEMESTER",
+            "values": ["GASAL", "GENAP"],
             "schema": "public"
-          }
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "code": {
-          "name": "code",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "sks": {
-          "name": "sks",
-          "type": "smallint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "''"
-        },
-        "semester": {
-          "name": "semester",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {},
-      "policies": {
-        "Enable delete for users based on user_id": {
-          "name": "Enable delete for users based on user_id",
-          "as": "PERMISSIVE",
-          "for": "DELETE",
-          "to": [
-            "supabase_admin"
-          ],
-          "using": "true"
-        },
-        "Enable insert for authenticated users only": {
-          "name": "Enable insert for authenticated users only",
-          "as": "PERMISSIVE",
-          "for": "INSERT",
-          "to": [
-            "supabase_admin"
-          ]
-        },
-        "Enable read access for all users": {
-          "name": "Enable read access for all users",
-          "as": "PERMISSIVE",
-          "for": "SELECT",
-          "to": [
-            "public"
-          ]
-        },
-        "Policy with table joins": {
-          "name": "Policy with table joins",
-          "as": "PERMISSIVE",
-          "for": "UPDATE",
-          "to": [
-            "supabase_admin"
-          ]
-        }
-      },
-      "isRLSEnabled": true
-    },
-    "public.rooms": {
-      "name": "rooms",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "bigint",
-          "primaryKey": true,
-          "notNull": true,
-          "identity": {
-            "type": "byDefault",
-            "name": "rooms_id_seq",
-            "increment": "1",
-            "minValue": "1",
-            "maxValue": "9223372036854775807",
-            "startWith": "1",
-            "cache": "1",
-            "cycle": false,
+        "public.USER_TYPE": {
+            "name": "USER_TYPE",
+            "values": ["STUDENT", "LECTURER"],
             "schema": "public"
-          }
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "capacity": {
-          "name": "capacity",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 50
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {},
-      "policies": {
-        "Enable delete for users based on user_id": {
-          "name": "Enable delete for users based on user_id",
-          "as": "PERMISSIVE",
-          "for": "DELETE",
-          "to": [
-            "supabase_admin"
-          ],
-          "using": "true"
-        },
-        "Enable insert for authenticated users only": {
-          "name": "Enable insert for authenticated users only",
-          "as": "PERMISSIVE",
-          "for": "INSERT",
-          "to": [
-            "supabase_admin"
-          ]
-        },
-        "Enable read access for all users": {
-          "name": "Enable read access for all users",
-          "as": "PERMISSIVE",
-          "for": "SELECT",
-          "to": [
-            "public"
-          ]
-        },
-        "Enable update for users based on user_id": {
-          "name": "Enable update for users based on user_id",
-          "as": "PERMISSIVE",
-          "for": "UPDATE",
-          "to": [
-            "supabase_admin"
-          ]
-        }
-      },
-      "isRLSEnabled": true
-    },
-    "public.schedule": {
-      "name": "schedule",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "bigint",
-          "primaryKey": true,
-          "notNull": true,
-          "identity": {
-            "type": "byDefault",
-            "name": "schedule_id_seq",
-            "increment": "1",
-            "minValue": "1",
-            "maxValue": "9223372036854775807",
-            "startWith": "1",
-            "cache": "1",
-            "cycle": false,
+        "public.WEEKDAY": {
+            "name": "WEEKDAY",
+            "values": ["SENIN", "SELASA", "RABU", "KAMIS", "JUMAT"],
             "schema": "public"
-          }
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "course_id": {
-          "name": "course_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "room_id": {
-          "name": "room_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "lecturer_id": {
-          "name": "lecturer_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "week_day": {
-          "name": "week_day",
-          "type": "WEEKDAY",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "start_hour": {
-          "name": "start_hour",
-          "type": "HOUR",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "end_hour": {
-          "name": "end_hour",
-          "type": "HOUR",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "schedule_list_id": {
-          "name": "schedule_list_id",
-          "type": "bigint",
-          "primaryKey": false,
-          "notNull": true
         }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "schedule_course_id_fkey": {
-          "name": "schedule_course_id_fkey",
-          "tableFrom": "schedule",
-          "tableTo": "course",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "course_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "cascade"
-        },
-        "schedule_lecturer_id_fkey": {
-          "name": "schedule_lecturer_id_fkey",
-          "tableFrom": "schedule",
-          "tableTo": "lecturer",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "lecturer_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "cascade"
-        },
-        "schedule_room_id_fkey": {
-          "name": "schedule_room_id_fkey",
-          "tableFrom": "schedule",
-          "tableTo": "rooms",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "room_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "cascade"
-        },
-        "schedule_schedule_list_id_fkey": {
-          "name": "schedule_schedule_list_id_fkey",
-          "tableFrom": "schedule",
-          "tableTo": "schedule_list",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "schedule_list_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "cascade"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {},
-      "policies": {},
-      "isRLSEnabled": true
     },
-    "public.lecturer": {
-      "name": "lecturer",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "bigint",
-          "primaryKey": true,
-          "notNull": true,
-          "identity": {
-            "type": "byDefault",
-            "name": "lecturer_ids_seq",
-            "increment": "1",
-            "minValue": "1",
-            "maxValue": "9223372036854775807",
-            "startWith": "1",
-            "cache": "1",
-            "cycle": false,
-            "schema": "public"
-          }
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "nip": {
-          "name": "nip",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "faculty": {
-          "name": "faculty",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "expertise": {
-          "name": "expertise",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "''"
-        },
-        "code": {
-          "name": "code",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {},
-      "policies": {
-        "Enable delete for users based on user_id": {
-          "name": "Enable delete for users based on user_id",
-          "as": "PERMISSIVE",
-          "for": "DELETE",
-          "to": [
-            "supabase_admin"
-          ],
-          "using": "true"
-        },
-        "Enable insert for authenticated users only": {
-          "name": "Enable insert for authenticated users only",
-          "as": "PERMISSIVE",
-          "for": "INSERT",
-          "to": [
-            "supabase_admin"
-          ]
-        },
-        "Enable read access for all users": {
-          "name": "Enable read access for all users",
-          "as": "PERMISSIVE",
-          "for": "SELECT",
-          "to": [
-            "public"
-          ]
-        },
-        "Policy with table joins": {
-          "name": "Policy with table joins",
-          "as": "PERMISSIVE",
-          "for": "UPDATE",
-          "to": [
-            "supabase_admin"
-          ]
-        }
-      },
-      "isRLSEnabled": true
-    }
-  },
-  "enums": {
-    "public.HOUR": {
-      "name": "HOUR",
-      "values": [
-        "07:00",
-        "07:50",
-        "08:00",
-        "08:50",
-        "09:00",
-        "09:50",
-        "10:00",
-        "10:50",
-        "11:00",
-        "11:50",
-        "12:00",
-        "12:50",
-        "13:30",
-        "14:20",
-        "14:30",
-        "15:20",
-        "15:30",
-        "16:20",
-        "16:30",
-        "17:20",
-        "17:30",
-        "18:20",
-        "18:30",
-        "19:20",
-        "19:30",
-        "20:20"
-      ],
-      "schema": "public"
-    },
-    "public.SEMESTER": {
-      "name": "SEMESTER",
-      "values": [
-        "GASAL",
-        "GENAP"
-      ],
-      "schema": "public"
-    },
-    "public.USER_TYPE": {
-      "name": "USER_TYPE",
-      "values": [
-        "STUDENT",
-        "LECTURER"
-      ],
-      "schema": "public"
-    },
-    "public.WEEKDAY": {
-      "name": "WEEKDAY",
-      "values": [
-        "SENIN",
-        "SELASA",
-        "RABU",
-        "KAMIS",
-        "JUMAT"
-      ],
-      "schema": "public"
-    }
-  },
-  "schemas": {},
-  "sequences": {},
-  "roles": {},
-  "policies": {},
-  "views": {},
-  "_meta": {
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "internal": {
-    "tables": {}
-  }
+    "sequences": {},
+    "roles": {},
+    "policies": {},
+    "views": {},
+    "_meta": {
+        "schemas": {},
+        "tables": {},
+        "columns": {}
+    },
+    "internal": {
+        "tables": {}
+    }
 }
