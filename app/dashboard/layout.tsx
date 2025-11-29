@@ -1,8 +1,8 @@
+export const dynamic = "force-dynamic"
 import { SidebarProvider } from '@/components/ui/sidebar';
 import AppSidebar from '@/components/app-sidebar';
 import SiteHeader from '@/components/site-header';
 import GetUserRoles from '@/src/application/usecases/GetUserRoles';
-
 export default async function Layout({
     children,
 }: {
