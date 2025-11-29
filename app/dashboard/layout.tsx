@@ -1,13 +1,15 @@
 import { SidebarProvider } from '@/components/ui/sidebar';
 import AppSidebar from '@/components/app-sidebar';
 import SiteHeader from '@/components/site-header';
+import GetUserRoles from '@/src/application/usecases/GetUserRoles';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({ children }: { children: React.ReactNode }) {
+    const role = await GetUserRoles();
     return (
         <div className="bg-linear-to-t from-teal-900 to-green-500">
             <SidebarProvider>
                 <div className="flex h-screen w-full">
-                    <AppSidebar className="bg-transparent" />
+                    <AppSidebar role={role} className="bg-transparent" />
                     <main className="flex-1 overflow-auto p-2 md:pl-0">
                         <div className="dark:bg-sidebar/95 bg-sidebar/90 h-full w-full rounded-xl shadow-xl">
                             <div className="flex h-full flex-col p-5">
