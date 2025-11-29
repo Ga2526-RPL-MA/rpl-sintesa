@@ -7,9 +7,9 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import ScheduleList from '@/src/domain/entities/ScheduleList';
-import ScheduleCalendar from '../schedule-calendar';
+import ScheduleCalendar from '../schedule/schedule-calendar';
 import { useEffect, useState } from 'react';
-import ScheduleSkeleton from '../schedule-skeleton';
+import ScheduleSkeleton from '../schedule/schedule-skeleton';
 
 interface ViewScheduleHistoryDialogProps {
     open: boolean;
@@ -43,11 +43,11 @@ export default function ViewScheduleHistoryDialog({
                 <DialogDescription className="sr-only">
                     Schedule details dialog
                 </DialogDescription>
-                <div className="overflow-hidden">
+                <div className="overflow-auto">
                     {isLoading ? (
                         <ScheduleSkeleton />
                     ) : (
-                        <div className="h-full w-full overflow-auto">
+                        <div className="h-full overflow-auto rounded-md">
                             <div className="min-w-[900px]">
                                 <ScheduleCalendar
                                     scheduleData={schedule}

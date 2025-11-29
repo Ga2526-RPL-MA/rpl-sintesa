@@ -19,11 +19,19 @@ import {
     IconClock,
     IconClockFilled,
     IconLogout,
+    IconUsersGroup,
 } from '@tabler/icons-react';
 import Logo from './logo';
 import { usePathname, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { toast } from 'sonner';
+import {
+    IconBooks,
+    IconBooksFilled,
+    IconDoors,
+    IconDoorsFilled,
+    IconUsersGroupFilled,
+} from './custom-icons';
 
 const menuItems = [
     {
@@ -44,7 +52,36 @@ const menuItems = [
         icon: IconClock,
         iconFilled: IconClockFilled,
     },
+    // {
+    //     title: 'View All Schedules',
+    //     url: '/#',
+    //     icon: IconClock,
+    //     iconFilled: IconClockFilled,
+    // },
+    {
+        title: 'Lecturers',
+        url: '/dashboard/admin/lecturers',
+        icon: IconUsersGroup,
+        iconFilled: IconUsersGroupFilled,
+    },
+    {
+        title: 'Rooms',
+        url: '/dashboard/admin/rooms',
+        icon: IconDoors,
+        iconFilled: IconDoorsFilled,
+    },
+    {
+        title: 'Courses',
+        url: '/dashboard/admin/courses',
+        icon: IconBooks,
+        iconFilled: IconBooksFilled,
+    },
 ];
+
+function isAdmin() {
+    //Determine if user's an admin
+    return true;
+}
 
 function AppSidebar({ className }: { className?: string }) {
     const pathname = usePathname();

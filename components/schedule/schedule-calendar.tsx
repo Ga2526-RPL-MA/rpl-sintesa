@@ -3,7 +3,7 @@
 import FullCalendar from '@fullcalendar/react';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import { useEffect, useState } from 'react';
-import ScheduleDialog from './dialogs/course-detail-dialog';
+import ScheduleDialog from '../dialogs/schedule-detail-dialog';
 import { EventClickArg } from '@fullcalendar/core/index.js';
 import Schedule from '@/src/domain/entities/Schedule';
 import ScheduleList from '@/src/domain/entities/ScheduleList';

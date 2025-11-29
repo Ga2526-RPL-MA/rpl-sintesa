@@ -1,5 +1,5 @@
 import React from 'react';
-import ScheduleHistoryList from '@/components/schedule-history-list';
+import ScheduleHistoryList from '@/components/schedule/schedule-history-list';
 function Page() {
     return (
         <div className="space-y-10">

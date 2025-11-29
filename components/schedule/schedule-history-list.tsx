@@ -1,9 +1,9 @@
 'use client';
 import React, { use, useState } from 'react';
-import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import ScheduleList from '@/src/domain/entities/ScheduleList';
 import ScheduleHistoryCard from './schedule-history-card';
-import { HistoryListSkeleton } from './history-list-skeleton';
+import { HistoryListSkeleton } from '../history-list-skeleton';
 import { toast } from 'sonner';
 import axios from 'axios';
 

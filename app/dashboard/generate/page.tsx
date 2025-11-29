@@ -1,5 +1,5 @@
 'use client';
-import ScheduleCalendar from '@/components/schedule-calendar';
+import ScheduleCalendar from '@/components/schedule/schedule-calendar';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -14,7 +14,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import Semester from '@/src/domain/enums/Semester';
 import { toast } from 'sonner';
-import ConfirmDialog from '@/components/dialogs/confirm-generation-dialog';
+import ConfirmDialog from '@/components/dialogs/confirm-dialog';
 import { Spinner } from '@/components/ui/spinner';
 
 function Page() {
@@ -136,7 +136,7 @@ function Page() {
                 </div>
                 <div className="flex items-center justify-center">
                     <Button
-                        disabled={!semester && isLoading}
+                        disabled={!semester || isLoading}
                         onClick={handleGenerateClick}
                     >
                         {isLoading ? (
@@ -153,6 +153,23 @@ function Page() {
                     open={showDialog}
                     onOpenChange={setShowDialog}
                     onConfirm={generateSchedule}
+                    description={
+                        <>
+                            Are you sure you want to replace the generated
+                            schedule?
+                            <br />
+                            This action will replace the current schedule with a
+                            new one, you can view the replaced schedule in the
+                            &quot;
+                            <a
+                                href="/dashboard/history"
+                                className="text-primary hover:underline"
+                            >
+                                Schedules History
+                            </a>
+                            &quot; tab.
+                        </>
+                    }
                     title="Confirm Schedule Generation"
                 />
             </div>

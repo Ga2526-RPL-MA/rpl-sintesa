@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Card, CardDescription, CardTitle } from './ui/card';
+import { Card, CardDescription, CardTitle } from '../ui/card';
 import ScheduleList from '@/src/domain/entities/ScheduleList';
-import ScheduleHistoryDialog from './dialogs/open-schedule-history-dialog';
+import ScheduleHistoryDialog from '../dialogs/open-schedule-history-dialog';
 
 function ScheduleHistoryCard({ schedule }: { schedule: ScheduleList }) {
     const [open, setOpen] = useState(false);
@@ -12,7 +12,7 @@ function ScheduleHistoryCard({ schedule }: { schedule: ScheduleList }) {
     return (
         <div>
             <Card
-                onClick={handleScheduleClick}
+                onClick={() => handleScheduleClick()}
                 className="active:bg-primary/40 border-primary/30 bg-primary/10 hover:bg-primary/30 grid cursor-pointer grid-cols-1 items-center justify-between border p-4 px-6 lg:flex"
             >
                 <CardTitle>Schedule - {schedule.id}</CardTitle>
