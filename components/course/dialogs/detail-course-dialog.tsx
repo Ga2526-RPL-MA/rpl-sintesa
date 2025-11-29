@@ -16,8 +16,14 @@ import Lecturer from '@/src/domain/entities/Lecturer';
 import { Button } from '@/components/ui/button';
 import axios from 'axios';
 import Course from '@/src/domain/entities/Course';
-import { CalendarFold, ClipboardList, Clock12, MapPin, User } from 'lucide-react';
- '@/src/domain/entities';
+import {
+    CalendarFold,
+    ClipboardList,
+    Clock12,
+    MapPin,
+    User,
+} from 'lucide-react';
+('@/src/domain/entities');
 
 interface DetaiDialogProps {
     item?: Course | null;
@@ -30,10 +36,9 @@ export default function DetaiDialog({
     open,
     onOpenChange,
 }: DetaiDialogProps) {
-
-    const courseData = item
+    const courseData = item;
     if (!courseData) {
-        return
+        return;
     }
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -47,9 +52,7 @@ export default function DetaiDialog({
                             Course details dialog
                         </DialogDescription>
                         {item.code && (
-                            <h1 className="text-primary">
-                                {item.code}
-                            </h1>
+                            <h1 className="text-primary">{item.code}</h1>
                         )}
                     </div>
                     <Separator />

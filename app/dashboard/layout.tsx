@@ -8,11 +8,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <SidebarProvider>
                 <div className="flex h-screen w-full">
                     <AppSidebar className="bg-transparent" />
-                    <main className="flex-1 p-2 md:pl-0 overflow-auto">
+                    <main className="flex-1 overflow-auto p-2 md:pl-0">
                         <div className="dark:bg-sidebar/95 bg-sidebar/90 h-full w-full rounded-xl shadow-xl">
-                            <div className='p-5 h-full flex flex-col'>
+                            <div className="flex h-full flex-col p-5">
                                 <SiteHeader />
-                                <div className="mt-5 flex-1 min-h-0">{children}</div>
+                                <div className="mt-5 min-h-0 flex-1">
+                                    {children}
+                                </div>
                             </div>
                         </div>
                     </main>

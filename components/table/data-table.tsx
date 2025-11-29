@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { 
+import {
     ColumnDef,
     flexRender,
     getCoreRowModel,
@@ -8,31 +8,31 @@ import {
     GlobalFilterTableState,
     SortingState,
     getSortedRowModel,
-    useReactTable, 
-} from "@tanstack/react-table"
+    useReactTable,
+} from '@tanstack/react-table';
 
-import { 
+import {
     Table,
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
-import { useState } from "react"
+} from '@/components/ui/table';
+import { useState } from 'react';
 
 interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[]
-    data: TData[]
-    globalFilter?: string
+    columns: ColumnDef<TData, TValue>[];
+    data: TData[];
+    globalFilter?: string;
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
-    globalFilter = ''
+    globalFilter = '',
 }: DataTableProps<TData, TValue>) {
-    const [sorting, setSorting] = useState<SortingState>([])
+    const [sorting, setSorting] = useState<SortingState>([]);
     const table = useReactTable({
         data,
         columns,
@@ -44,13 +44,13 @@ export function DataTable<TData, TValue>({
             sorting,
             globalFilter,
         },
-        onGlobalFilterChange: () => {}
-    })
+        onGlobalFilterChange: () => {},
+    });
 
     return (
-        <div className="h-full flex flex-col overflow-auto">
+        <div className="flex h-full flex-col overflow-auto">
             <div className="flex flex-col overflow-auto rounded-md border">
-                <Table className="flex-1 min-h-0">
+                <Table className="min-h-0 flex-1">
                     <TableHeader className="bg-muted sticky top-0 z-10">
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
@@ -58,13 +58,14 @@ export function DataTable<TData, TValue>({
                                     return (
                                         <TableHead key={header.id}>
                                             {header.isPlaceholder
-                                            ? null
-                                            : flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
+                                                ? null
+                                                : flexRender(
+                                                      header.column.columnDef
+                                                          .header,
+                                                      header.getContext(),
+                                                  )}
                                         </TableHead>
-                                    )
+                                    );
                                 })}
                             </TableRow>
                         ))}
@@ -74,18 +75,26 @@ export function DataTable<TData, TValue>({
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
+                                    data-state={
+                                        row.getIsSelected() && 'selected'
+                                    }
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext(),
+                                            )}
                                         </TableCell>
                                     ))}
                                 </TableRow>
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 text-center">
+                                <TableCell
+                                    colSpan={columns.length}
+                                    className="h-24 text-center"
+                                >
                                     No results.
                                 </TableCell>
                             </TableRow>
@@ -94,5 +103,5 @@ export function DataTable<TData, TValue>({
                 </Table>
             </div>
         </div>
-    )
+    );
 }

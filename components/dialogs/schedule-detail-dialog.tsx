@@ -31,7 +31,7 @@ export default function ScheduleDialog({
     event,
 }: ScheduleDialogProps) {
     if (!event) return null;
-    
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>

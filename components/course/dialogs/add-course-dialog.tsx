@@ -29,43 +29,43 @@ export default function AddCourseDialog({
     onOpenChange,
     onAdd,
 }: AddCourseDialog) {
-    const [name, setName] = useState('')
-    const [sks, setSks] = useState('')
-    const [code, setCode] = useState('')
-    const [semester, setSemester] = useState('')
+    const [name, setName] = useState('');
+    const [sks, setSks] = useState('');
+    const [code, setCode] = useState('');
+    const [semester, setSemester] = useState('');
     // if description can be changed
-    const [description, setDescription] = useState('')
+    const [description, setDescription] = useState('');
     const [isAdding, setIsAdding] = useState(false);
 
-    function isInputsValid(){
-        if (!name){
+    function isInputsValid() {
+        if (!name) {
             toast.error('Name cannot be empty!');
-            return false
+            return false;
         }
-        if (!sks){
+        if (!sks) {
             toast.error('SKS cannot be empty!');
-            return
+            return;
         }
-        if (!sks.match(/^[0-9]+$/)){
+        if (!sks.match(/^[0-9]+$/)) {
             toast.error('SKS can only be digits/numbers!');
-            return false
+            return false;
         }
-        if (!code){
-            toast.error('Code cannot be empty!')
-            return false
+        if (!code) {
+            toast.error('Code cannot be empty!');
+            return false;
         }
-        if (!semester){
-            toast.error('Semester cannot be empty!')
-            return false
+        if (!semester) {
+            toast.error('Semester cannot be empty!');
+            return false;
         }
 
-        return true
+        return true;
     }
 
     async function handleAddCourse() {
         try {
-            if (!isInputsValid()){
-                return
+            if (!isInputsValid()) {
+                return;
             }
             setIsAdding(true);
             const response = await axios.post<Course>(
@@ -77,17 +77,17 @@ export default function AddCourseDialog({
                     code: code,
                     description: description,
                 },
-                {withCredentials: true}
+                { withCredentials: true },
             );
-            onAdd()
-            onOpenChange(false)
-            setIsAdding(false)
-            toast.success('Successfully added course!')
-            setSks('')
-            setName('')
-            setDescription('')
-            setCode('')
-            setSemester('')
+            onAdd();
+            onOpenChange(false);
+            setIsAdding(false);
+            toast.success('Successfully added course!');
+            setSks('');
+            setName('');
+            setDescription('');
+            setCode('');
+            setSemester('');
         } catch (err) {
             console.error(err);
             toast.error('Failed to add course');
@@ -95,16 +95,19 @@ export default function AddCourseDialog({
     }
 
     return (
-        <Dialog open={open} onOpenChange={(value) => {
-            onOpenChange(value);
-            if (!value) {
-                setSks('')
-                setName('')
-                setDescription('')
-                setCode('')
-                setSemester('')
-            }
-        }}>
+        <Dialog
+            open={open}
+            onOpenChange={(value) => {
+                onOpenChange(value);
+                if (!value) {
+                    setSks('');
+                    setName('');
+                    setDescription('');
+                    setCode('');
+                    setSemester('');
+                }
+            }}
+        >
             <DialogContent className="w-sm">
                 <DialogHeader>
                     <DialogTitle className="text-primary">
@@ -117,68 +120,74 @@ export default function AddCourseDialog({
                 <div className="grid gap-4">
                     <div className="grid gap-3">
                         <Label htmlFor="name">Name</Label>
-                        <Input 
-                        id="name" 
-                        name="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder='Object Oriented Programming'
+                        <Input
+                            id="name"
+                            name="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Object Oriented Programming"
                         />
                     </div>
                     <div className="grid gap-3">
                         <Label htmlFor="code">Code</Label>
-                        <Input 
-                        id="code" 
-                        name="code"
-                        maxLength={8}
-                        value={code}
-                        onChange={(e) => setCode(e.target.value.toUpperCase())}
-                        placeholder='ER234510'
+                        <Input
+                            id="code"
+                            name="code"
+                            maxLength={8}
+                            value={code}
+                            onChange={(e) =>
+                                setCode(e.target.value.toUpperCase())
+                            }
+                            placeholder="ER234510"
                         />
                     </div>
                     <div className="grid gap-3">
                         <Label htmlFor="sks">SKS</Label>
-                        <Input 
-                        id="sks" 
-                        name="sks"
-                        value={sks}
-                        maxLength={1}
-                        onChange={(e) => setSks(e.target.value.replace(/\D/g, ''))}
-                        placeholder='3'
+                        <Input
+                            id="sks"
+                            name="sks"
+                            value={sks}
+                            maxLength={1}
+                            onChange={(e) =>
+                                setSks(e.target.value.replace(/\D/g, ''))
+                            }
+                            placeholder="3"
                         />
                     </div>
                     <div className="grid gap-3">
                         <Label htmlFor="semester">Semester</Label>
-                        <Input 
-                        id="semester" 
-                        name="semester"
-                        value={semester}
-                        maxLength={1}
-                        onChange={(e) => setSemester(e.target.value.replace(/\D/g, ''))}
-                        placeholder='2'
+                        <Input
+                            id="semester"
+                            name="semester"
+                            value={semester}
+                            maxLength={1}
+                            onChange={(e) =>
+                                setSemester(e.target.value.replace(/\D/g, ''))
+                            }
+                            placeholder="2"
                         />
                     </div>
                     <div className="grid gap-3">
                         <Label htmlFor="description">Description</Label>
-                       <Textarea
-                        id='description'
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        placeholder='Teaches the object-oriented programming paradigm using languages such as Java'
+                        <Textarea
+                            id="description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="Teaches the object-oriented programming paradigm using languages such as Java"
                         />
                     </div>
                 </div>
-                <Button 
-                className='mt-2'
-                onClick={handleAddCourse}
-                disabled={isAdding}
+                <Button
+                    className="mt-2"
+                    onClick={handleAddCourse}
+                    disabled={isAdding}
                 >
-                   {isAdding ? (
+                    {isAdding ? (
                         <>
-                        <Spinner />
-                        Adding...
+                            <Spinner />
+                            Adding...
                         </>
-                    ): (
+                    ) : (
                         'Add'
                     )}
                 </Button>

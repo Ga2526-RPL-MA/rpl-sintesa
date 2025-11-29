@@ -34,11 +34,11 @@ export default function LecturerDetailDialog({
     onOpenChange,
     lecturer,
 }: LecturerDetailDialogProps) {
-    const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     if (!lecturer) return null;
 
     function handleDelete() {
-        setOpenDeleteDialog(true)
+        setOpenDeleteDialog(true);
     }
 
     return (
@@ -60,7 +60,7 @@ export default function LecturerDetailDialog({
                         <div className="flex items-start gap-2">
                             <IconIdCardLanyard className="text-muted-foreground mt-1" />
                             <div>
-                                <h1 className='font-bold'>Code:</h1>
+                                <h1 className="font-bold">Code:</h1>
                                 <p>{lecturer.code}</p>
                             </div>
                         </div>
@@ -87,7 +87,9 @@ export default function LecturerDetailDialog({
                         <CalendarFold className="text-muted-foreground mt-1" />
                         <div>
                             <h1 className="font-bold">Expertise:</h1>
-                            <p>{lecturer.expertise ? lecturer.expertise : '-'}</p>
+                            <p>
+                                {lecturer.expertise ? lecturer.expertise : '-'}
+                            </p>
                         </div>
                     </div>
                     <div className="mt-8 grid space-y-4">
@@ -98,10 +100,7 @@ export default function LecturerDetailDialog({
                         >
                             Edit
                         </Button>
-                        <Button 
-                        variant={'destructive'}
-                        onClick={handleDelete}
-                        >
+                        <Button variant={'destructive'} onClick={handleDelete}>
                             Delete
                         </Button>
                     </div>

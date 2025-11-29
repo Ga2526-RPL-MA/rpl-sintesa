@@ -25,7 +25,13 @@ import Logo from './logo';
 import { usePathname, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { toast } from 'sonner';
-import { IconBooks, IconBooksFilled, IconDoors, IconDoorsFilled, IconUsersGroupFilled } from './custom-icons';
+import {
+    IconBooks,
+    IconBooksFilled,
+    IconDoors,
+    IconDoorsFilled,
+    IconUsersGroupFilled,
+} from './custom-icons';
 
 const menuItems = [
     {
@@ -56,7 +62,7 @@ const menuItems = [
         title: 'Lecturers',
         url: '/dashboard/admin/lecturers',
         icon: IconUsersGroup,
-        iconFilled: IconUsersGroupFilled, 
+        iconFilled: IconUsersGroupFilled,
     },
     {
         title: 'Rooms',
@@ -69,10 +75,10 @@ const menuItems = [
         url: '/dashboard/admin/courses',
         icon: IconBooks,
         iconFilled: IconBooksFilled,
-    }
+    },
 ];
 
-function isAdmin(){
+function isAdmin() {
     //Determine if user's an admin
     return true;
 }

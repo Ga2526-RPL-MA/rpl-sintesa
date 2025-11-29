@@ -18,10 +18,10 @@ import axios from 'axios';
 import { Spinner } from '@/components/ui/spinner';
 
 interface EditLecturerDialogProps {
-    open: boolean
-    onOpenChange: (open: boolean) => void
-    item?: Lecturer | null // Use 'item' instead of 'lecturer'
-    onEdit: () => void
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    item?: Lecturer | null; // Use 'item' instead of 'lecturer'
+    onEdit: () => void;
 }
 
 export default function EditLecturerDialog({
@@ -30,44 +30,44 @@ export default function EditLecturerDialog({
     onOpenChange,
     onEdit,
 }: EditLecturerDialogProps) {
-    const original = useRef<Lecturer | null>(null)
-    const [name, setName] = useState('')
-    const [nip, setNip] = useState('')
-    const [code, setCode] = useState('')
-    const [expertise, setExpertise] = useState('')
+    const original = useRef<Lecturer | null>(null);
+    const [name, setName] = useState('');
+    const [nip, setNip] = useState('');
+    const [code, setCode] = useState('');
+    const [expertise, setExpertise] = useState('');
     // if faculty can be changed
-    const [faculty, setFaculty] = useState('')
+    const [faculty, setFaculty] = useState('');
     const [isEditing, setIsEditing] = useState(false);
 
-    function isInputsValid(){
-        if (!name){
+    function isInputsValid() {
+        if (!name) {
             toast.error('Name cannot be empty!');
-            return false
+            return false;
         }
-        if (!nip){
+        if (!nip) {
             toast.error('NIP cannot be empty!');
-            return
+            return;
         }
-        if (!nip.match(/^[0-9]+$/)){
+        if (!nip.match(/^[0-9]+$/)) {
             toast.error('NIP can only be digits/numbers!');
-            return false
+            return false;
         }
-        if (!code){
-            toast.error('Code cannot be empty!')
-            return false
+        if (!code) {
+            toast.error('Code cannot be empty!');
+            return false;
         }
-        if (!faculty){
-            toast.error('Faculty cannot be empty!')
-            return false
+        if (!faculty) {
+            toast.error('Faculty cannot be empty!');
+            return false;
         }
 
-        return true
+        return true;
     }
 
-    function hasChanges(){
-        const oc = original.current
-        if (!oc){
-            return false
+    function hasChanges() {
+        const oc = original.current;
+        if (!oc) {
+            return false;
         }
 
         return (
@@ -76,35 +76,35 @@ export default function EditLecturerDialog({
             oc.faculty !== faculty ||
             oc.code !== code ||
             oc.expertise !== expertise
-        )
+        );
     }
 
     async function handleEditLecturer() {
         try {
-            if (!isInputsValid()){
-                return
+            if (!isInputsValid()) {
+                return;
             }
             setIsEditing(true);
             const response = await axios.put<Lecturer>(
                 `/api/lecturers?id=${item?.id}`,
-                { 
+                {
                     nip: nip,
                     name: name,
                     faculty: faculty,
                     code: code,
                     expertise: expertise,
-                 },
-                {withCredentials: true}
+                },
+                { withCredentials: true },
             );
-            onEdit()
-            onOpenChange(false)
-            setIsEditing(false)
-            toast.success('Successfully edited lecturer!')
-            setNip('')
-            setName('')
-            setFaculty('')
-            setCode('')
-            setExpertise('')
+            onEdit();
+            onOpenChange(false);
+            setIsEditing(false);
+            toast.success('Successfully edited lecturer!');
+            setNip('');
+            setName('');
+            setFaculty('');
+            setCode('');
+            setExpertise('');
         } catch (err) {
             console.error(err);
             toast.error('Failed to edit lecturer');
@@ -113,26 +113,29 @@ export default function EditLecturerDialog({
 
     useEffect(() => {
         if (item && open) {
-            original.current = item
+            original.current = item;
 
-            setName(item.name)
-            setNip(item.nip)
-            setCode(item.code)
-            setFaculty(item.faculty)
-            setExpertise(item.expertise || '')
+            setName(item.name);
+            setNip(item.nip);
+            setCode(item.code);
+            setFaculty(item.faculty);
+            setExpertise(item.expertise || '');
         }
-    }, [open, item])
+    }, [open, item]);
     return (
-        <Dialog open={open} onOpenChange={(value) => {
-            onOpenChange(value);
-            if (!value) {
-                setNip('')
-                setName('')
-                setFaculty('')
-                setCode('')
-                setExpertise('')
-            }
-        }}>
+        <Dialog
+            open={open}
+            onOpenChange={(value) => {
+                onOpenChange(value);
+                if (!value) {
+                    setNip('');
+                    setName('');
+                    setFaculty('');
+                    setCode('');
+                    setExpertise('');
+                }
+            }}
+        >
             <DialogContent className="w-sm">
                 <DialogHeader>
                     <DialogTitle className="text-primary">
@@ -145,68 +148,72 @@ export default function EditLecturerDialog({
                 <div className="grid gap-4">
                     <div className="grid gap-3">
                         <Label htmlFor="name">Name</Label>
-                        <Input 
-                        id="name" 
-                        name="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder='Andi Yanto'
+                        <Input
+                            id="name"
+                            name="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Andi Yanto"
                         />
                     </div>
                     <div className="grid gap-3">
                         <Label htmlFor="nip">NIP</Label>
-                        <Input 
-                        id="nip" 
-                        name="nip"
-                        value={nip}
-                        maxLength={10}
-                        onChange={(e) => setNip(e.target.value.replace(/\D/g, ''))}
-                        placeholder=' 50000XXXXX'
+                        <Input
+                            id="nip"
+                            name="nip"
+                            value={nip}
+                            maxLength={10}
+                            onChange={(e) =>
+                                setNip(e.target.value.replace(/\D/g, ''))
+                            }
+                            placeholder=" 50000XXXXX"
                         />
                     </div>
                     <div className="grid gap-3">
                         <Label htmlFor="code">Code</Label>
-                        <Input 
-                        id="code" 
-                        name="code"
-                        maxLength={2}
-                        value={code}
-                        onChange={(e) => setCode(e.target.value.toUpperCase())}
-                        placeholder='AY'
+                        <Input
+                            id="code"
+                            name="code"
+                            maxLength={2}
+                            value={code}
+                            onChange={(e) =>
+                                setCode(e.target.value.toUpperCase())
+                            }
+                            placeholder="AY"
                         />
                     </div>
                     <div className="grid gap-3">
                         <Label htmlFor="faculty">Faculty</Label>
-                        <Input 
-                        id="faculty" 
-                        name="faculty"
-                        value={faculty}
-                        onChange={(e) => setFaculty(e.target.value.trim())}
-                        placeholder='FTEIC'
+                        <Input
+                            id="faculty"
+                            name="faculty"
+                            value={faculty}
+                            onChange={(e) => setFaculty(e.target.value.trim())}
+                            placeholder="FTEIC"
                         />
                     </div>
                     <div className="grid gap-3">
                         <Label htmlFor="expertise">Expertise</Label>
-                        <Input 
-                        id="expertise" 
-                        name="expertise"
-                        value={expertise}
-                        onChange={(e) => setExpertise(e.target.value)}
-                        placeholder='Automata'
+                        <Input
+                            id="expertise"
+                            name="expertise"
+                            value={expertise}
+                            onChange={(e) => setExpertise(e.target.value)}
+                            placeholder="Automata"
                         />
                     </div>
                 </div>
-                <Button 
-                className='mt-2'
-                onClick={handleEditLecturer}
-                disabled={!hasChanges() || isEditing}
+                <Button
+                    className="mt-2"
+                    onClick={handleEditLecturer}
+                    disabled={!hasChanges() || isEditing}
                 >
                     {isEditing ? (
                         <>
-                        <Spinner />
-                        Confirming...
+                            <Spinner />
+                            Confirming...
                         </>
-                    ): (
+                    ) : (
                         'Confirm'
                     )}
                 </Button>

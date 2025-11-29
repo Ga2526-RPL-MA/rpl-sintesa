@@ -136,7 +136,7 @@ function Page() {
                 </div>
                 <div className="flex items-center justify-center">
                     <Button
-                        disabled={!semester && isLoading}
+                        disabled={!semester || isLoading}
                         onClick={handleGenerateClick}
                     >
                         {isLoading ? (
@@ -155,17 +155,21 @@ function Page() {
                     onConfirm={generateSchedule}
                     description={
                         <>
-                            Are you sure you want to replace the generated schedule?
+                            Are you sure you want to replace the generated
+                            schedule?
                             <br />
-                            This action will replace the current schedule with a new one, you can view the
-                            replaced schedule in the "
-                            <a 
-                            href='/dashboard/history'
-                            className=''>
+                            This action will replace the current schedule with a
+                            new one, you can view the replaced schedule in the
+                            &quot;
+                            <a
+                                href="/dashboard/history"
+                                className="text-primary hover:underline"
+                            >
                                 Schedules History
-                            </a>" tab.
+                            </a>
+                            &quot; tab.
                         </>
-                        }
+                    }
                     title="Confirm Schedule Generation"
                 />
             </div>

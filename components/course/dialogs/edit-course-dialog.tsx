@@ -18,10 +18,10 @@ import Course from '@/src/domain/entities/Course';
 import { Spinner } from '@/components/ui/spinner';
 
 interface EditCourseDialog {
-    open: boolean
-    onOpenChange: (open: boolean) => void
-    item?: Course | null // Use 'item' instead of 'Course'
-    onEdit: () => void
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+    item?: Course | null; // Use 'item' instead of 'Course'
+    onEdit: () => void;
 }
 // code: string,
 //     public name: string,
@@ -36,43 +36,43 @@ export default function EditCourseDialog({
     onEdit,
 }: EditCourseDialog) {
     const original = useRef<Course>(null);
-    const [name, setName] = useState('')
-    const [sks, setSks] = useState('')
-    const [code, setCode] = useState('')
-    const [description, setDescription] = useState('')
+    const [name, setName] = useState('');
+    const [sks, setSks] = useState('');
+    const [code, setCode] = useState('');
+    const [description, setDescription] = useState('');
     // if semester can be changed
-    const [semester, setSemester] = useState('')
-    const [isEditing, setIsEditing] = useState(false)
+    const [semester, setSemester] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
 
-    function isInputsValid(){
-        if (!name){
+    function isInputsValid() {
+        if (!name) {
             toast.error('Name cannot be empty!');
-            return false
+            return false;
         }
-        if (!sks){
+        if (!sks) {
             toast.error('SKS cannot be empty!');
-            return
+            return;
         }
-        if (!sks.match(/^[0-9]+$/)){
+        if (!sks.match(/^[0-9]+$/)) {
             toast.error('SKS can only be digits/numbers!');
-            return false
+            return false;
         }
-        if (!code){
-            toast.error('Code cannot be empty!')
-            return false
+        if (!code) {
+            toast.error('Code cannot be empty!');
+            return false;
         }
-        if (!semester){
-            toast.error('Semester cannot be empty!')
-            return false
+        if (!semester) {
+            toast.error('Semester cannot be empty!');
+            return false;
         }
 
-        return true
+        return true;
     }
 
     function hasChanges() {
-        const oc = original.current
-        if (!oc){
-            return false
+        const oc = original.current;
+        if (!oc) {
+            return false;
         }
 
         return (
@@ -81,35 +81,35 @@ export default function EditCourseDialog({
             oc.semester.toString() !== semester ||
             oc.sks.toString() !== sks ||
             oc.description !== description
-        )
+        );
     }
 
     async function handleEditCourse() {
         try {
-            if (!isInputsValid()){
-                return
+            if (!isInputsValid()) {
+                return;
             }
             setIsEditing(true);
             const response = await axios.put<Course>(
                 `/api/courses?id=${item?.id}`,
-                { 
+                {
                     sks: parseInt(sks),
                     name: name,
                     semester: parseInt(semester),
                     code: code,
                     description: description,
-                 },
-                {withCredentials: true}
+                },
+                { withCredentials: true },
             );
-            onEdit()
-            onOpenChange(false)
-            setIsEditing(false)
-            toast.success('Successfully edited course!')
-            setSks('')
-            setName('')
-            setSemester('')
-            setCode('')
-            setDescription('')
+            onEdit();
+            onOpenChange(false);
+            setIsEditing(false);
+            toast.success('Successfully edited course!');
+            setSks('');
+            setName('');
+            setSemester('');
+            setCode('');
+            setDescription('');
         } catch (err) {
             console.error(err);
             toast.error('Failed to edit course');
@@ -117,25 +117,28 @@ export default function EditCourseDialog({
     }
     useEffect(() => {
         if (open && item) {
-            original.current = item
-            setName(item.name)
-            setSks(item.sks.toString())
-            setCode(item.code)
-            setSemester(item.semester.toString())
-            setDescription(item.description || '')
+            original.current = item;
+            setName(item.name);
+            setSks(item.sks.toString());
+            setCode(item.code);
+            setSemester(item.semester.toString());
+            setDescription(item.description || '');
         }
-    }, [open, item])
+    }, [open, item]);
     return (
-        <Dialog open={open} onOpenChange={(value) => {
-            onOpenChange(value);
-            if (!value) {
-                setName('')
-                setSks('')
-                setCode('')
-                setSemester('')
-                setDescription('')
-            }
-        }}>
+        <Dialog
+            open={open}
+            onOpenChange={(value) => {
+                onOpenChange(value);
+                if (!value) {
+                    setName('');
+                    setSks('');
+                    setCode('');
+                    setSemester('');
+                    setDescription('');
+                }
+            }}
+        >
             <DialogContent className="w-sm">
                 <DialogHeader>
                     <DialogTitle className="text-primary">
@@ -148,71 +151,78 @@ export default function EditCourseDialog({
                 <div className="grid gap-4">
                     <div className="grid gap-3">
                         <Label htmlFor="name">Name</Label>
-                        <Input 
-                        id="name" 
-                        name="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder='Object Oriented Programming'
+                        <Input
+                            id="name"
+                            name="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Object Oriented Programming"
                         />
                     </div>
                     <div className="grid gap-3">
                         <Label htmlFor="code">Code</Label>
-                        <Input 
-                        id="code" 
-                        name="code"
-                        maxLength={8}
-                        value={code}
-                        onChange={(e) => setCode(e.target.value.toUpperCase())}
-                        placeholder='ER234510'
+                        <Input
+                            id="code"
+                            name="code"
+                            maxLength={8}
+                            value={code}
+                            onChange={(e) =>
+                                setCode(e.target.value.toUpperCase())
+                            }
+                            placeholder="ER234510"
                         />
                     </div>
                     <div className="grid gap-3">
                         <Label htmlFor="sks">SKS</Label>
-                        <Input 
-                        id="sks" 
-                        name="sks"
-                        value={sks}
-                        maxLength={1}
-                        onChange={(e) => setSks(e.target.value.replace(/\D/g, ''))}
-                        placeholder='3'
+                        <Input
+                            id="sks"
+                            name="sks"
+                            value={sks}
+                            maxLength={1}
+                            onChange={(e) =>
+                                setSks(e.target.value.replace(/\D/g, ''))
+                            }
+                            placeholder="3"
                         />
                     </div>
                     <div className="grid gap-3">
                         <Label htmlFor="semester">Semester</Label>
-                        <Input 
-                        id="semester" 
-                        name="semester"
-                        value={semester}
-                        maxLength={1}
-                        onChange={(e) => setSemester(e.target.value.replace(/\D/g, ''))}
-                        placeholder='2'
+                        <Input
+                            id="semester"
+                            name="semester"
+                            value={semester}
+                            maxLength={1}
+                            onChange={(e) =>
+                                setSemester(e.target.value.replace(/\D/g, ''))
+                            }
+                            placeholder="2"
                         />
                     </div>
                     <div className="grid gap-3">
                         <Label htmlFor="description">Description</Label>
                         <Textarea
-                        id='description'
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        placeholder='Teaches the object-oriented programming paradigm using languages such as Java'
+                            id="description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="Teaches the object-oriented programming paradigm using languages such as Java"
                         />
                     </div>
                     <DialogDescription>
-                        Note: Editing a course will result in changes in schedules that has this course!
+                        Note: Editing a course will result in changes in
+                        schedules that has this course!
                     </DialogDescription>
                 </div>
-                <Button 
-                className='mt-2'
-                onClick={handleEditCourse}
-                disabled={!hasChanges() || isEditing}
+                <Button
+                    className="mt-2"
+                    onClick={handleEditCourse}
+                    disabled={!hasChanges() || isEditing}
                 >
                     {isEditing ? (
                         <>
-                        <Spinner />
-                        Confirming...
+                            <Spinner />
+                            Confirming...
                         </>
-                    ): (
+                    ) : (
                         'Confirm'
                     )}
                 </Button>

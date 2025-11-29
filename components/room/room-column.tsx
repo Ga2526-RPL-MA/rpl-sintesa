@@ -1,85 +1,86 @@
-'use client'
+'use client';
 
-import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
-import Room from '@/src/domain/entities/Room'
- 
-import { Button } from "@/components/ui/button"
+import { ColumnDef } from '@tanstack/react-table';
+import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
+import Room from '@/src/domain/entities/Room';
+
+import { Button } from '@/components/ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Badge } from '../ui/badge'
-
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Badge } from '../ui/badge';
 
 export const RoomColumns = (
     onDelete: (id: number) => void,
     onEdit: (Room: Room) => void,
 ): ColumnDef<Room>[] => [
     {
-        accessorKey: "name",
+        accessorKey: 'name',
         header: ({ column }) => {
             return (
-                    <Button
+                <Button
                     variant="ghost"
-                    className='px-1 active:scale-100 hover:scale-105 transition-transform'
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Name
+                    className="px-1 transition-transform hover:scale-105 active:scale-100"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === 'asc')
+                    }
+                >
+                    Name
                     <ArrowUpDown className="h-4" />
-                    </Button>
-                )
-            },
+                </Button>
+            );
+        },
     },
     {
-        accessorKey: "capacity",
+        accessorKey: 'capacity',
         header: ({ column }) => {
             return (
-                    <Button
+                <Button
                     variant="ghost"
-                    className='px-1 active:scale-100 hover:scale-105 transition-transform'
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Capacity
+                    className="px-1 transition-transform hover:scale-105 active:scale-100"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === 'asc')
+                    }
+                >
+                    Capacity
                     <ArrowUpDown className="h-4" />
-                    </Button>
-                )
-            },
+                </Button>
+            );
+        },
     },
     {
-        id: "actions",
+        id: 'actions',
         cell: ({ row }) => {
             // Get original Room object
             const room = row.original;
             return (
                 <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                    <span className="sr-only">Open menu</span>
-                    <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                    onClick={() => onEdit(room)}
-                    >
-                        Edit
-                    </DropdownMenuItem>
-                    <DropdownMenuItem 
-                    onClick={() => onDelete(room.id)}
-                    variant={'destructive'}
-                    >
-                        Delete
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={() => onEdit(room)}>
+                            Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() => onDelete(room.id)}
+                            variant={'destructive'}
+                        >
+                            Delete
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
                 </DropdownMenu>
-            )
-        }
-    }
-]
+            );
+        },
+    },
+];
