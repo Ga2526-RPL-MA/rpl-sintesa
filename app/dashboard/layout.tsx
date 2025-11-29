@@ -3,7 +3,11 @@ import AppSidebar from '@/components/app-sidebar';
 import SiteHeader from '@/components/site-header';
 import GetUserRoles from '@/src/application/usecases/GetUserRoles';
 
-export default async function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
     const role = await GetUserRoles();
     return (
         <div className="bg-linear-to-t from-teal-900 to-green-500">

@@ -58,7 +58,7 @@ export async function updateSession(request: NextRequest) {
         // no user, potentially respond by redirecting the user to the login page
         const url = request.nextUrl.clone();
         url.pathname = '/auth/login';
-        if(path.startsWith('/api')){
+        if (path.startsWith('/api')) {
             url.pathname = '/api/auth/login';
         }
         return NextResponse.redirect(url);
@@ -70,7 +70,7 @@ export async function updateSession(request: NextRequest) {
 
     const { data: userData } = await supabase.auth.getUser();
     const user = userData.user;
-    if (!user){
+    if (!user) {
         const url = request.nextUrl.clone();
         url.pathname = '/auth/login';
         return NextResponse.redirect(url);
@@ -81,14 +81,14 @@ export async function updateSession(request: NextRequest) {
         .select('role')
         .eq('user_id', user.id);
 
-    if (!roles){
-        console.log("No roles assigned");
+    if (!roles) {
+        console.log('No roles assigned');
         return NextResponse.redirect(new URL('/forbidden', request.url));
     }
 
     const userRoles = roles.map((r) => r.role);
-    
-    if (path.includes('/admin') && !userRoles.includes(UserRole.ADMIN)){
+
+    if (path.includes('/admin') && !userRoles.includes(UserRole.ADMIN)) {
         return NextResponse.redirect(new URL('/forbidden', request.url));
     }
 

@@ -1,18 +1,14 @@
-import React from 'react'
+import React from 'react';
 
 function Forbidden() {
-  return (
-    <div className='w-full h-screen flex justify-center items-center bg-black/80'>
-        <div className='text-xl grid-rows-2 text-center font-light text-white'>
-            <div>
-                403: Forbidden
-            </div>
-            <div>
-                You don't have the permission to view this page.
+    return (
+        <div className="flex h-screen w-full items-center justify-center bg-black/80">
+            <div className="grid-rows-2 text-center text-xl text-white">
+                <div>403: Forbidden</div>
+                <div>You don&apos;t have the permission to view this page.</div>
             </div>
         </div>
-    </div>
-  )
+    );
 }
 
-export default Forbidden
+export default Forbidden;

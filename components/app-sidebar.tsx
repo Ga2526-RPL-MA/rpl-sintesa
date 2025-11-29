@@ -85,7 +85,13 @@ const menuItems = [
     },
 ];
 
-function AppSidebar({ className, role }: { className?: string, role: UserRole[] }) {
+function AppSidebar({
+    className,
+    role,
+}: {
+    className?: string;
+    role: UserRole[];
+}) {
     const pathname = usePathname();
     const router = useRouter();
 
@@ -106,13 +112,13 @@ function AppSidebar({ className, role }: { className?: string, role: UserRole[] 
 
     const visibleMenuItems = menuItems.filter((item) => {
         // Show if user has the required permission
-        if (role.includes(item.perms)) return true
-        
-        // Show non-admin items to everyone
-        return item.perms !== UserRole.ADMIN
-    })
+        if (role.includes(item.perms)) return true;
 
-    console.log(role)
+        // Show non-admin items to everyone
+        return item.perms !== UserRole.ADMIN;
+    });
+
+    console.log(role);
     return (
         <Sidebar
             variant={'floating'}
