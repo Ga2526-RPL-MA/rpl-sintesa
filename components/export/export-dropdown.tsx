@@ -18,8 +18,8 @@ function ExportDropdown({ scheduleId, children }: {scheduleId: number, children:
             
             const link = document.createElement('a');
             link.href = url;
-            const contentDisposition = response.headers['Content-Disposition']
-
+            const contentDisposition = response.headers['content-disposition']
+            console.log(contentDisposition);
             const fileName = contentDisposition
             ? contentDisposition.split('filename=')[1].replace(/"/g, '')
             : `schedule-${scheduleId}-${new Date().toISOString().split('T')[0]}.${type.toLowerCase()}`
