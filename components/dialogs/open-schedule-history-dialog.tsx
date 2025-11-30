@@ -12,15 +12,12 @@ import {
     CalendarDays,
     CalendarFold,
     CalendarRange,
-    Clock12,
-    Clock3,
-    MapPin,
-    User,
 } from 'lucide-react';
 import ScheduleList from '@/src/domain/entities/ScheduleList';
 import { Button } from '../ui/button';
 import { useEffect, useState } from 'react';
 import ViewScheduleHistoryDialog from './view-schedule-history-dialog';
+import ExportDropdown from '../export/export-dropdown';
 
 interface ScheduleHistoryDialogProps {
     open: boolean;
@@ -107,7 +104,9 @@ export default function ScheduleHistoryDialog({
                         >
                             View
                         </Button>
-                        <Button variant={'outline'}>Export</Button>
+                        <ExportDropdown scheduleId={schedule.id}>
+                            <Button variant={'outline'}>Export</Button>
+                        </ExportDropdown>
                     </div>
                 </div>
                 <ViewScheduleHistoryDialog
