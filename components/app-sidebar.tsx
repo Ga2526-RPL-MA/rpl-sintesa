@@ -32,6 +32,7 @@ import {
     IconDoorsFilled,
     IconUsersGroupFilled,
 } from './custom-icons';
+import UserRole from '@/src/domain/enums/UserRole';
 
 const menuItems = [
     {
@@ -39,18 +40,21 @@ const menuItems = [
         url: '/dashboard',
         icon: IconLayoutDashboard,
         iconFilled: IconLayoutDashboardFilled,
+        perms: UserRole.USER,
     },
     {
         title: 'Generate Schedule',
         url: '/dashboard/generate',
         icon: IconCalendarWeek,
         iconFilled: IconCalendarWeekFilled,
+        perms: UserRole.USER,
     },
     {
         title: 'Schedule History',
         url: '/dashboard/history',
         icon: IconClock,
         iconFilled: IconClockFilled,
+        perms: UserRole.USER,
     },
     // {
     //     title: 'View All Schedules',
@@ -63,27 +67,31 @@ const menuItems = [
         url: '/dashboard/admin/lecturers',
         icon: IconUsersGroup,
         iconFilled: IconUsersGroupFilled,
+        perms: UserRole.ADMIN,
     },
     {
         title: 'Rooms',
         url: '/dashboard/admin/rooms',
         icon: IconDoors,
         iconFilled: IconDoorsFilled,
+        perms: UserRole.ADMIN,
     },
     {
         title: 'Courses',
         url: '/dashboard/admin/courses',
         icon: IconBooks,
         iconFilled: IconBooksFilled,
+        perms: UserRole.ADMIN,
     },
 ];
 
-function isAdmin() {
-    //Determine if user's an admin
-    return true;
-}
-
-function AppSidebar({ className }: { className?: string }) {
+function AppSidebar({
+    className,
+    role,
+}: {
+    className?: string;
+    role: UserRole[];
+}) {
     const pathname = usePathname();
     const router = useRouter();
 
@@ -102,6 +110,15 @@ function AppSidebar({ className }: { className?: string }) {
         }
     }
 
+    const visibleMenuItems = menuItems.filter((item) => {
+        // Show if user has the required permission
+        if (role.includes(item.perms)) return true;
+
+        // Show non-admin items to everyone
+        return item.perms !== UserRole.ADMIN;
+    });
+
+    console.log(role);
     return (
         <Sidebar
             variant={'floating'}
@@ -114,9 +131,8 @@ function AppSidebar({ className }: { className?: string }) {
                     <SidebarGroupLabel>Menu</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {menuItems.map((item) => {
+                            {visibleMenuItems.map(async (item) => {
                                 const isSelected = pathname === item.url;
-
                                 return (
                                     <SidebarMenuItem key={item.title}>
                                         <SidebarMenuButton
