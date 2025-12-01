@@ -69,7 +69,7 @@ export default function ScheduleCalendar({
         setEventOpen(true);
     };
     return (
-        <div className={cn(className, 'overflow-y-auto bg-transparent')}>
+        <div className={cn(className, 'bg-transparent')}>
             <FullCalendar
                 plugins={[timeGridPlugin]}
                 initialView="timeGridWeek"

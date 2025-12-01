@@ -12,8 +12,6 @@ import { IconPlus } from '@tabler/icons-react';
 import ConfirmDialog from './dialogs/confirm-dialog';
 import { toast } from 'sonner';
 import axios from 'axios';
-import { table } from 'console';
-import { boolean } from 'drizzle-orm/gel-core';
 
 interface GenericCrudListProps<T> {
     // API Configuration

@@ -8,11 +8,7 @@ import {
     DialogDescription,
 } from '@/components/ui/dialog';
 import { Separator } from '../ui/separator';
-import {
-    CalendarDays,
-    CalendarFold,
-    CalendarRange,
-} from 'lucide-react';
+import { CalendarDays, CalendarFold, CalendarRange } from 'lucide-react';
 import ScheduleList from '@/src/domain/entities/ScheduleList';
 import { Button } from '../ui/button';
 import { useEffect, useState } from 'react';

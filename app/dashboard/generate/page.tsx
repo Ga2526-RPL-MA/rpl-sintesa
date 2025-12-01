@@ -16,36 +16,12 @@ import Semester from '@/src/domain/enums/Semester';
 import { toast } from 'sonner';
 import ConfirmDialog from '@/components/dialogs/confirm-dialog';
 import { Spinner } from '@/components/ui/spinner';
+import GenerateScheduleTable from '@/components/generate/generate-schedule-tab';
+import { year } from 'drizzle-orm/mysql-core';
 
 function Page() {
-    const [showDialog, setShowDialog] = useState(false);
-    const [scheduleListData, setScheduleListData] = useState<
-        ScheduleList | undefined
-    >(undefined);
-    const [semester, setSemester] = useState<Semester | undefined>(undefined);
-    const [year, setYear] = useState<string | undefined>(undefined);
-    const [isLoading, setIsLoading] = useState(false);
-    async function handleGenerateClick() {
-        if (isLoading) {
-            return;
-        }
-        if (!semester) {
-            toast.error('Please select a semester first');
-            return;
-        }
-
-        if (!year) {
-            toast.error('Please select a year first');
-            return;
-        }
-
-        if (scheduleListData) {
-            setShowDialog(true);
-            return;
-        }
-
-        await generateSchedule();
-    }
+    const [semester, setSemester] = useState<Semester | undefined>();
+    const [year, setYear] = useState<string | undefined>('');
 
     function getYears() {
         const yearList = [];
@@ -56,124 +32,23 @@ function Page() {
         return yearList;
     }
 
-    async function generateSchedule() {
-        try {
-            setIsLoading(true);
-            const response = await axios.post<ScheduleList>(
-                '/api/schedules',
-                { semester: semester },
-                // Implement when api is updated to take year
-                // { year: year },
-                { withCredentials: true },
-            );
-            setScheduleListData(response.data);
-            setIsLoading(false);
-            toast.success('Schedule generated successfully');
-        } catch (err) {
-            console.error('Error generating schedule:', err);
-            toast.error('Failed to generate schedule');
-        }
-    }
-
     return (
-        <>
-            <div className="grid grid-cols-1 grid-rows-[minmax(4rem,auto)_1fr_auto] items-center space-y-5 self-center">
-                <div className="mx-auto space-x-5">
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button className="w-35">
-                                {semester ? semester : 'Select Semester'}
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <DropdownMenuLabel>
-                                Select Semesters
-                            </DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                                onClick={() => setSemester(Semester.GASAL)}
-                            >
-                                GASAL
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => setSemester(Semester.GENAP)}
-                            >
-                                GENAP
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button className="w-35">
-                                {year ? year : 'Select Year'}
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <DropdownMenuLabel>Select Year</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            {getYears().map((year) => (
-                                <DropdownMenuItem
-                                    key={year}
-                                    onClick={() => setYear(year)}
-                                >
-                                    {year}
-                                </DropdownMenuItem>
-                            ))}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
-                <div>
-                    <div className="h-[65vh] overflow-hidden md:h-full">
-                        <div className="h-full w-full overflow-auto">
-                            <div className="min-w-[900px]">
-                                <ScheduleCalendar
-                                    scheduleData={scheduleListData}
-                                    className="h-full w-full"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex items-center justify-center">
-                    <Button
-                        disabled={!semester || isLoading}
-                        onClick={handleGenerateClick}
-                    >
-                        {isLoading ? (
-                            <>
-                                <Spinner />
-                                Generating...
-                            </>
-                        ) : (
-                            'Generate'
-                        )}
-                    </Button>
-                </div>
-                <ConfirmDialog
-                    open={showDialog}
-                    onOpenChange={setShowDialog}
-                    onConfirm={generateSchedule}
-                    description={
-                        <>
-                            Are you sure you want to replace the generated
-                            schedule?
-                            <br />
-                            This action will replace the current schedule with a
-                            new one, you can view the replaced schedule in the
-                            &quot;
-                            <a
-                                href="/dashboard/history"
-                                className="text-primary hover:underline"
-                            >
-                                Schedules History
-                            </a>
-                            &quot; tab.
-                        </>
-                    }
-                    title="Confirm Schedule Generation"
-                />
+        <div className="flex h-full flex-col">
+            <div className="mb-4 space-y-1">
+                <h1 className="flex text-2xl font-bold">Generate Schedule</h1>
+                <p className="text-muted-foreground">
+                    Pick the following{' '}
+                    <span className="font-bold">semester</span> and{' '}
+                    <span className="font-bold">year</span> to generate a
+                    schedule, <br />
+                    you can also rename, export, and save the schedule to be
+                    stored in the history page.
+                </p>
             </div>
-        </>
+            <div className="min-h-0 flex-1">
+                <GenerateScheduleTable />
+            </div>
+        </div>
     );
 }
 
