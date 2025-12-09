@@ -10,10 +10,10 @@ export default async function Layout({
 }) {
     const role = await GetUserRoles();
     return (
-        <div className="bg-linear-to-t from-teal-900 to-primary">
+        <div className="to-primary bg-linear-to-t from-teal-900">
             <SidebarProvider>
                 <div className="flex h-screen w-full">
-                    <AppSidebar role={role}/>
+                    <AppSidebar role={role} />
                     <main className="flex-1 overflow-auto p-2 md:pl-0">
                         <div className="bg-sidebar h-full w-full rounded-xl shadow-xl">
                             <div className="flex h-full flex-col p-5">

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -32,10 +32,10 @@ function GenerateScheduleTable({}) {
     const [isLoading, setIsLoading] = useState(false);
     const [scheduleName, setScheduleName] = useState<string>('');
     const [isSaving, setIsSaving] = useState(false);
-    const [dirtySchedules, setDirtySchedules] = useState<Schedule[]>([])
-    const [originalSchedules, setOriginalSchedules] = useState<Schedule[]>([])
-    const [newSchedule, setNewSchedule] = useState<ScheduleList>()
-    console.log(dirtySchedules)
+    const [dirtySchedules, setDirtySchedules] = useState<Schedule[]>([]);
+    const [originalSchedules, setOriginalSchedules] = useState<Schedule[]>([]);
+    const [newSchedule, setNewSchedule] = useState<ScheduleList>();
+    console.log(dirtySchedules);
     async function handleGenerateClick() {
         if (isLoading) {
             return;
@@ -79,8 +79,8 @@ function GenerateScheduleTable({}) {
             );
             setScheduleListData(response.data);
             // for export to have fallback
-            setNewSchedule(scheduleListData)
-            setOriginalSchedules(response.data.schedules)
+            setNewSchedule(scheduleListData);
+            setOriginalSchedules(response.data.schedules);
             setIsLoading(false);
             toast.success('Schedule generated successfully');
         } catch (err) {
@@ -96,18 +96,16 @@ function GenerateScheduleTable({}) {
 
             // setIsSaving(false);
             setIsSaving(false);
-            setDirtySchedules([])
+            setDirtySchedules([]);
 
-            // TODO: Set new schedule to be used for 
+            // TODO: Set new schedule to be used for
             // setNewSchedule(newScheduleList)
-        } catch (err) {
-
-        }
+        } catch (err) {}
     }
 
     function handleUpdate(updated: Schedule) {
         if (originalSchedules.length === 0) return;
-        console.log(updated)
+        console.log(updated);
         const original = originalSchedules.find((s) => s.id === updated.id);
 
         const isSame =
@@ -120,7 +118,7 @@ function GenerateScheduleTable({}) {
 
         if (isSame) {
             setDirtySchedules((prev) =>
-                prev.filter((s) => s.id !== updated.id)
+                prev.filter((s) => s.id !== updated.id),
             );
             return;
         }
@@ -129,7 +127,7 @@ function GenerateScheduleTable({}) {
             const exists = prev.find((s) => s.id === updated.id);
 
             if (exists) {
-            return prev.map((s) => (s.id === updated.id ? updated : s));
+                return prev.map((s) => (s.id === updated.id ? updated : s));
             }
 
             return [...prev, updated];
@@ -137,8 +135,8 @@ function GenerateScheduleTable({}) {
     }
 
     function handleConfirm() {
-        generateSchedule()
-        setDirtySchedules([])
+        generateSchedule();
+        setDirtySchedules([]);
     }
 
     const isMobile = useIsMobile();
@@ -200,7 +198,9 @@ function GenerateScheduleTable({}) {
                 <ExportDropdown scheduleId={newSchedule?.id}>
                     <Button
                         variant={'outline'}
-                        disabled={!scheduleListData || dirtySchedules.length > 0}
+                        disabled={
+                            !scheduleListData || dirtySchedules.length > 0
+                        }
                         className="order-3 lg:order-4"
                     >
                         {isMobile ? <Download /> : 'Export'}
@@ -210,7 +210,11 @@ function GenerateScheduleTable({}) {
                 {/* order last in lg: */}
                 <Button
                     className="order-4 lg:order-5"
-                    disabled={!scheduleListData || isSaving || dirtySchedules.length == 0}
+                    disabled={
+                        !scheduleListData ||
+                        isSaving ||
+                        dirtySchedules.length == 0
+                    }
                     onClick={handleSave}
                 >
                     <>

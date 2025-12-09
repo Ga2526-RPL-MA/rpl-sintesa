@@ -190,14 +190,22 @@ export default function GenericCrudList<T extends { id: number }>({
                             <Button
                                 variant={'outline'}
                                 onClick={() => setView('table')}
-                                className={cn(view === 'table' ? 'bg-muted' : 'bg-transparent')}
+                                className={cn(
+                                    view === 'table'
+                                        ? 'bg-muted'
+                                        : 'bg-transparent',
+                                )}
                             >
                                 <Table2 />
                             </Button>
                             <Button
                                 variant={'outline'}
                                 onClick={() => setView('card')}
-                                className={cn(view === 'card' ? 'bg-muted' : 'bg-transparent')}
+                                className={cn(
+                                    view === 'card'
+                                        ? 'bg-muted'
+                                        : 'bg-transparent',
+                                )}
                             >
                                 <LayoutGrid />
                             </Button>

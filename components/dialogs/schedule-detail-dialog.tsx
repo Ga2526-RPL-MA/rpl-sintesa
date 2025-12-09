@@ -35,7 +35,7 @@ interface ScheduleDialogProps {
     onOpenChange: (open: boolean) => void;
     onDialogUpdate: (schedule: Schedule) => void;
     event: Schedule;
-    scheduleList: ScheduleList | undefined,
+    scheduleList: ScheduleList | undefined;
 }
 
 export default function ScheduleDialog({
@@ -45,95 +45,98 @@ export default function ScheduleDialog({
     event,
     scheduleList,
 }: ScheduleDialogProps) {
-    
     const [isEditing, setIsEditing] = useState(false);
-    const [roomList, setRoomList] = useState<Room[]>([])
-    const [lecturerList, setLecturerList] = useState<Lecturer[]>([])
-    
+    const [roomList, setRoomList] = useState<Room[]>([]);
+    const [lecturerList, setLecturerList] = useState<Lecturer[]>([]);
+
     // Fix: Initialize with null instead of undefined
-    const [room, setRoom] = useState<Room | null>(null)
-    const [lecturer, setLecturer] = useState<Lecturer | null>(null)
-    const [weekDay, setWeekDay] = useState<WeekDay | null>(null)
-    const [startTime, setStartTime] = useState<string>('')
-    const [endTime, setEndTime] = useState<string>('')
+    const [room, setRoom] = useState<Room | null>(null);
+    const [lecturer, setLecturer] = useState<Lecturer | null>(null);
+    const [weekDay, setWeekDay] = useState<WeekDay | null>(null);
+    const [startTime, setStartTime] = useState<string>('');
+    const [endTime, setEndTime] = useState<string>('');
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-    console.log(event)
+    console.log(event);
     // Remove unused weekDayList state
     const weekDayOptions = [
-        { value: "Monday", label: "Monday", data: WeekDay.SENIN },
-        { value: "Tuesday", label: "Tuesday", data: WeekDay.SELASA },
-        { value: "Wednesday", label: "Wednesday", data: WeekDay.RABU },
-        { value: "Thursday", label: "Thursday", data: WeekDay.KAMIS },
-        { value: "Friday", label: "Friday", data: WeekDay.JUMAT },
+        { value: 'Monday', label: 'Monday', data: WeekDay.SENIN },
+        { value: 'Tuesday', label: 'Tuesday', data: WeekDay.SELASA },
+        { value: 'Wednesday', label: 'Wednesday', data: WeekDay.RABU },
+        { value: 'Thursday', label: 'Thursday', data: WeekDay.KAMIS },
+        { value: 'Friday', label: 'Friday', data: WeekDay.JUMAT },
     ];
 
     function clampTime(time: string, min = '07:00', max = '20:00'): string {
-        if (time < min){
-            toast.error('Time is less than minimum: 07:00')
-            return min
+        if (time < min) {
+            toast.error('Time is less than minimum: 07:00');
+            return min;
         }
-        if (time > max){
-            toast.error('Time exceeded maximum: 08:00')
-            return max
+        if (time > max) {
+            toast.error('Time exceeded maximum: 08:00');
+            return max;
         }
         return time;
     }
 
-    function roundToInterval(time: string, intervalMinutes: number = 10): string {
+    function roundToInterval(
+        time: string,
+        intervalMinutes: number = 10,
+    ): string {
         const [hours, minutes] = time.split(':').map(Number);
-        const roundedMinutes = Math.round(minutes / intervalMinutes) * intervalMinutes;
-        
+        const roundedMinutes =
+            Math.round(minutes / intervalMinutes) * intervalMinutes;
+
         // Handle rounding to 60 (next hour)
         if (roundedMinutes === 60) {
             return `${String(hours + 1).padStart(2, '0')}:00`;
         }
-        
+
         return `${String(hours).padStart(2, '0')}:${String(roundedMinutes).padStart(2, '0')}`;
     }
-
 
     useEffect(() => {
         async function getDatas() {
             try {
                 const [roomResponse, lecturerResponse] = await Promise.all([
                     axios.get<Room[]>('/api/rooms', { withCredentials: true }),
-                    axios.get<Lecturer[]>('/api/lecturers', { withCredentials: true }),
+                    axios.get<Lecturer[]>('/api/lecturers', {
+                        withCredentials: true,
+                    }),
                 ]);
-                
-                setRoomList(roomResponse.data)
-                setLecturerList(lecturerResponse.data)
+
+                setRoomList(roomResponse.data);
+                setLecturerList(lecturerResponse.data);
             } catch (error) {
-                console.error('Failed to fetch data:', error)
+                console.error('Failed to fetch data:', error);
             }
         }
 
         if (event) {
-            setStartTime(event.startHour)
-            setEndTime(event.endHour)
+            setStartTime(event.startHour);
+            setEndTime(event.endHour);
         }
-        getDatas()
-    }, [event, onOpenChange])
+        getDatas();
+    }, [event, onOpenChange]);
 
     useEffect(() => {
         if (!isEditing) return;
 
-        const changed = (
+        const changed =
             (weekDay !== null && weekDay !== event.weekDay) ||
             (lecturer !== null && lecturer.id !== event.lecturer?.id) ||
             (room !== null && room.id !== event.room?.id) ||
             startTime !== event.startHour ||
-            endTime !== event.endHour
-        );
+            endTime !== event.endHour;
 
         setHasUnsavedChanges(changed);
     }, [weekDay, lecturer, room, startTime, endTime, event, isEditing]);
 
     // Helper function to check if two time ranges overlap
     function timesOverlap(
-        start1: string, 
-        end1: string, 
-        start2: string, 
-        end2: string
+        start1: string,
+        end1: string,
+        start2: string,
+        end2: string,
     ): boolean {
         // Two time ranges overlap if:
         // start1 < end2 AND end1 > start2
@@ -141,48 +144,64 @@ export default function ScheduleDialog({
     }
 
     function handleSave() {
-
-        
-        if (endTime < startTime){
-            toast.error('Start and end times are invalid!')
-            return
+        if (endTime < startTime) {
+            toast.error('Start and end times are invalid!');
+            return;
         }
-        
-        console.log(scheduleList)
+
+        console.log(scheduleList);
         // Check for overlaps with other schedules
         const hasOverlap = scheduleList?.schedules.some((schedule) => {
             // Skip checking against itself
             if (schedule.id === event.id) return false;
-            
+
             // Only check schedules on the same day
             const checkWeekDay = weekDay ?? event.weekDay;
             if (schedule.weekDay !== checkWeekDay) return false;
-            
+
             // Check if lecturer overlaps (if lecturer changed)
             const checkLecturer = lecturer ?? event.lecturer;
             if (checkLecturer && schedule.lecturer?.id === checkLecturer.id) {
                 // Check time overlap
-                if (timesOverlap(startTime, endTime, schedule.startHour, schedule.endHour)) {
-                    toast.error(`Lecturer ${checkLecturer.name} is already scheduled at this time`);
+                if (
+                    timesOverlap(
+                        startTime,
+                        endTime,
+                        schedule.startHour,
+                        schedule.endHour,
+                    )
+                ) {
+                    toast.error(
+                        `Lecturer ${checkLecturer.name} is already scheduled at this time`,
+                    );
                     return true;
                 }
             }
-            
+
             // Check if room overlaps (if room changed)
             const checkRoom = room ?? event.room;
             if (checkRoom && schedule.room?.id === checkRoom.id) {
                 // Check time overlap
-                if (timesOverlap(startTime, endTime, schedule.startHour, schedule.endHour)) {
-                    toast.error(`Room ${checkRoom.name} is already booked at this time`);
+                if (
+                    timesOverlap(
+                        startTime,
+                        endTime,
+                        schedule.startHour,
+                        schedule.endHour,
+                    )
+                ) {
+                    toast.error(
+                        `Room ${checkRoom.name} is already booked at this time`,
+                    );
                     return true;
                 }
             }
-            
-            return false
+
+            return false;
         });
-        
+
         if (hasOverlap) return;
-        
+
         const updatedEvent: Schedule = {
             ...event,
             weekDay: weekDay ?? event.weekDay,
@@ -195,26 +214,27 @@ export default function ScheduleDialog({
         // Update via api
         //const response = await axios.patch/put based on schedule id
 
-        
-        onDialogUpdate(updatedEvent)
-        onOpenChange(false)
+        onDialogUpdate(updatedEvent);
+        onOpenChange(false);
     }
 
     if (!event) return null;
 
     return (
-        <Dialog open={open} onOpenChange={(value) => {
+        <Dialog
+            open={open}
+            onOpenChange={(value) => {
                 onOpenChange(value);
                 if (!value) {
-                    setIsEditing(false)
+                    setIsEditing(false);
                     setLecturer(null);
                     setRoom(null);
                     setWeekDay(null);
                     setStartTime(event.startHour);
-                    setEndTime(event.endHour)
+                    setEndTime(event.endHour);
                 }
             }}
-            >
+        >
             <DialogContent>
                 <DialogHeader>
                     <div>
@@ -239,7 +259,7 @@ export default function ScheduleDialog({
                             <div>
                                 <h1 className="font-bold">Room:</h1>
                                 {isEditing ? (
-                                    <div className='mt-2'>
+                                    <div className="mt-2">
                                         <ComboBoxResponsive<Room>
                                             options={roomList.map((room) => ({
                                                 value: room.name,
@@ -251,7 +271,9 @@ export default function ScheduleDialog({
                                             onChange={setRoom}
                                         />
                                     </div>
-                                ) : (<p>{event.room.name}</p>)}
+                                ) : (
+                                    <p>{event.room.name}</p>
+                                )}
                             </div>
                         </div>
                     )}
@@ -261,19 +283,23 @@ export default function ScheduleDialog({
                             <div>
                                 <h1 className="font-bold">Lecturer:</h1>
                                 {isEditing ? (
-                                    <div className='mt-2'>
+                                    <div className="mt-2">
                                         <ComboBoxResponsive<Lecturer>
-                                            options={lecturerList.map((lecturer) => ({
-                                                value: lecturer.name,
-                                                label: lecturer.name,
-                                                data: lecturer,
-                                            }))}
+                                            options={lecturerList.map(
+                                                (lecturer) => ({
+                                                    value: lecturer.name,
+                                                    label: lecturer.name,
+                                                    data: lecturer,
+                                                }),
+                                            )}
                                             placeholder={event.lecturer.name}
                                             value={lecturer}
                                             onChange={setLecturer}
                                         />
                                     </div>
-                                ) : (<p>{event.lecturer.name}</p>)}
+                                ) : (
+                                    <p>{event.lecturer.name}</p>
+                                )}
                             </div>
                         </div>
                     )}
@@ -292,15 +318,19 @@ export default function ScheduleDialog({
                             <div>
                                 <h1 className="font-bold">Day:</h1>
                                 {isEditing ? (
-                                    <div className='mt-2'>
+                                    <div className="mt-2">
                                         <ComboBoxResponsive<WeekDay>
                                             options={weekDayOptions}
-                                            placeholder={weekDaysEngRecord[event.weekDay]}
+                                            placeholder={
+                                                weekDaysEngRecord[event.weekDay]
+                                            }
                                             value={weekDay}
                                             onChange={setWeekDay}
                                         />
                                     </div>
-                                ) : (<p>{weekDaysEngRecord[event.weekDay]}</p>)}
+                                ) : (
+                                    <p>{weekDaysEngRecord[event.weekDay]}</p>
+                                )}
                             </div>
                         </div>
                     )}
@@ -310,24 +340,33 @@ export default function ScheduleDialog({
                             <div>
                                 <h1 className="font-bold">Start Time:</h1>
                                 {isEditing ? (
-                                    <div className='mt-2'>
+                                    <div className="mt-2">
                                         <Input
-                                        type="time"
-                                        id="time-picker"
-                                        value={startTime}
-                                        onChange={(e) => setStartTime((e.target.value))}
-                                        onBlur={(e) => {
-                                            const clamped = clampTime(e.target.value);
-                                            const rounded = roundToInterval(clamped, 10);
-                                            setStartTime(rounded);
-                                        }}
-                                        step="600"
-                                        min={'07:00'}
-                                        max={'20:00'}
-                                        className="bg-background invalid:border-red-500 invalid:ring-red-500 appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                            type="time"
+                                            id="time-picker"
+                                            value={startTime}
+                                            onChange={(e) =>
+                                                setStartTime(e.target.value)
+                                            }
+                                            onBlur={(e) => {
+                                                const clamped = clampTime(
+                                                    e.target.value,
+                                                );
+                                                const rounded = roundToInterval(
+                                                    clamped,
+                                                    10,
+                                                );
+                                                setStartTime(rounded);
+                                            }}
+                                            step="600"
+                                            min={'07:00'}
+                                            max={'20:00'}
+                                            className="bg-background appearance-none invalid:border-red-500 invalid:ring-red-500 [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                                         />
                                     </div>
-                                ) : (<p>{event.startHour}</p>)}
+                                ) : (
+                                    <p>{event.startHour}</p>
+                                )}
                             </div>
                         </div>
                     )}
@@ -336,29 +375,38 @@ export default function ScheduleDialog({
                             <Clock3 className="text-muted-foreground mt-1" />
                             <div>
                                 <h1 className="font-bold">End Time:</h1>
-                               {isEditing ? (
-                                    <div className='mt-2'>
+                                {isEditing ? (
+                                    <div className="mt-2">
                                         <Input
-                                        type="time"
-                                        id="time-picker"
-                                        value={endTime}
-                                        onChange={(e) => setEndTime((e.target.value))}
-                                        onBlur={(e) => {
-                                            const clamped = clampTime(e.target.value);
-                                            const rounded = roundToInterval(clamped, 10);
-                                            setEndTime(rounded);
-                                        }}
-                                        step="600"
-                                        min={'07:00'}
-                                        max={'20:00'}
-                                        className="bg-background invalid:border-red-500 invalid:ring-red-500 appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                            type="time"
+                                            id="time-picker"
+                                            value={endTime}
+                                            onChange={(e) =>
+                                                setEndTime(e.target.value)
+                                            }
+                                            onBlur={(e) => {
+                                                const clamped = clampTime(
+                                                    e.target.value,
+                                                );
+                                                const rounded = roundToInterval(
+                                                    clamped,
+                                                    10,
+                                                );
+                                                setEndTime(rounded);
+                                            }}
+                                            step="600"
+                                            min={'07:00'}
+                                            max={'20:00'}
+                                            className="bg-background appearance-none invalid:border-red-500 invalid:ring-red-500 [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
                                         />
                                     </div>
-                                ) : (<p>{event.endHour}</p>)}
+                                ) : (
+                                    <p>{event.endHour}</p>
+                                )}
                             </div>
                         </div>
                     )}
-                    <div className='justify-center space-y-0.5'>
+                    <div className="justify-center space-y-0.5">
                         {/* {isEditing && (
                             <Button 
                                 variant={'destructive'}
@@ -368,10 +416,14 @@ export default function ScheduleDialog({
                                 Cancel
                             </Button>
                         )} */}
-                        <Button 
-                            variant={'outline'} 
-                            className='w-full mt-2'
-                            onClick={isEditing ? handleSave : () => setIsEditing(true)}
+                        <Button
+                            variant={'outline'}
+                            className="mt-2 w-full"
+                            onClick={
+                                isEditing
+                                    ? handleSave
+                                    : () => setIsEditing(true)
+                            }
                             disabled={isEditing && !hasUnsavedChanges}
                         >
                             {isEditing ? 'Confirm' : 'Edit'}

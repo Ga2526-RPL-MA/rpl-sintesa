@@ -13,13 +13,12 @@ export const weekDaysEngRecord: Record<WeekDay, string> = {
 };
 
 export const engWeekDays: Record<string, WeekDay> = {
-  Monday: WeekDay.SENIN,
-  Tuesday: WeekDay.SELASA,
-  Wednesday: WeekDay.RABU,
-  Thursday: WeekDay.KAMIS,
-  Friday: WeekDay.JUMAT,
+    Monday: WeekDay.SENIN,
+    Tuesday: WeekDay.SELASA,
+    Wednesday: WeekDay.RABU,
+    Thursday: WeekDay.KAMIS,
+    Friday: WeekDay.JUMAT,
 };
-
 
 export const WeekDaysIndexRecord: Record<WeekDay, number> = {
     [WeekDay.SENIN]: 1,

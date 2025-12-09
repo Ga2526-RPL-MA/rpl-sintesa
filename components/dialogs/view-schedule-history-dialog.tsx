@@ -30,17 +30,17 @@ export default function ViewScheduleHistoryDialog({
 }: ViewScheduleHistoryDialogProps) {
     if (!scheduleList) return null;
     const [isLoading, setIsLoading] = useState(true);
-    const [originalSchedules, setOriginalSchedules] = useState<Schedule[]>([])
+    const [originalSchedules, setOriginalSchedules] = useState<Schedule[]>([]);
     // Dirty schedule as in schedules that have been updated
-    const [dirtySchedules, setDirtySchedules] = useState<Schedule[]>([])
-    const [isSaving, setIsSaving] = useState(false)
-    const [openAlert, setOpenAlert] = useState(false)
-    console.log(dirtySchedules)
+    const [dirtySchedules, setDirtySchedules] = useState<Schedule[]>([]);
+    const [isSaving, setIsSaving] = useState(false);
+    const [openAlert, setOpenAlert] = useState(false);
+    console.log(dirtySchedules);
     useEffect(() => {
-        if (scheduleList){
-            setOriginalSchedules(scheduleList.schedules)
+        if (scheduleList) {
+            setOriginalSchedules(scheduleList.schedules);
         }
-    },[])
+    }, []);
 
     useEffect(() => {
         if (open) {
@@ -56,8 +56,8 @@ export default function ViewScheduleHistoryDialog({
 
     function handleUpdate(updated: Schedule) {
         if (originalSchedules.length === 0) return;
-        
-        console.log(updated)
+
+        console.log(updated);
         const original = originalSchedules.find((s) => s.id === updated.id);
 
         const isSame =
@@ -70,7 +70,7 @@ export default function ViewScheduleHistoryDialog({
 
         if (isSame) {
             setDirtySchedules((prev) =>
-                prev.filter((s) => s.id !== updated.id)
+                prev.filter((s) => s.id !== updated.id),
             );
             return;
         }
@@ -79,7 +79,7 @@ export default function ViewScheduleHistoryDialog({
             const exists = prev.find((s) => s.id === updated.id);
 
             if (exists) {
-            return prev.map((s) => (s.id === updated.id ? updated : s));
+                return prev.map((s) => (s.id === updated.id ? updated : s));
             }
 
             return [...prev, updated];
@@ -88,30 +88,28 @@ export default function ViewScheduleHistoryDialog({
 
     async function handleSave() {
         try {
-            setIsSaving(true)
+            setIsSaving(true);
 
-
-            setIsSaving(false)
-            setDirtySchedules([])
-        } catch (err) {
-
-        }
+            setIsSaving(false);
+            setDirtySchedules([]);
+        } catch (err) {}
         // Patch schedules[] into database based on id
         // const response = await axios
         //     .patch()
-
     }
 
     function handleConfirmClose() {
-        onOpenChange(false)
-        setDirtySchedules([])
+        onOpenChange(false);
+        setDirtySchedules([]);
     }
 
     return (
-        <Dialog open={open} onOpenChange={(value) => {
-                if (isSaving){
-                    toast.info('Please wait until schedule is saved.')
-                    return
+        <Dialog
+            open={open}
+            onOpenChange={(value) => {
+                if (isSaving) {
+                    toast.info('Please wait until schedule is saved.');
+                    return;
                 }
 
                 if (!value && dirtySchedules.length > 0) {
@@ -126,19 +124,21 @@ export default function ViewScheduleHistoryDialog({
             }}
         >
             <DialogContent className="h-[80vh] min-w-[90vw] grid-rows-[auto_1fr]">
-                <div className='flex items-center justify-between'>
+                <div className="flex items-center justify-between">
                     <DialogTitle>Schedule - {scheduleList.id}</DialogTitle>
                     <Button
-                    className='mr-[2em]'
-                    onClick={handleSave}
-                    disabled={dirtySchedules.length === 0}
+                        className="mr-[2em]"
+                        onClick={handleSave}
+                        disabled={dirtySchedules.length === 0}
                     >
                         {isSaving ? (
                             <>
                                 <Spinner />
                                 Saving...
                             </>
-                        ): 'Save'}
+                        ) : (
+                            'Save'
+                        )}
                     </Button>
                 </div>
                 <DialogDescription className="sr-only">
@@ -161,8 +161,8 @@ export default function ViewScheduleHistoryDialog({
                 </div>
             </DialogContent>
             <ConfirmDialog
-                title='Confirm leave before saving changes'
-                description='Are you sure you want to leave without saving changes?'
+                title="Confirm leave before saving changes"
+                description="Are you sure you want to leave without saving changes?"
                 open={openAlert}
                 onOpenChange={setOpenAlert}
                 onConfirm={handleConfirmClose}
