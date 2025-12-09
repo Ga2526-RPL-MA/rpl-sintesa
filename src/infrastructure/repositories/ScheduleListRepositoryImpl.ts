@@ -1,8 +1,6 @@
 import { db } from '@/src/database/index';
 import ScheduleList from '@/src/domain/entities/ScheduleList';
-import ScheduleListRepository, {
-    UpdateScheduleInput,
-} from '@/src/domain/repositories/ScheduleListRepository';
+import ScheduleListRepository from '@/src/domain/repositories/ScheduleListRepository';
 import { schedule, scheduleList } from '@/src/database/drizzle/schema';
 import { desc, eq } from 'drizzle-orm';
 import Semester from '@/src/domain/enums/Semester';
@@ -45,7 +43,7 @@ export default class ScheduleListRepositoryImpl
 
     async UpdateSchedulesInList(
         scheduleListId: number,
-        schedulesToUpdate: UpdateScheduleInput[],
+        schedulesToUpdate: ScheduleList['schedules'],
     ): Promise<ScheduleList> {
         await db.transaction(async (tx) => {
             const existingScheduleList = await tx.query.scheduleList.findFirst({
@@ -56,28 +54,28 @@ export default class ScheduleListRepositoryImpl
                 throw new Error('Schedule list not found');
             }
 
-            for (const updateInput of schedulesToUpdate) {
+            for (const updatedSchedule of schedulesToUpdate) {
                 const existingSchedule = await tx.query.schedule.findFirst({
-                    where: eq(schedule.id, updateInput.scheduleId),
+                    where: eq(schedule.id, updatedSchedule.id),
                 });
 
                 if (!existingSchedule) {
                     throw new Error(
-                        `Schedule with ID ${updateInput.scheduleId} not found`,
+                        `Schedule with ID ${updatedSchedule.id} not found`,
                     );
                 }
 
                 await tx
                     .update(schedule)
                     .set({
-                        courseId: updateInput.schedule.course.id,
-                        lecturerId: updateInput.schedule.lecturer.id,
-                        roomId: updateInput.schedule.room.id,
-                        weekDay: updateInput.schedule.weekDay,
-                        startHour: updateInput.schedule.startHour,
-                        endHour: updateInput.schedule.endHour,
+                        courseId: updatedSchedule.course.id,
+                        lecturerId: updatedSchedule.lecturer.id,
+                        roomId: updatedSchedule.room.id,
+                        weekDay: updatedSchedule.weekDay,
+                        startHour: updatedSchedule.startHour,
+                        endHour: updatedSchedule.endHour,
                     })
-                    .where(eq(schedule.id, updateInput.scheduleId));
+                    .where(eq(schedule.id, updatedSchedule.id));
             }
         });
 

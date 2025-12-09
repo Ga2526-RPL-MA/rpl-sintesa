@@ -12,7 +12,6 @@ import CourseRepositoryImpl from '@/src/infrastructure/repositories/CourseReposi
 import LecturerRepositoryImpl from '@/src/infrastructure/repositories/LecturerRepositoryImpl';
 import RoomRepositoryImpl from '@/src/infrastructure/repositories/RoomRepositoryImpl';
 import ScheduleListRepositoryImpl from '@/src/infrastructure/repositories/ScheduleListRepositoryImpl';
-import { UpdateScheduleInput } from '@/src/domain/repositories/ScheduleListRepository';
 import Schedule from '@/src/domain/entities/Schedule';
 import { NextResponse } from 'next/server';
 
@@ -20,10 +19,7 @@ const scheduleListRepo = new ScheduleListRepositoryImpl();
 
 export interface UpdateSchedulesRequest {
     scheduleListId: number;
-    updates: {
-        scheduleId: number;
-        schedule: Schedule;
-    }[];
+    updates: Schedule[];
 }
 
 export async function GET(request: Request) {
@@ -109,17 +105,10 @@ export async function PUT(request: Request) {
             );
         }
 
-        const schedulesToUpdate: UpdateScheduleInput[] = body.updates.map(
-            (update) => ({
-                scheduleId: update.scheduleId,
-                schedule: update.schedule,
-            }),
-        );
-
         const updatedScheduleList =
             await scheduleListRepo.UpdateSchedulesInList(
                 body.scheduleListId,
-                schedulesToUpdate,
+                body.updates,
             );
 
         return NextResponse.json(updatedScheduleList);
