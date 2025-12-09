@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -20,18 +20,22 @@ import ExportDropdown from '../export/export-dropdown';
 import { customBreakpoint, useIsMobile } from '@/hooks/use-mobile';
 import { Download, Save } from 'lucide-react';
 import { Input } from '../ui/input';
+import Schedule from '@/src/domain/entities/Schedule';
 
 function GenerateScheduleTable({}) {
     const [showDialog, setShowDialog] = useState(false);
     const [scheduleListData, setScheduleListData] = useState<
         ScheduleList | undefined
-    >(undefined);
+    >();
     const [semester, setSemester] = useState<Semester | undefined>(undefined);
     const [year, setYear] = useState<string | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(false);
     const [scheduleName, setScheduleName] = useState<string>('');
     const [isSaving, setIsSaving] = useState(false);
-
+    const [dirtySchedules, setDirtySchedules] = useState<Schedule[]>([])
+    const [originalSchedules, setOriginalSchedules] = useState<Schedule[]>([])
+    const [newSchedule, setNewSchedule] = useState<ScheduleList>()
+    console.log(dirtySchedules)
     async function handleGenerateClick() {
         if (isLoading) {
             return;
@@ -74,6 +78,9 @@ function GenerateScheduleTable({}) {
                 { withCredentials: true },
             );
             setScheduleListData(response.data);
+            // for export to have fallback
+            setNewSchedule(scheduleListData)
+            setOriginalSchedules(response.data.schedules)
             setIsLoading(false);
             toast.success('Schedule generated successfully');
         } catch (err) {
@@ -83,11 +90,55 @@ function GenerateScheduleTable({}) {
     }
 
     async function handleSave() {
-        setIsSaving(true);
         try {
-            //Save to history/db
+            setIsSaving(true);
+            //Save to db
+
             // setIsSaving(false);
-        } catch (err) {}
+            setIsSaving(false);
+            setDirtySchedules([])
+
+            // TODO: Set new schedule to be used for 
+            // setNewSchedule(newScheduleList)
+        } catch (err) {
+
+        }
+    }
+
+    function handleUpdate(updated: Schedule) {
+        if (originalSchedules.length === 0) return;
+        console.log(updated)
+        const original = originalSchedules.find((s) => s.id === updated.id);
+
+        const isSame =
+            original &&
+            original.startHour === updated.startHour &&
+            original.endHour === updated.endHour &&
+            original.weekDay === updated.weekDay &&
+            original.room?.id === updated.room?.id &&
+            original.lecturer?.id === updated.lecturer?.id;
+
+        if (isSame) {
+            setDirtySchedules((prev) =>
+                prev.filter((s) => s.id !== updated.id)
+            );
+            return;
+        }
+
+        setDirtySchedules((prev) => {
+            const exists = prev.find((s) => s.id === updated.id);
+
+            if (exists) {
+            return prev.map((s) => (s.id === updated.id ? updated : s));
+            }
+
+            return [...prev, updated];
+        });
+    }
+
+    function handleConfirm() {
+        generateSchedule()
+        setDirtySchedules([])
     }
 
     const isMobile = useIsMobile();
@@ -146,10 +197,10 @@ function GenerateScheduleTable({}) {
                 </DropdownMenu>
 
                 {/* order 4 in lg: */}
-                <ExportDropdown scheduleId={scheduleListData?.id}>
+                <ExportDropdown scheduleId={newSchedule?.id}>
                     <Button
                         variant={'outline'}
-                        disabled={!scheduleListData}
+                        disabled={!scheduleListData || dirtySchedules.length > 0}
                         className="order-3 lg:order-4"
                     >
                         {isMobile ? <Download /> : 'Export'}
@@ -159,7 +210,7 @@ function GenerateScheduleTable({}) {
                 {/* order last in lg: */}
                 <Button
                     className="order-4 lg:order-5"
-                    disabled={!scheduleListData || isSaving}
+                    disabled={!scheduleListData || isSaving || dirtySchedules.length == 0}
                     onClick={handleSave}
                 >
                     <>
@@ -186,6 +237,7 @@ function GenerateScheduleTable({}) {
                         <ScheduleCalendar
                             scheduleData={scheduleListData}
                             className="h-full w-full"
+                            updatedSchedule={handleUpdate}
                         />
                     </div>
                 </div>
@@ -208,7 +260,7 @@ function GenerateScheduleTable({}) {
             <ConfirmDialog
                 open={showDialog}
                 onOpenChange={setShowDialog}
-                onConfirm={generateSchedule}
+                onConfirm={handleConfirm}
                 description={
                     <>
                         Are you sure you want to replace the generated schedule?

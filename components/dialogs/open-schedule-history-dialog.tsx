@@ -108,7 +108,7 @@ export default function ScheduleHistoryDialog({
                 <ViewScheduleHistoryDialog
                     open={viewDialogOpen}
                     onOpenChange={setViewDialogOpen}
-                    schedule={schedule}
+                    scheduleList={schedule}
                 />
             </DialogContent>
         </Dialog>
