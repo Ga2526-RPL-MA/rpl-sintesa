@@ -192,4 +192,12 @@ export default class ScheduleListRepositoryImpl
             })),
         }));
     }
+
+    async DeleteScheduleList(id: number): Promise<ScheduleList> {
+        const existingScheduleList = await this.GetScheduleListByID(id);
+
+        await db.delete(scheduleList).where(eq(scheduleList.id, id));
+
+        return existingScheduleList;
+    }
 }

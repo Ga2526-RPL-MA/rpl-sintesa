@@ -14,4 +14,5 @@ export default interface ScheduleListRepository {
         scheduleListId: number,
         schedulesToUpdate: UpdateScheduleInput[],
     ): Promise<ScheduleList>;
+    DeleteScheduleList(id: number): Promise<ScheduleList>;
 }

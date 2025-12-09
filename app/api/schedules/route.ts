@@ -135,3 +135,33 @@ export async function PUT(request: Request) {
         );
     }
 }
+
+export async function DELETE(request: Request) {
+    try {
+        const { searchParams } = new URL(request.url);
+        const id = searchParams.get('id');
+
+        if (!id) {
+            return NextResponse.json(
+                { error: 'id is required' },
+                { status: 400 },
+            );
+        }
+
+        const deletedScheduleList = await scheduleListRepo.DeleteScheduleList(
+            Number(id),
+        );
+
+        return NextResponse.json(deletedScheduleList);
+    } catch (error) {
+        return NextResponse.json(
+            {
+                error:
+                    error instanceof Error
+                        ? error.message
+                        : 'Unknown error occurred',
+            },
+            { status: 500 },
+        );
+    }
+}
