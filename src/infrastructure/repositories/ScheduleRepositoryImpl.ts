@@ -1,12 +1,7 @@
 import { db } from '@/src/database/index';
 import Schedule from '@/src/domain/entities/Schedule';
 import ScheduleRepository from '@/src/domain/repositories/ScheduleRepository';
-import {
-    schedule,
-    course,
-    lecturer,
-    rooms,
-} from '@/src/database/drizzle/schema';
+import { schedule } from '@/src/database/drizzle/schema';
 import { eq } from 'drizzle-orm';
 import WeekDay from '@/src/domain/enums/WeekDay';
 import Hour from '@/src/domain/enums/Hour';
@@ -59,6 +54,7 @@ export default class ScheduleRepositoryImpl implements ScheduleRepository {
         const [result] = await db
             .insert(schedule)
             .values({
+                scheduleListId: newSchedule.id,
                 courseId: newSchedule.course.id,
                 lecturerId: newSchedule.lecturer.id,
                 roomId: newSchedule.room.id,
