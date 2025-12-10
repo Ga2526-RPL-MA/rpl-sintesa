@@ -41,6 +41,47 @@ export default class ScheduleListRepositoryImpl
         return this.GetScheduleListByID(result[0].id);
     }
 
+    async UpdateSchedulesInList(
+        scheduleListId: number,
+        schedulesToUpdate: ScheduleList['schedules'],
+    ): Promise<ScheduleList> {
+        await db.transaction(async (tx) => {
+            const existingScheduleList = await tx.query.scheduleList.findFirst({
+                where: eq(scheduleList.id, scheduleListId),
+            });
+
+            if (!existingScheduleList) {
+                throw new Error('Schedule list not found');
+            }
+
+            for (const updatedSchedule of schedulesToUpdate) {
+                const existingSchedule = await tx.query.schedule.findFirst({
+                    where: eq(schedule.id, updatedSchedule.id),
+                });
+
+                if (!existingSchedule) {
+                    throw new Error(
+                        `Schedule with ID ${updatedSchedule.id} not found`,
+                    );
+                }
+
+                await tx
+                    .update(schedule)
+                    .set({
+                        courseId: updatedSchedule.course.id,
+                        lecturerId: updatedSchedule.lecturer.id,
+                        roomId: updatedSchedule.room.id,
+                        weekDay: updatedSchedule.weekDay,
+                        startHour: updatedSchedule.startHour,
+                        endHour: updatedSchedule.endHour,
+                    })
+                    .where(eq(schedule.id, updatedSchedule.id));
+            }
+        });
+
+        return this.GetScheduleListByID(scheduleListId);
+    }
+
     async GetScheduleListByID(id: number): Promise<ScheduleList> {
         const result = await db.query.scheduleList.findFirst({
             where: eq(scheduleList.id, id),
@@ -148,5 +189,13 @@ export default class ScheduleListRepositoryImpl
                 },
             })),
         }));
+    }
+
+    async DeleteScheduleList(id: number): Promise<ScheduleList> {
+        const existingScheduleList = await this.GetScheduleListByID(id);
+
+        await db.delete(scheduleList).where(eq(scheduleList.id, id));
+
+        return existingScheduleList;
     }
 }
