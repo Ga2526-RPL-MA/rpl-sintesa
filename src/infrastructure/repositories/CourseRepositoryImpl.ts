@@ -10,10 +10,11 @@ export default class CourseRepositoryImpl implements CourseRepository {
         return courses.map((c) => ({
             id: Number(c.id),
             createdAt: new Date(c.createdAt),
-            code: c.code || '',
-            name: c.name || '',
-            sks: Number(c.sks) || 0,
-            description: c.description || '',
+            code: c.code,
+            name: c.name,
+            sks: Number(c.sks),
+            description: c.description,
+            semester: c.semester,
         }));
     }
 
@@ -27,10 +28,11 @@ export default class CourseRepositoryImpl implements CourseRepository {
         return {
             id: Number(result.id),
             createdAt: new Date(result.createdAt),
-            code: result.code || '',
-            name: result.name || '',
-            sks: Number(result.sks) || 0,
-            description: result.description || '',
+            code: result.code,
+            name: result.name,
+            sks: Number(result.sks),
+            description: result.description,
+            semester: result.semester,
         };
     }
 
@@ -42,16 +44,18 @@ export default class CourseRepositoryImpl implements CourseRepository {
                 name: newCourse.name,
                 sks: newCourse.sks,
                 description: newCourse.description,
+                semester: newCourse.semester,
             })
             .returning();
 
         return {
             id: Number(result.id),
             createdAt: new Date(result.createdAt),
-            code: result.code || '',
-            name: result.name || '',
-            sks: Number(result.sks) || 0,
-            description: result.description || '',
+            code: result.code,
+            name: result.name,
+            sks: Number(result.sks),
+            description: result.description,
+            semester: result.semester,
         };
     }
 
@@ -63,6 +67,7 @@ export default class CourseRepositoryImpl implements CourseRepository {
                 name: updatedCourse.name,
                 sks: updatedCourse.sks,
                 description: updatedCourse.description,
+                semester: updatedCourse.semester,
             })
             .where(eq(course.id, id))
             .returning();
@@ -72,10 +77,11 @@ export default class CourseRepositoryImpl implements CourseRepository {
         return {
             id: Number(result.id),
             createdAt: new Date(result.createdAt),
-            code: result.code || '',
-            name: result.name || '',
-            sks: Number(result.sks) || 0,
-            description: result.description || '',
+            code: result.code,
+            name: result.name,
+            sks: Number(result.sks),
+            description: result.description,
+            semester: result.semester,
         };
     }
 
@@ -90,10 +96,11 @@ export default class CourseRepositoryImpl implements CourseRepository {
         return {
             id: Number(result.id),
             createdAt: new Date(result.createdAt),
-            code: result.code || '',
-            name: result.name || '',
-            sks: Number(result.sks) || 0,
-            description: result.description || '',
+            code: result.code,
+            name: result.name,
+            sks: Number(result.sks),
+            description: result.description,
+            semester: result.semester,
         };
     }
 }

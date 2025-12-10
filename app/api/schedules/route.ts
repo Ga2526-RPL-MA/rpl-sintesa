@@ -42,12 +42,12 @@ export async function GET(request: Request) {
         );
 
         return NextResponse.json(scheduleList);
-    } catch (err) {
+    } catch (error) {
         return NextResponse.json(
             {
                 error:
-                    err instanceof Error
-                        ? err.message
+                    error instanceof Error
+                        ? error.message
                         : 'Unknown error occured',
             },
             { status: 500 },
@@ -73,13 +73,13 @@ export async function POST(request: Request) {
             new ScheduleListRepositoryImpl(),
         );
 
-        return NextResponse.json(addedScheduleList);
-    } catch (err) {
+        return NextResponse.json(addedScheduleList, { status: 201 });
+    } catch (error) {
         return NextResponse.json(
             {
                 error:
-                    err instanceof Error
-                        ? err.message
+                    error instanceof Error
+                        ? error.message
                         : 'Unknown error occured',
             },
             { status: 500 },

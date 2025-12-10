@@ -6,10 +6,10 @@ export default async function GetLecturers(
 ): Promise<Lecturer[]> {
     try {
         return await lecturerRepository.GetLecturers();
-    } catch (err) {
+    } catch (error) {
         throw new Error(
-            err instanceof Error
-                ? err.message
+            error instanceof Error
+                ? error.message
                 : `Error: GetLecturers(${lecturerRepository})`,
         );
     }

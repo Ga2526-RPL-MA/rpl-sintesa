@@ -5,20 +5,15 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
 } from '@/components/ui/dialog';
 import { Separator } from '../ui/separator';
-import {
-    CalendarDays,
-    CalendarRange,
-    Clock12,
-    Clock3,
-    MapPin,
-    User,
-} from 'lucide-react';
+import { CalendarDays, CalendarFold, CalendarRange } from 'lucide-react';
 import ScheduleList from '@/src/domain/entities/ScheduleList';
 import { Button } from '../ui/button';
 import { useEffect, useState } from 'react';
 import ViewScheduleHistoryDialog from './view-schedule-history-dialog';
+import ExportDropdown from '../export/export-dropdown';
 
 interface ScheduleHistoryDialogProps {
     open: boolean;
@@ -40,12 +35,15 @@ export default function ScheduleHistoryDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="w-[18vw]">
+            <DialogContent className="w-sm">
                 <DialogHeader>
                     <div>
                         <DialogTitle className="text-primary">
                             Schedule - {schedule.id}
                         </DialogTitle>
+                        <DialogDescription className="sr-only">
+                            Schedule details dialog
+                        </DialogDescription>
                     </div>
                     <Separator />
                 </DialogHeader>
@@ -54,7 +52,7 @@ export default function ScheduleHistoryDialog({
                         <div className="flex items-start gap-2">
                             <CalendarDays className="text-muted-foreground mt-1" />
                             <div>
-                                Generated on:
+                                <span className="font-bold">Generated on:</span>
                                 {schedule.createdAt && (
                                     <h1 className="">
                                         {new Date(
@@ -78,7 +76,7 @@ export default function ScheduleHistoryDialog({
                     )}
                     {schedule.semester && (
                         <div className="flex items-start gap-2">
-                            <CalendarRange className="text-muted-foreground mt-1" />
+                            <CalendarFold className="text-muted-foreground mt-1" />
                             <div>
                                 <h1 className="font-bold">Semester:</h1>
                                 <p>{schedule.semester}</p>
@@ -102,13 +100,15 @@ export default function ScheduleHistoryDialog({
                         >
                             View
                         </Button>
-                        <Button variant={'outline'}>Export</Button>
+                        <ExportDropdown scheduleId={schedule.id}>
+                            <Button variant={'outline'}>Export</Button>
+                        </ExportDropdown>
                     </div>
                 </div>
                 <ViewScheduleHistoryDialog
                     open={viewDialogOpen}
                     onOpenChange={setViewDialogOpen}
-                    schedule={schedule}
+                    scheduleList={schedule}
                 />
             </DialogContent>
         </Dialog>

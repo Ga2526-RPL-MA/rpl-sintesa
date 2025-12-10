@@ -103,25 +103,32 @@
                     "name": "code",
                     "type": "text",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true
                 },
                 "name": {
                     "name": "name",
                     "type": "text",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true
                 },
                 "sks": {
                     "name": "sks",
                     "type": "smallint",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true
                 },
                 "description": {
                     "name": "description",
                     "type": "text",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true,
+                    "default": "''"
+                },
+                "semester": {
+                    "name": "semester",
+                    "type": "integer",
+                    "primaryKey": false,
+                    "notNull": true
                 }
             },
             "indexes": {},
@@ -130,18 +137,12 @@
             "uniqueConstraints": {},
             "checkConstraints": {},
             "policies": {
-                "Policy with table joins": {
-                    "name": "Policy with table joins",
+                "Enable delete for users based on user_id": {
+                    "name": "Enable delete for users based on user_id",
                     "as": "PERMISSIVE",
-                    "for": "UPDATE",
+                    "for": "DELETE",
                     "to": ["supabase_admin"],
                     "using": "true"
-                },
-                "Enable read access for all users": {
-                    "name": "Enable read access for all users",
-                    "as": "PERMISSIVE",
-                    "for": "SELECT",
-                    "to": ["public"]
                 },
                 "Enable insert for authenticated users only": {
                     "name": "Enable insert for authenticated users only",
@@ -149,10 +150,16 @@
                     "for": "INSERT",
                     "to": ["supabase_admin"]
                 },
-                "Enable delete for users based on user_id": {
-                    "name": "Enable delete for users based on user_id",
+                "Enable read access for all users": {
+                    "name": "Enable read access for all users",
                     "as": "PERMISSIVE",
-                    "for": "DELETE",
+                    "for": "SELECT",
+                    "to": ["public"]
+                },
+                "Policy with table joins": {
+                    "name": "Policy with table joins",
+                    "as": "PERMISSIVE",
+                    "for": "UPDATE",
                     "to": ["supabase_admin"]
                 }
             },
@@ -190,13 +197,14 @@
                     "name": "name",
                     "type": "text",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true
                 },
                 "capacity": {
                     "name": "capacity",
                     "type": "integer",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true,
+                    "default": 50
                 }
             },
             "indexes": {},
@@ -205,11 +213,11 @@
             "uniqueConstraints": {},
             "checkConstraints": {},
             "policies": {
-                "Enable read access for all users": {
-                    "name": "Enable read access for all users",
+                "Enable delete for users based on user_id": {
+                    "name": "Enable delete for users based on user_id",
                     "as": "PERMISSIVE",
-                    "for": "SELECT",
-                    "to": ["public"],
+                    "for": "DELETE",
+                    "to": ["supabase_admin"],
                     "using": "true"
                 },
                 "Enable insert for authenticated users only": {
@@ -218,11 +226,11 @@
                     "for": "INSERT",
                     "to": ["supabase_admin"]
                 },
-                "Enable delete for users based on user_id": {
-                    "name": "Enable delete for users based on user_id",
+                "Enable read access for all users": {
+                    "name": "Enable read access for all users",
                     "as": "PERMISSIVE",
-                    "for": "DELETE",
-                    "to": ["supabase_admin"]
+                    "for": "SELECT",
+                    "to": ["public"]
                 },
                 "Enable update for users based on user_id": {
                     "name": "Enable update for users based on user_id",
@@ -265,46 +273,46 @@
                     "name": "course_id",
                     "type": "bigint",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true
                 },
                 "room_id": {
                     "name": "room_id",
                     "type": "bigint",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true
                 },
                 "lecturer_id": {
                     "name": "lecturer_id",
                     "type": "bigint",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true
                 },
                 "week_day": {
                     "name": "week_day",
                     "type": "WEEKDAY",
                     "typeSchema": "public",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true
                 },
                 "start_hour": {
                     "name": "start_hour",
                     "type": "HOUR",
                     "typeSchema": "public",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true
                 },
                 "end_hour": {
                     "name": "end_hour",
                     "type": "HOUR",
                     "typeSchema": "public",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true
                 },
                 "schedule_list_id": {
                     "name": "schedule_list_id",
                     "type": "bigint",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true
                 }
             },
             "indexes": {},
@@ -388,25 +396,32 @@
                     "name": "nip",
                     "type": "text",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true
                 },
                 "name": {
                     "name": "name",
                     "type": "text",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true
                 },
                 "faculty": {
                     "name": "faculty",
                     "type": "text",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true
                 },
                 "expertise": {
                     "name": "expertise",
                     "type": "text",
                     "primaryKey": false,
-                    "notNull": false
+                    "notNull": true,
+                    "default": "''"
+                },
+                "code": {
+                    "name": "code",
+                    "type": "text",
+                    "primaryKey": false,
+                    "notNull": true
                 }
             },
             "indexes": {},
@@ -415,11 +430,11 @@
             "uniqueConstraints": {},
             "checkConstraints": {},
             "policies": {
-                "Enable read access for all users": {
-                    "name": "Enable read access for all users",
+                "Enable delete for users based on user_id": {
+                    "name": "Enable delete for users based on user_id",
                     "as": "PERMISSIVE",
-                    "for": "SELECT",
-                    "to": ["public"],
+                    "for": "DELETE",
+                    "to": ["supabase_admin"],
                     "using": "true"
                 },
                 "Enable insert for authenticated users only": {
@@ -428,11 +443,11 @@
                     "for": "INSERT",
                     "to": ["supabase_admin"]
                 },
-                "Enable delete for users based on user_id": {
-                    "name": "Enable delete for users based on user_id",
+                "Enable read access for all users": {
+                    "name": "Enable read access for all users",
                     "as": "PERMISSIVE",
-                    "for": "DELETE",
-                    "to": ["supabase_admin"]
+                    "for": "SELECT",
+                    "to": ["public"]
                 },
                 "Policy with table joins": {
                     "name": "Policy with table joins",
@@ -448,32 +463,32 @@
         "public.HOUR": {
             "name": "HOUR",
             "values": [
-                "\"07:00\"",
-                "\"07:50\"",
-                "\"08:00\"",
-                "\"08:50\"",
-                "\"09:00\"",
-                "\"09:50\"",
-                "\"10:00\"",
-                "\"10:50\"",
-                "\"11:00\"",
-                "\"11:50\"",
-                "\"12:00\"",
-                "\"12:50\"",
-                "\"13:30\"",
-                "\"14:20\"",
-                "\"14:30\"",
-                "\"15:20\"",
-                "\"15:30\"",
-                "\"16:20\"",
-                "\"16:30\"",
-                "\"17:20\"",
-                "\"17:30\"",
-                "\"18:20\"",
-                "\"18:30\"",
-                "\"19:20\"",
-                "\"19:30\"",
-                "\"20:20\""
+                "07:00",
+                "07:50",
+                "08:00",
+                "08:50",
+                "09:00",
+                "09:50",
+                "10:00",
+                "10:50",
+                "11:00",
+                "11:50",
+                "12:00",
+                "12:50",
+                "13:30",
+                "14:20",
+                "14:30",
+                "15:20",
+                "15:30",
+                "16:20",
+                "16:30",
+                "17:20",
+                "17:30",
+                "18:20",
+                "18:30",
+                "19:20",
+                "19:30",
+                "20:20"
             ],
             "schema": "public"
         },

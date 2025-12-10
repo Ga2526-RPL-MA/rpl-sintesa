@@ -7,11 +7,9 @@ export default async function AddScheduleList(
 ): Promise<ScheduleList> {
     try {
         return await scheduleListRepository.AddScheduleList(newScheduleList);
-    } catch (err) {
+    } catch (error) {
         throw new Error(
-            err instanceof Error
-                ? err.message
-                : `Error: AddScheduleList(${newScheduleList}, ${scheduleListRepository})`,
+            error instanceof Error ? error.message : `Error: AddScheduleList()`,
         );
     }
 }

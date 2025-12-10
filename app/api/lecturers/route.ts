@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import LecturerRepositoryImpl from '@/src/infrastructure/repositories/LecturerRepositoryImpl';
 import Lecturer from '@/src/domain/entities/Lecturer';
+import IsAuthorize from '@/src/application/usecases/IsAuthorize';
+import UserRole from '@/src/domain/enums/UserRole';
 
 const lecturerRepo = new LecturerRepositoryImpl();
 
@@ -31,6 +33,10 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
     try {
+        if (!(await IsAuthorize([UserRole.ADMIN]))) {
+            return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+        }
+
         const body = await request.json();
         const lecturer = await lecturerRepo.AddLecturer(body as Lecturer);
         return NextResponse.json(lecturer, { status: 201 });
@@ -49,6 +55,10 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
     try {
+        if (!(await IsAuthorize([UserRole.ADMIN]))) {
+            return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+        }
+
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
 
@@ -80,6 +90,10 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
     try {
+        if (!(await IsAuthorize([UserRole.ADMIN]))) {
+            return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+        }
+
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
 

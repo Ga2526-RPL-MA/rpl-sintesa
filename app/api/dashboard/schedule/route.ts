@@ -1,6 +1,7 @@
 import GetCurrentUserID from '@/src/application/usecases/GetCurrentUserID';
 import GetNewestScheduleListByUserID from '@/src/application/usecases/GetNewestScheduleListByUserID';
 import ScheduleListRepositoryImpl from '@/src/infrastructure/repositories/ScheduleListRepositoryImpl';
+
 import { NextResponse } from 'next/server';
 
 export async function GET() {
@@ -11,12 +12,12 @@ export async function GET() {
         );
 
         return NextResponse.json(scheduleList);
-    } catch (err) {
+    } catch (error) {
         return NextResponse.json(
             {
                 error:
-                    err instanceof Error
-                        ? err.message
+                    error instanceof Error
+                        ? error.message
                         : 'Unknown error occured',
             },
             { status: 500 },

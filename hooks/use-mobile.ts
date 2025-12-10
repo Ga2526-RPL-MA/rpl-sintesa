@@ -21,3 +21,25 @@ export function useIsMobile() {
 
     return !!isMobile;
 }
+
+export function customBreakpoint(breakpoint: number) {
+    const [isBelow, setIsBelow] = React.useState<boolean | undefined>(
+        undefined,
+    );
+
+    React.useEffect(() => {
+        const mql = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
+
+        const onChange = () => {
+            setIsBelow(window.innerWidth < breakpoint);
+        };
+
+        // Set initial value
+        setIsBelow(window.innerWidth < breakpoint);
+
+        mql.addEventListener('change', onChange);
+        return () => mql.removeEventListener('change', onChange);
+    }, [breakpoint]); // Add breakpoint to dependency array
+
+    return !!isBelow;
+}
