@@ -123,7 +123,7 @@ function AppSidebar({
         <Sidebar
             variant={'floating'}
             className={cn(className)}
-            sidebarInner={cn('dark:bg-sidebar/95', 'bg-sidebar/90')}
+            sidebarInner={cn('bg-sidebar')}
         >
             <SidebarContent>
                 <SidebarGroup>

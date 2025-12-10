@@ -12,8 +12,7 @@ import { IconPlus } from '@tabler/icons-react';
 import ConfirmDialog from './dialogs/confirm-dialog';
 import { toast } from 'sonner';
 import axios from 'axios';
-import { table } from 'console';
-import { boolean } from 'drizzle-orm/gel-core';
+import { cn } from '@/lib/utils';
 
 interface GenericCrudListProps<T> {
     // API Configuration
@@ -182,7 +181,7 @@ export default function GenericCrudList<T extends { id: number }>({
 
     return (
         <>
-            <div className="bg-background flex h-full flex-col rounded-2xl p-4">
+            <div className="bg-crud-tab flex h-full flex-col rounded-2xl p-4">
                 {/* Header with controls */}
                 <div className="mb-4 grid grid-cols-[0.5fr_1fr_0.5fr] items-center gap-2">
                     {/* View Toggle */}
@@ -191,14 +190,22 @@ export default function GenericCrudList<T extends { id: number }>({
                             <Button
                                 variant={'outline'}
                                 onClick={() => setView('table')}
-                                className={view === 'table' ? 'bg-muted' : ''}
+                                className={cn(
+                                    view === 'table'
+                                        ? 'bg-muted'
+                                        : 'bg-transparent',
+                                )}
                             >
                                 <Table2 />
                             </Button>
                             <Button
                                 variant={'outline'}
                                 onClick={() => setView('card')}
-                                className={view === 'card' ? 'bg-muted' : ''}
+                                className={cn(
+                                    view === 'card'
+                                        ? 'bg-muted'
+                                        : 'bg-transparent',
+                                )}
                             >
                                 <LayoutGrid />
                             </Button>
@@ -208,7 +215,7 @@ export default function GenericCrudList<T extends { id: number }>({
                             <Button
                                 variant={'outline'}
                                 onClick={() => viewToggler()}
-                                className={'active:bg-muted'}
+                                className={'active:bg-muted bg-transparent'}
                             >
                                 {view == 'table' ? <Table2 /> : <LayoutGrid />}
                             </Button>
