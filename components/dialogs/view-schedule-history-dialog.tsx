@@ -90,9 +90,20 @@ export default function ViewScheduleHistoryDialog({
         try {
             setIsSaving(true);
 
+            const response = await axios.put<ScheduleList>(
+                '/api/schedules',
+                {
+                    scheduleListId: scheduleList.id,
+                    updates: dirtySchedules,
+                },
+                {withCredentials: true}
+            );
             setIsSaving(false);
             setDirtySchedules([]);
-        } catch (err) {}
+            toast.success('Successfully updated schedule!')
+        } catch (err) {
+            toast.error('Failed to save schedules')
+        }
         // Patch schedules[] into database based on id
         // const response = await axios
         //     .patch()

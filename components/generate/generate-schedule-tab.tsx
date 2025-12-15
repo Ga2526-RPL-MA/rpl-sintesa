@@ -93,14 +93,23 @@ function GenerateScheduleTable({}) {
         try {
             setIsSaving(true);
             //Save to db
-
+            const response = await axios.put<ScheduleList>(
+                '/api/schedules',
+                {
+                    scheduleListId: scheduleListData!.id,
+                    updates: dirtySchedules
+                },
+                {withCredentials: true}
+            );
             // setIsSaving(false);
             setIsSaving(false);
             setDirtySchedules([]);
-
+            toast.success('Succesfully edited schedule!')
             // TODO: Set new schedule to be used for
             // setNewSchedule(newScheduleList)
-        } catch (err) {}
+        } catch (err) {
+            toast.error('Failed to save schedule changes');
+        }
     }
 
     function handleUpdate(updated: Schedule) {
